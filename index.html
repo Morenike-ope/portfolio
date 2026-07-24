@@ -1,113 +1,107 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="The Living City Atlas — the planning, research, and public-sector portfolio of Morenike Atejioye.">
-  <title>The Living City Atlas — Morenike Atejioye</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23071e2b'/%3E%3Ctext x='5' y='22' fill='%2327c3c8' font-family='Arial' font-size='15' font-weight='700'%3EMA%3C/text%3E%3C/svg%3E">
-  <link rel="stylesheet" href="./styles.css?v=2">
-  <script src="./app.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="The Living City Atlas: selected planning, public engagement, data governance, and applied research work by Morenike Atejioye.">
+  <title>Morenike Atejioye | Living City Atlas</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 rx=%226%22 fill=%22%23071a26%22/><text x=%225%22 y=%2222%22 fill=%22%2323c1c6%22 font-size=%2215%22 font-family=%22Arial%22 font-weight=%22700%22>MA</text></svg>">
+  <link rel="stylesheet" href="./styles.css?v=5">
+  <script src="./app.js?v=5" defer></script>
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to main content</a>
-  <div class="map-world" aria-hidden="true">
-    <div class="map-image"></div>
-    <div class="map-shade"></div>
-    <svg class="route-map" viewBox="0 0 100 100" preserveAspectRatio="none">
-      <path class="regional-line" d="M 68 65 C 67 53, 72 38, 80 24"></path>
-      <path class="route-progress" d="M 68 65 C 67 53, 72 38, 80 24"></path>
-    </svg>
-    <span class="city-point omaha-point"></span>
-    <span class="city-point ames-point"></span>
-    <div class="contour contour-one"></div>
-    <div class="contour contour-two"></div>
-  </div>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <main class="atlas-site" id="main-content" tabindex="-1">
+    <div class="world" aria-hidden="true">
+      <div class="world-image"></div><div class="world-shade"></div>
+      <svg class="travel-route" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path class="regional-route" d="M 68 64 C 67 52, 71 39, 79 24"></path>
+        <path class="active-route" d="M 68 64 C 67 52, 71 39, 79 24"></path>
+      </svg>
+      <span class="world-marker omaha-marker"></span>
+      <span class="world-marker ames-marker"></span>
+      <div class="contour contour-a"></div><div class="contour contour-b"></div><div class="scan-line"></div>
+    </div>
 
-  <header class="topbar">
-    <button class="monogram" type="button" data-go="home" aria-label="Return home">MA</button>
-    <div class="identity"><strong>Morenike Atejioye</strong><span>Urban planner · public-sector researcher</span></div>
-    <div class="coordinates" aria-live="polite"><span id="latitude">41.2565° N</span><span id="longitude">95.9345° W</span></div>
-  </header>
+    <header class="topbar">
+      <button class="monogram" type="button" data-go="home" aria-label="Return home">MA</button>
+      <div class="top-identity"><strong>Morenike Atejioye</strong><span>Urban planner · public-sector researcher</span></div>
+      <div class="coordinates" aria-live="polite"><span id="latitude">41.2565° N</span><span id="longitude">95.9345° W</span></div>
+    </header>
+    <div class="travel-status" id="travel-status" role="status" aria-live="polite" hidden></div>
+    <button class="return-origin" id="return-origin" type="button" hidden>Return to Omaha ↙</button>
 
-  <div class="journey-status" id="journey-status" role="status" aria-live="polite" hidden></div>
-  <button class="return-omaha" id="return-omaha" type="button" hidden>Return to Omaha ↙</button>
+    <aside class="chapter-rail" aria-label="Current chapter"><span id="chapter-number">01</span><i></i><small id="chapter-label">Home</small></aside>
 
-  <main id="main" tabindex="-1">
-    <section class="chapter hero" id="home">
-      <div class="hero-copy">
-        <p class="eyebrow"><span></span> Welcome to my living city atlas</p>
+    <section class="scene hero-scene" id="home">
+      <div class="scene-content hero-content">
+        <p class="kicker"><span></span> Welcome to my living city atlas</p>
         <h1>I study how cities <em>listen, decide,</em> and move.</h1>
-        <p class="lead">My work connects public knowledge, spatial analysis, and implementation—turning community priorities into decisions people can see, follow, and measure.</p>
+        <p class="lede">My work connects public knowledge, spatial analysis, and implementation—turning community priorities into decisions people can see and measure.</p>
         <div class="hero-actions">
-          <button class="primary-action" type="button" data-go="atlas">Enter the atlas <span>↘</span></button>
-          <button class="text-action" type="button" data-go="about">Read my story</button>
+          <button class="atlas-button" type="button" data-go="atlas">Enter the atlas <span>↘</span></button>
+          <button class="text-button" type="button" data-go="about">Read my story</button>
         </div>
       </div>
       <button class="featured-beacon" type="button" data-project="omaha">
-        <span class="beacon"><i></i><i></i><i></i></span>
-        <span><small>Featured fieldwork</small><strong>We Make Omaha</strong></span>
+        <span class="beacon-rings"><i></i><i></i><i></i></span>
+        <span class="beacon-label"><small>Featured fieldwork</small><strong>We Make Omaha</strong></span>
       </button>
-      <div class="map-legend"><span><i class="dot active"></i> Planning practice</span><span><i class="dot"></i> Applied research</span><span><i class="line"></i> Knowledge route</span></div>
+      <div class="legend-card">
+        <span><i class="legend-dot active"></i> Planning practice</span>
+        <span><i class="legend-dot"></i> Applied research</span>
+        <span><i class="legend-line"></i> Public knowledge route</span>
+      </div>
+      <div class="scroll-cue"><span>Scroll to travel</span><i></i></div>
     </section>
 
-    <section class="chapter atlas" id="atlas">
-      <div class="chapter-heading">
-        <p class="eyebrow"><span></span> Explore the field</p>
-        <h2>Places where the work comes alive.</h2>
-        <p>Select a station to open its field note.</p>
+    <section class="scene atlas-scene" id="atlas">
+      <div class="scene-heading">
+        <p class="kicker"><span></span> Explore the field</p>
+        <h2>Five places where my work comes alive.</h2>
+        <p>Select a location to open its field note.</p>
       </div>
       <div class="hotspot-field" id="hotspot-field"></div>
-      <div class="field-index"><small>Field index</small><strong>05 projects · 02 destinations</strong><span>Omaha ↗ Ames</span></div>
+      <div class="atlas-key"><span>FIELD INDEX</span><strong>05 locations</strong><small>Planning · Data · Research · Access</small></div>
     </section>
 
-    <section class="chapter selected-work" id="work">
-      <div class="chapter-heading">
-        <p class="eyebrow"><span></span> Selected work</p>
-        <h2>Projects built for public use.</h2>
-      </div>
-      <div class="project-list" id="project-list"></div>
+    <section class="scene work-scene" id="work">
+      <div class="scene-heading work-heading"><p class="kicker"><span></span> Selected work</p><h2>Projects built for public use.</h2></div>
+      <div class="project-stack" id="project-stack"></div>
     </section>
 
-    <section class="chapter methods" id="methods">
-      <div class="methods-copy">
-        <p class="eyebrow"><span></span> Methods lab</p>
+    <section class="scene lab-scene" id="lab">
+      <div class="lab-intro">
+        <p class="kicker"><span></span> Methods lab</p>
         <h2>Opportunity is not one number.</h2>
-        <p>Adjust the inputs to explore how housing, transportation, and nearby employment can combine. This is an educational demonstration—not a finding about any real neighborhood.</p>
+        <p>Move the three inputs to see how housing, transportation, and job access combine. This simplified demonstration shows the logic behind accessibility research—not a finding about any real neighborhood.</p>
       </div>
-      <div class="lab-panel">
-        <div class="lab-top"><span>EMPLOYMENT ACCESS / DEMO</span><span>LIVE INPUT</span></div>
-        <div class="score-ring" id="score-ring"><div><strong id="access-score">58</strong><span>combined access</span></div></div>
+      <div class="lab-console">
+        <div class="console-top"><span>ACCESS MODEL / DEMO</span><span>LIVE INPUT</span></div>
+        <div class="score-orbit" id="score-orbit"><div><strong id="access-score">58</strong><span>combined access</span></div></div>
         <div class="sliders">
           <label><span><b>Affordable housing</b><output id="housing-output" for="housing">62</output></span><input id="housing" type="range" min="0" max="100" value="62"></label>
           <label><span><b>Transit connection</b><output id="transit-output" for="transit">44</output></span><input id="transit" type="range" min="0" max="100" value="44"></label>
-          <label><span><b>Nearby employment</b><output id="jobs-output" for="jobs">71</output></span><input id="jobs" type="range" min="0" max="100" value="71"></label>
+          <label><span><b>Nearby jobs</b><output id="jobs-output" for="jobs">71</output></span><input id="jobs" type="range" min="0" max="100" value="71"></label>
         </div>
         <p class="model-note" id="model-note" aria-live="polite"></p>
       </div>
     </section>
 
-    <section class="chapter about" id="about">
-      <div class="story-card">
-        <p class="eyebrow"><span></span> About the cartographer</p>
+    <section class="scene about-scene" id="about">
+      <div class="about-card">
+        <p class="kicker"><span></span> About the cartographer</p>
         <h2>I am interested in what happens after the plan is adopted.</h2>
-        <div class="story-columns">
-          <p>I am a City Planner in Long Range Planning with the City of Omaha. My work sits between community engagement, spatial analysis, data governance, policy implementation, and public accountability.</p>
-          <p>I hold an M.S. in Community and Regional Planning from Iowa State University and a B.S. in Urban and Regional Planning from Obafemi Awolowo University.</p>
+        <div class="about-columns">
+          <p>I am a City Planner in Long Range Planning with the City of Omaha. My work sits between urban planning, public administration, data governance, community engagement, and implementation.</p>
+          <p>I study how institutions collect community knowledge, coordinate across departments, and make implementation visible and accountable to the people they serve.</p>
         </div>
-        <div class="skills-grid">
-          <div><small>Analysis</small><strong>Spatial analysis · survey analysis</strong></div>
-          <div><small>Knowledge</small><strong>Qualitative coding · community engagement</strong></div>
-          <div><small>Governance</small><strong>Data governance · implementation · accountability</strong></div>
+        <div class="profile-grid">
+          <div><small>Methods</small><strong>Spatial analysis · qualitative coding · survey analysis</strong></div>
+          <div><small>Research</small><strong>Data governance · community engagement · accountability</strong></div>
+          <div><small>Education</small><strong>M.S. CRP, Iowa State · B.S. URP, Obafemi Awolowo</strong></div>
         </div>
-      </div>
-    </section>
-
-    <section class="chapter contact" id="contact">
-      <div class="contact-card">
-        <p class="eyebrow"><span></span> Contact</p>
-        <h2>Let’s connect around planning, research, and civic innovation.</h2>
-        <div class="contact-links">
+        <div class="contact-placeholders">
           <!-- TODO: Morenike to provide email address -->
           <span>Email · TODO: Morenike to provide</span>
           <!-- TODO: Morenike to provide LinkedIn URL -->
@@ -115,33 +109,32 @@
           <!-- TODO: Morenike to provide résumé file -->
           <span>Résumé · TODO: Morenike to provide</span>
         </div>
-        <button class="text-action" type="button" data-go="home">Return to origin ↑</button>
+        <div class="contact-line"><span>Open to research and civic innovation conversations.</span><button type="button" data-go="home">Return to origin ↑</button></div>
       </div>
     </section>
+
+    <nav class="dock" aria-label="Atlas navigation">
+      <button type="button" class="active" data-go="home" aria-label="Home"><span>⌂</span><small>Home</small></button>
+      <button type="button" data-go="atlas" aria-label="Atlas"><span>⌖</span><small>Atlas</small></button>
+      <button type="button" data-go="work" aria-label="Work"><span>▦</span><small>Work</small></button>
+      <button type="button" data-go="lab" aria-label="Methods"><span>∿</span><small>Methods</small></button>
+      <button type="button" data-go="about" aria-label="About"><span>◉</span><small>About</small></button>
+    </nav>
+
+    <div class="drawer-shell" id="drawer" role="dialog" aria-modal="true" aria-labelledby="project-title" aria-describedby="drawer-description" hidden>
+      <button class="drawer-backdrop" type="button" data-close aria-label="Close project details"></button>
+      <article class="project-drawer" tabindex="-1">
+        <button class="drawer-close" type="button" data-close aria-label="Close project details">×</button>
+        <p class="kicker"><span></span> <b id="drawer-number"></b></p>
+        <small class="drawer-location" id="drawer-location"></small>
+        <h2 id="project-title"></h2>
+        <p class="drawer-lede" id="drawer-description"></p>
+        <div class="drawer-stat"><strong id="drawer-stat"></strong><span id="drawer-stat-label"></span></div>
+        <div class="field-note-details" id="field-note-details" hidden></div>
+        <div class="method-list" id="drawer-methods"><small>Methods and lenses</small></div>
+        <p class="drawer-footnote">Selected professional and research work · Morenike Atejioye</p>
+      </article>
+    </div>
   </main>
-
-  <nav class="dock" aria-label="Atlas navigation">
-    <button class="active" type="button" data-go="home"><span>⌂</span><small>Home</small></button>
-    <button type="button" data-go="atlas"><span>⌖</span><small>Atlas</small></button>
-    <button type="button" data-go="work"><span>▦</span><small>Work</small></button>
-    <button type="button" data-go="methods"><span>∿</span><small>Methods</small></button>
-    <button type="button" data-go="about"><span>◉</span><small>About</small></button>
-    <button type="button" data-go="contact"><span>↗</span><small>Contact</small></button>
-  </nav>
-
-  <div class="drawer-shell" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" aria-describedby="drawer-summary" hidden>
-    <button class="drawer-backdrop" type="button" data-close aria-label="Close project field note"></button>
-    <article class="project-drawer" tabindex="-1">
-      <button class="drawer-close" type="button" data-close aria-label="Close project field note">×</button>
-      <p class="eyebrow"><span></span> <b id="drawer-number"></b></p>
-      <small class="drawer-location" id="drawer-location"></small>
-      <h2 id="drawer-title"></h2>
-      <p class="drawer-summary" id="drawer-summary"></p>
-      <div class="drawer-highlight"><strong id="drawer-highlight"></strong><span id="drawer-highlight-label"></span></div>
-      <div class="drawer-details" id="drawer-details"></div>
-      <div class="drawer-methods" id="drawer-methods"></div>
-      <p class="drawer-footnote">Living City Atlas · Morenike Atejioye</p>
-    </article>
-  </div>
 </body>
 </html>

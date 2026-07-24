@@ -1,143 +1,98 @@
 /*
- * EDIT PROJECT CONTENT HERE
- * Keep TODO comments until Morenike supplies verified project information.
+ * EDITABLE PROJECT CONTENT
+ * Keep every TODO until Morenike supplies verified Inclusivity WDSM information.
  */
-const PROJECTS = [
+const projects = [
+  { id:"omaha", number:"01", destination:"omaha", category:"Comprehensive planning", title:"We Make Omaha", short:"Turning community knowledge into a citywide planning framework.", description:"Work involving community engagement analysis, scenario planning, spatial research, and implementation-focused reporting.", stat:"50K+", statLabel:"resident comments analyzed", methods:["Qualitative coding","Survey analysis","Spatial synthesis"], location:"Community District" },
+  { id:"tracker", number:"02", destination:"omaha", category:"Civic technology and public accountability", title:"Implementation Tracker", short:"Making adopted commitments visible, measurable, and accountable.", description:"A public-facing framework connecting plan commitments to actions, indicators, annual reporting, and place-based projects.", stat:"32", statLabel:"implementation indicators", methods:["Information design","Data governance","Public accountability"], location:"Civic Core" },
+  { id:"plans", number:"03", destination:"omaha", category:"Applied research", title:"Plan Quality and Implementation Research", short:"Following the path from public vision to administrative action.", description:"A comparative evaluation of comprehensive plans in Marshalltown, Iowa; Walla Walla, Washington; and Ottumwa, Iowa, including equity, implementation responsibility, and monitoring.", stat:"10", statLabel:"plan-quality criteria", methods:["Comparative research","Content analysis","Plan evaluation"], location:"Research Quarter" },
+  { id:"access", number:"04", destination:"omaha", category:"Current research", title:"Employment Access and Housing", short:"Testing how affordable housing connects residents to opportunity.", description:"Research examining how affordable housing locations connect residents with employment opportunities. Spatial mismatch is one explanation being tested, not a predetermined conclusion.", stat:"1", statLabel:"explanation among several", methods:["GIS","Accessibility analysis","Equity research"], location:"Opportunity Corridor" },
   {
-    id: "omaha", number: "01", destination: "omaha", category: "Comprehensive planning",
-    title: "We Make Omaha", location: "Omaha, Nebraska", station: "Community Planning Station",
-    summary: "Work involving community engagement analysis, scenario planning, spatial research, and implementation-focused reporting.",
-    highlight: "50K+", highlightLabel: "resident comments analyzed",
-    methods: ["Community engagement", "Scenario planning", "Spatial research", "Implementation reporting"]
-  },
-  {
-    id: "tracker", number: "02", destination: "omaha", category: "Civic technology and public accountability",
-    title: "Implementation Tracker", location: "Omaha, Nebraska", station: "Civic Accountability Station",
-    summary: "A public-facing framework connecting plan commitments to actions, indicators, annual reporting, and place-based projects.",
-    highlight: "32", highlightLabel: "implementation indicators",
-    methods: ["Information design", "Data governance", "Public accountability"]
-  },
-  {
-    id: "plans", number: "03", destination: "omaha", category: "Applied research",
-    title: "Plan Quality and Implementation Research",
-    location: "Marshalltown, Iowa · Walla Walla, Washington · Ottumwa, Iowa", station: "Comparative Research Station",
-    summary: "A comparative evaluation of comprehensive plans, including equity, implementation responsibility, and monitoring.",
-    highlight: "10", highlightLabel: "plan-quality criteria",
-    methods: ["Comparative research", "Content analysis", "Plan evaluation"]
-  },
-  {
-    id: "access", number: "04", destination: "omaha", category: "Current research",
-    title: "Employment Access and Housing", location: "Omaha, Nebraska", station: "Opportunity Station",
-    summary: "Research examining how affordable housing locations connect residents with employment opportunities. Spatial mismatch is one explanation being tested, not a predetermined conclusion.",
-    highlight: "01", highlightLabel: "explanation among several",
-    methods: ["GIS", "Accessibility analysis", "Equity research"]
-  },
-  {
-    id: "ames", number: "05", destination: "ames", category: "Academic research",
-    title: "Inclusivity WDSM Project", institution: "Iowa State University",
-    location: "Ames, Iowa", station: "Ames Research Station",
-    // TODO: Morenike to provide full meaning of WDSM
-    summary: "TODO: Morenike to provide project summary.",
-    highlight: "ISU", highlightLabel: "Iowa State University",
-    methods: ["TODO: Morenike to provide methods", "TODO: Morenike to provide skills demonstrated"],
-    details: [
-      ["Full meaning of WDSM", "TODO: Morenike to provide"],
-      ["Project date", "TODO: Morenike to provide"],
-      ["Research objective", "TODO: Morenike to provide"],
-      ["My role", "TODO: Morenike to provide"],
-      ["Collaborators", "TODO: Morenike to provide"],
-      ["Methods", "TODO: Morenike to provide"],
-      ["Findings", "TODO: Morenike to provide"],
-      ["Deliverables", "TODO: Morenike to provide"],
-      ["Relevant images or documents", "TODO: Morenike to provide"],
-      ["Skills demonstrated", "TODO: Morenike to provide"]
+    id:"ames", number:"05", destination:"ames", category:"Academic research",
+    title:"Inclusivity WDSM Project", short:"An Iowa State University research project based in Ames, Iowa.",
+    description:"TODO: Morenike to provide project summary.", stat:"ISU", statLabel:"Iowa State University",
+    methods:["TODO: Morenike to provide methods","TODO: Morenike to provide skills demonstrated"],
+    location:"Ames Research Station",
+    details:[
+      ["Full meaning of WDSM","TODO: Morenike to provide"],
+      ["Project date","TODO: Morenike to provide"],
+      ["Research objective","TODO: Morenike to provide"],
+      ["My role","TODO: Morenike to provide"],
+      ["Collaborators","TODO: Morenike to provide"],
+      ["Methods","TODO: Morenike to provide"],
+      ["Findings","TODO: Morenike to provide"],
+      ["Deliverables","TODO: Morenike to provide"],
+      ["Images and documents","TODO: Morenike to provide"],
+      ["Skills demonstrated","TODO: Morenike to provide"]
     ]
   }
 ];
+const chapters = [{id:"home",label:"Home"},{id:"atlas",label:"Atlas"},{id:"work",label:"Work"},{id:"lab",label:"Methods"},{id:"about",label:"About"}];
 
-const DESTINATIONS = {
-  omaha: { latitude: "41.2565° N", longitude: "95.9345° W" },
-  ames: { latitude: "42.0308° N", longitude: "93.6319° W" }
-};
-const CHAPTERS = ["home", "atlas", "work", "methods", "about", "contact"];
-const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-const site = document.documentElement;
+const hotspotField = document.querySelector("#hotspot-field");
+const projectStack = document.querySelector("#project-stack");
+projects.forEach((p, i) => {
+  hotspotField.insertAdjacentHTML("beforeend", `<button class="map-hotspot hotspot-${i+1} destination-${p.destination}" type="button" data-project="${p.id}" aria-label="Open ${p.title}"><span class="hotspot-pulse"></span><span class="hotspot-card"><small>${p.location} · ${p.number}</small><strong>${p.title}</strong><em>${p.category}</em></span></button>`);
+  projectStack.insertAdjacentHTML("beforeend", `<button class="project-tile" type="button" data-project="${p.id}" aria-label="Open ${p.title} project details"><span class="tile-number">${p.number}</span><span class="tile-copy"><small>${p.category}</small><strong>${p.title}</strong><em>${p.short}</em></span><span class="tile-stat"><strong>${p.stat}</strong><small>${p.statLabel}</small></span><span class="tile-arrow" aria-hidden="true">↗</span></button>`);
+});
+
+function goTo(id) { document.getElementById(id)?.scrollIntoView({behavior:"smooth"}); }
+document.querySelectorAll("[data-go]").forEach(button => button.addEventListener("click", () => goTo(button.dataset.go)));
+
 const drawer = document.querySelector("#drawer");
 const drawerPanel = drawer.querySelector(".project-drawer");
-const status = document.querySelector("#journey-status");
-const returnButton = document.querySelector("#return-omaha");
-let currentDestination = "omaha";
 let projectTrigger = null;
-let savedScroll = 0;
+let scrollPosition = 0;
+let currentDestination = "omaha";
 let journeyTimer = 0;
-
-function escapeHtml(value) {
-  const element = document.createElement("span");
-  element.textContent = String(value);
-  return element.innerHTML;
-}
-
-function renderProjects() {
-  const hotspots = document.querySelector("#hotspot-field");
-  const list = document.querySelector("#project-list");
-  PROJECTS.forEach((project, index) => {
-    hotspots.insertAdjacentHTML("beforeend", `
-      <button class="map-hotspot hotspot-${index + 1} destination-${project.destination}" type="button" data-project="${project.id}" aria-label="Open ${escapeHtml(project.title)}">
-        <span class="hotspot-pulse"></span>
-        <span class="hotspot-card"><small>${escapeHtml(project.station)} · ${project.number}</small><strong>${escapeHtml(project.title)}</strong><em>${escapeHtml(project.category)}</em></span>
-      </button>`);
-    list.insertAdjacentHTML("beforeend", `
-      <button class="project-card" type="button" data-project="${project.id}">
-        <span class="project-number">${project.number}</span>
-        <span class="project-copy"><small>${escapeHtml(project.category)}</small><strong>${escapeHtml(project.title)}</strong><em>${escapeHtml(project.summary)}</em></span>
-        <span class="project-stat"><strong>${escapeHtml(project.highlight)}</strong><small>${escapeHtml(project.highlightLabel)}</small></span>
-        <span class="project-arrow" aria-hidden="true">↗</span>
-      </button>`);
-  });
-}
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const site = document.querySelector(".atlas-site");
+const travelStatus = document.querySelector("#travel-status");
+const returnOrigin = document.querySelector("#return-origin");
 
 function setCoordinates(destination) {
-  document.querySelector("#latitude").textContent = DESTINATIONS[destination].latitude;
-  document.querySelector("#longitude").textContent = DESTINATIONS[destination].longitude;
+  const ames = destination === "ames";
+  document.querySelector("#latitude").textContent = ames ? "42.0308° N" : "41.2565° N";
+  document.querySelector("#longitude").textContent = ames ? "93.6319° W" : "95.9345° W";
 }
 
 function travelToAmes(onArrival) {
   window.clearTimeout(journeyTimer);
   currentDestination = "ames";
-  site.classList.add("traveling", "at-ames");
-  status.textContent = "Traveling northeast · Omaha → Ames";
-  status.hidden = false;
-  returnButton.hidden = true;
+  site.classList.add("traveling", "location-ames");
+  travelStatus.textContent = "Traveling northeast · Omaha → Ames";
+  travelStatus.hidden = false;
+  returnOrigin.hidden = true;
   const arrive = () => {
     site.classList.remove("traveling");
     setCoordinates("ames");
-    status.textContent = "Arrived · Ames Research Station";
-    returnButton.hidden = false;
-    journeyTimer = window.setTimeout(() => { status.hidden = true; }, 1300);
+    travelStatus.textContent = "Arrived · Ames Research Station";
+    returnOrigin.hidden = false;
+    journeyTimer = window.setTimeout(() => { travelStatus.hidden = true; }, 1400);
     onArrival?.();
   };
-  if (prefersReducedMotion.matches) arrive();
-  else journeyTimer = window.setTimeout(arrive, 1750);
+  if (reduceMotion.matches) arrive();
+  else journeyTimer = window.setTimeout(arrive, 1500);
 }
 
 function returnToOmaha() {
   window.clearTimeout(journeyTimer);
-  closeDrawer(false);
   currentDestination = "omaha";
   site.classList.add("returning");
-  site.classList.remove("at-ames", "traveling");
-  status.textContent = "Returning southwest · Ames → Omaha";
-  status.hidden = false;
-  returnButton.hidden = true;
+  site.classList.remove("location-ames", "traveling");
+  travelStatus.textContent = "Returning southwest · Ames → Omaha";
+  travelStatus.hidden = false;
+  returnOrigin.hidden = true;
   const arrive = () => {
     site.classList.remove("returning");
     setCoordinates("omaha");
-    status.textContent = "Returned · Omaha";
-    journeyTimer = window.setTimeout(() => { status.hidden = true; }, 1200);
+    travelStatus.textContent = "Returned · Omaha";
+    journeyTimer = window.setTimeout(() => { travelStatus.hidden = true; }, 1200);
   };
-  if (prefersReducedMotion.matches) arrive();
-  else journeyTimer = window.setTimeout(arrive, 1750);
+  if (reduceMotion.matches) arrive();
+  else journeyTimer = window.setTimeout(arrive, 1500);
 }
+returnOrigin.addEventListener("click", returnToOmaha);
 
 function getDrawerControls() {
   return [...drawer.querySelectorAll("button:not([disabled]), [href], input:not([disabled]), [tabindex]:not([tabindex='-1'])")]
@@ -145,79 +100,54 @@ function getDrawerControls() {
 }
 
 function openProject(id) {
-  const project = PROJECTS.find(item => item.id === id);
-  if (!project) return;
-  if (project.destination === "ames" && currentDestination !== "ames") {
+  const p = projects.find(project => project.id === id);
+  if (!p) return;
+  if (p.destination === "ames" && currentDestination !== "ames") {
     travelToAmes(() => openProject(id));
     return;
   }
   projectTrigger = document.activeElement;
-  document.querySelector("#drawer-number").textContent = `Field note ${project.number}`;
-  document.querySelector("#drawer-location").textContent = `${project.station} / ${project.category}`;
-  document.querySelector("#drawer-title").textContent = project.title;
-  document.querySelector("#drawer-summary").textContent = project.summary;
-  document.querySelector("#drawer-highlight").textContent = project.highlight;
-  document.querySelector("#drawer-highlight-label").textContent = project.highlightLabel;
-  document.querySelector("#drawer-methods").innerHTML =
-    `<small>Methods and lenses</small>${project.methods.map(item => `<span>${escapeHtml(item)}</span>`).join("")}`;
-  document.querySelector("#drawer-details").innerHTML = project.details
-    ? project.details.map(([label, value]) => `<section><h3>${escapeHtml(label)}</h3><p>${escapeHtml(value)}</p></section>`).join("")
+  document.querySelector("#drawer-number").textContent = `Field note ${p.number}`;
+  document.querySelector("#drawer-location").textContent = `${p.location} / ${p.category}`;
+  document.querySelector("#project-title").textContent = p.title;
+  document.querySelector("#drawer-description").textContent = p.description;
+  document.querySelector("#drawer-stat").textContent = p.stat;
+  document.querySelector("#drawer-stat-label").textContent = p.statLabel;
+  const details = document.querySelector("#field-note-details");
+  details.hidden = !p.details;
+  details.innerHTML = p.details
+    ? p.details.map(([label, value]) => `<section><h3>${label}</h3><p>${value}</p></section>`).join("")
     : "";
-  savedScroll = window.scrollY;
+  const methods = document.querySelector("#drawer-methods");
+  methods.innerHTML = `<small>Methods and lenses</small>${p.methods.map(method => `<span>${method}</span>`).join("")}`;
+  scrollPosition = window.scrollY;
   drawer.hidden = false;
   document.body.classList.add("drawer-open");
-  document.body.style.top = `-${savedScroll}px`;
+  document.body.style.top = `-${scrollPosition}px`;
   drawer.querySelector(".drawer-close").focus();
 }
-
-function closeDrawer(restoreFocus = true) {
+function closeProject() {
   if (drawer.hidden) return;
   drawer.hidden = true;
   document.body.classList.remove("drawer-open");
   document.body.style.top = "";
-  const previousBehavior = document.documentElement.style.scrollBehavior;
+  const previousScrollBehavior = document.documentElement.style.scrollBehavior;
   document.documentElement.style.scrollBehavior = "auto";
-  window.scrollTo(0, savedScroll);
-  document.documentElement.style.scrollBehavior = previousBehavior;
-  if (restoreFocus && projectTrigger instanceof HTMLElement && projectTrigger.isConnected) projectTrigger.focus();
+  window.scrollTo(0, scrollPosition);
+  document.documentElement.style.scrollBehavior = previousScrollBehavior;
+  if (projectTrigger instanceof HTMLElement && projectTrigger.isConnected) projectTrigger.focus();
   projectTrigger = null;
 }
-
-function goTo(id) {
-  document.getElementById(id)?.scrollIntoView({ behavior: prefersReducedMotion.matches ? "auto" : "smooth" });
-}
-
-function updateModel() {
-  const values = ["housing", "transit", "jobs"].map(id => Number(document.getElementById(id).value));
-  ["housing", "transit", "jobs"].forEach((id, index) => {
-    document.getElementById(`${id}-output`).textContent = values[index];
-  });
-  const score = Math.round(values[0] * .3 + values[1] * .35 + values[2] * .35);
-  document.querySelector("#access-score").textContent = score;
-  document.querySelector("#score-ring").style.setProperty("--score", `${score * 3.6}deg`);
-  document.querySelector("#model-note").textContent = score >= 70
-    ? "Strong combined access—but distribution and affordability still matter."
-    : score >= 45
-      ? "Moderate access. A weakness in one system can constrain the others."
-      : "Low combined access. Place-based interventions may be needed across systems.";
-}
-
-renderProjects();
-document.querySelectorAll("[data-go]").forEach(button => button.addEventListener("click", () => goTo(button.dataset.go)));
 document.addEventListener("click", event => {
   const projectButton = event.target.closest("[data-project]");
   if (projectButton) openProject(projectButton.dataset.project);
 });
-document.querySelectorAll("[data-close]").forEach(button => button.addEventListener("click", () => closeDrawer()));
-returnButton.addEventListener("click", returnToOmaha);
-["housing", "transit", "jobs"].forEach(id => document.getElementById(id).addEventListener("input", updateModel));
-updateModel();
-
+document.querySelectorAll("[data-close]").forEach(button => button.addEventListener("click", closeProject));
 document.addEventListener("keydown", event => {
   if (drawer.hidden) return;
   if (event.key === "Escape") {
     event.preventDefault();
-    closeDrawer();
+    closeProject();
     return;
   }
   if (event.key !== "Tab") return;
@@ -227,7 +157,7 @@ document.addEventListener("keydown", event => {
     drawerPanel.focus();
     return;
   }
-  const [first] = controls;
+  const first = controls[0];
   const last = controls[controls.length - 1];
   if (event.shiftKey && document.activeElement === first) {
     event.preventDefault();
@@ -238,13 +168,26 @@ document.addEventListener("keydown", event => {
   }
 });
 
-const chapterObserver = new IntersectionObserver(entries => {
-  const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+const observer = new IntersectionObserver(entries => {
+  const visible = entries.filter(entry => entry.isIntersecting).sort((a,b) => b.intersectionRatio-a.intersectionRatio)[0];
   if (!visible) return;
+  const index = chapters.findIndex(chapter => chapter.id === visible.target.id);
+  document.querySelector("#chapter-number").textContent = String(index+1).padStart(2,"0");
+  document.querySelector("#chapter-label").textContent = chapters[index].label;
   document.querySelectorAll(".dock button").forEach(button => {
-    const active = button.dataset.go === visible.target.id;
-    button.classList.toggle("active", active);
-    button.toggleAttribute("aria-current", active);
+    button.classList.toggle("active", button.dataset.go === visible.target.id);
+    button.toggleAttribute("aria-current", button.dataset.go === visible.target.id);
   });
-}, { threshold: [.35, .6] });
-CHAPTERS.forEach(id => chapterObserver.observe(document.getElementById(id)));
+}, {threshold:[.35,.6]});
+chapters.forEach(chapter => observer.observe(document.getElementById(chapter.id)));
+
+const inputs = ["housing","transit","jobs"].map(id => document.getElementById(id));
+function updateModel() {
+  inputs.forEach(input => document.getElementById(`${input.id}-output`).textContent = input.value);
+  const score = Math.round(Number(inputs[0].value)*.3 + Number(inputs[1].value)*.35 + Number(inputs[2].value)*.35);
+  document.querySelector("#access-score").textContent = score;
+  document.querySelector("#score-orbit").style.setProperty("--score", `${score*3.6}deg`);
+  document.querySelector("#model-note").textContent = score >= 70 ? "Strong combined access—but distribution and affordability still matter." : score >= 45 ? "Moderate access. A weakness in one system can constrain the others." : "Low combined access. Place-based interventions may be needed across systems.";
+}
+inputs.forEach(input => input.addEventListener("input", updateModel));
+updateModel();
