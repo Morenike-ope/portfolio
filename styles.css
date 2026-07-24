@@ -83,6 +83,7 @@ body.drawer-open, body.portal-open {
 }
 .geographic-marker:hover > small, .geographic-marker:focus-visible > small, .geographic-marker.active > small { opacity: 1; transform: none; }
 .geographic-marker:hover > span, .geographic-marker:focus-visible > span { transform: scale(1.25); }
+.geographic-marker.active > span { transform: scale(1.45); box-shadow: 0 0 0 10px rgba(35,193,198,.16), 0 0 30px var(--teal); }
 .marker-west-des-moines > span { border-color: var(--amber); box-shadow: 0 0 0 7px rgba(243,170,85,.13), 0 0 22px var(--amber); }
 .marker-west-des-moines.active > span { transform: scale(1.45); box-shadow: 0 0 0 11px rgba(243,170,85,.15), 0 0 32px var(--amber); }
 .marker-future-lab > span {
@@ -446,7 +447,7 @@ input[type="range"] { width: 100%; accent-color: var(--teal); cursor: pointer; }
 .drawer-backdrop { border: 0; background: rgba(2,8,12,.68); backdrop-filter: blur(5px); cursor: pointer; }
 .project-drawer {
   position: relative; min-width: 0; height: 100%; padding: clamp(38px, 5vw, 72px);
-  overflow-y: auto; overscroll-behavior: contain; background: #0a202c;
+  overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; background: #0a202c;
   border-left: 1px solid var(--teal); animation: drawerIn 320ms both;
   scrollbar-color: var(--teal) var(--navy);
 }
@@ -457,6 +458,19 @@ input[type="range"] { width: 100%; accent-color: var(--teal); cursor: pointer; }
 }
 .drawer-close:hover { border-color: var(--teal); color: var(--teal); }
 .drawer-location { display: block; margin: 60px 0 18px; color: var(--amber); font-family: var(--font-geist-mono), monospace; font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; }
+.drawer-navigation, .drawer-location-choices { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 24px; }
+.drawer-location-choices[hidden] { display: none; }
+.drawer-navigation button, .drawer-location-choices button {
+  min-height: 42px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 100px;
+  background: transparent; color: #c5d5d6; font-size: .63rem; letter-spacing: .04em; cursor: pointer;
+}
+.drawer-navigation button:hover, .drawer-location-choices button:hover,
+.drawer-location-choices button[aria-current="true"] { border-color: var(--teal); color: var(--teal-soft); }
+.drawer-location-choices { padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+.drawer-location-choices::before {
+  content: "Research location"; flex-basis: 100%; color: #879da2; font-size: .54rem;
+  letter-spacing: .14em; text-transform: uppercase;
+}
 .project-drawer h2 { font-size: clamp(3rem, 5vw, 5.3rem); }
 .drawer-lede { max-width: 60ch; margin: 28px 0; color: #d5dfdf; font-size: 1.03rem; line-height: 1.75; }
 .drawer-stat { display: flex; align-items: end; gap: 18px; padding: 28px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
@@ -567,7 +581,7 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--amber); out
   }
   .drawer-close { top: max(16px, env(safe-area-inset-top)); right: 16px; }
   .drawer-location { margin-top: 64px; }
-  .project-drawer h2 { padding-right: 32px; font-size: clamp(2.7rem, 15vw, 4.6rem); }
+  .project-drawer h2 { padding-right: 32px; hyphens: auto; font-size: clamp(2.5rem, 11vw, 4.2rem); }
   .drawer-lede { font-size: .98rem; line-height: 1.7; }
   .drawer-stat { align-items: center; }
   .drawer-stat strong { font-size: 3.35rem; }

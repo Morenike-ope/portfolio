@@ -5,8 +5,11 @@
  * Keep every TODO until Morenike supplies verified Inclusivity WDSM information.
  */
 const ATLAS_LOCATIONS = {
-  omaha: { city: "Omaha", state: "Nebraska", coordinates: [-95.9345, 41.2565], zoom: 11.2, bearing: -8, pitch: 34 },
-  westDesMoines: { city: "West Des Moines", state: "Iowa", coordinates: [-93.7113, 41.5772], zoom: 11.8, bearing: 6, pitch: 36 }
+  omaha: { city: "Omaha", state: "Nebraska", coordinates: [-95.9345, 41.2565], zoom: 11.2, bearing: -8, pitch: 34, markerClass:"omaha" },
+  westDesMoines: { city: "West Des Moines", state: "Iowa", coordinates: [-93.7113, 41.5772], zoom: 11.8, bearing: 6, pitch: 36, markerClass:"west-des-moines" },
+  marshalltown: { city: "Marshalltown", state: "Iowa", coordinates: [-92.9123, 42.0489], zoom: 11.7, bearing: -4, pitch: 32, markerClass:"marshalltown" },
+  ottumwa: { city: "Ottumwa", state: "Iowa", coordinates: [-92.4083, 41.0160], zoom: 11.7, bearing: 4, pitch: 32, markerClass:"ottumwa" },
+  wallaWalla: { city: "Walla Walla", state: "Washington", coordinates: [-118.3430, 46.0646], zoom: 11.5, bearing: -5, pitch: 34, markerClass:"walla-walla" }
 };
 
 const projects = [
@@ -58,13 +61,14 @@ const projects = [
     location:"Omaha · approximate city-center location", destination:"omaha", markerOffset:[42,-20]
   },
   {
-    id:"plans", number:"04", title:"Plan Quality and Implementation Research", city:"Regional case study", state:"United States",
-    coordinates:[-95.9345,41.2565], approximate:true, category:"Applied research",
+    id:"plans", number:"04", title:"Plan Quality and Implementation Research", city:"Marshalltown", state:"Iowa",
+    coordinates:[-92.9123,42.0489], approximate:true, category:"Applied research",
     short:"Following the path from public vision to administrative action.",
     summary:"A comparative evaluation of comprehensive plans in Marshalltown, Iowa; Walla Walla, Washington; and Ottumwa, Iowa, including equity, implementation responsibility, and monitoring.",
     role:"Applied research", methods:["Comparative research","Content analysis","Plan evaluation"],
     findings:[], deliverables:[], skills:[], images:[], stat:"10", statLabel:"plan-quality criteria",
-    location:"Regional research · Marshalltown, Ottumwa, and Walla Walla", destination:"omaha", markerOffset:[27,20]
+    location:"Regional research · Marshalltown, Ottumwa, and Walla Walla", destination:"plan-research", markerOffset:[0,0],
+    locationKeys:["marshalltown","ottumwa","wallaWalla"]
   },
   {
     id:"access", number:"05", title:"Employment Access and Housing", city:"Omaha", state:"Nebraska",
@@ -161,9 +165,36 @@ let activeCityArrival = null;
 let scrollPosition = 0;
 let portalScrollPosition = 0;
 let journeyTimer = 0;
+let journeySequence = 0;
+let activeProjectId = "omaha";
+let activeLocationKey = "omaha";
+const projectLocationMemory = new Map();
 
 function escapeHTML(value) {
   return String(value).replace(/[&<>"']/g, character => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[character]));
+}
+
+function getProjectLocationKeys(project) {
+  if (project.locationKeys?.length) return project.locationKeys;
+  return [project.destination === "west-des-moines" ? "westDesMoines" : "omaha"];
+}
+
+function getProjectListButton(projectId) {
+  return document.querySelector(`#project-stack [data-project="${projectId}"]`)
+    || document.querySelector(`#hotspot-field [data-project="${projectId}"]`);
+}
+
+function setSelectedProject(projectId, locationKey) {
+  activeProjectId = projectId;
+  activeLocationKey = locationKey;
+  projectLocationMemory.set(projectId,locationKey);
+  document.querySelectorAll("[data-map-project]").forEach(marker => {
+    marker.classList.toggle("active", marker.dataset.mapProject === projectId && marker.dataset.locationKey === locationKey);
+  });
+  document.querySelectorAll("[data-project]").forEach(button => {
+    if (button.dataset.project === projectId) button.setAttribute("aria-current","true");
+    else button.removeAttribute("aria-current");
+  });
 }
 
 function renderProjectLists() {
@@ -184,6 +215,16 @@ function setCoordinates(coordinates) {
   document.querySelector("#longitude").textContent = formatCoordinate(coordinates[0], "E", "W");
 }
 
+function setCurrentLocationDisplay(locationKey) {
+  const location = ATLAS_LOCATIONS[locationKey];
+  if (!location) return;
+  document.querySelector("#atlas-map").setAttribute(
+    "aria-label",
+    `Interactive project atlas centered on ${location.city}, ${location.state}. Use arrow keys to pan and plus or minus to zoom.`
+  );
+  mapStateText.textContent = `Viewing ${location.city}, ${location.state}`;
+}
+
 function showMapError() {
   mapState.classList.add("map-error");
   mapStateText.textContent = "Geographic atlas unavailable · project list remains active";
@@ -201,17 +242,22 @@ function addRouteLayers() {
 
 function addMapMarkers() {
   projects.forEach(project => {
-    const markerButton = document.createElement("button");
-    markerButton.type = "button";
-    markerButton.className = `geographic-marker marker-${project.destination} marker-${project.id}`;
-    markerButton.dataset.mapProject = project.id;
-    markerButton.setAttribute("aria-label", `${project.title}, ${project.city}, ${project.state}${project.approximate ? ", approximate project location" : ""}`);
-    markerButton.innerHTML = `<span aria-hidden="true">${project.markerSymbol ? escapeHTML(project.markerSymbol) : ""}</span><small>${escapeHTML(project.title)}</small>`;
-    markerButton.addEventListener("click", () => openProject(project.id, markerButton));
-    new maplibregl.Marker({element:markerButton,anchor:"center",offset:project.markerOffset})
-      .setLngLat(project.coordinates)
-      .addTo(map);
+    getProjectLocationKeys(project).forEach(locationKey => {
+      const location = ATLAS_LOCATIONS[locationKey];
+      const markerButton = document.createElement("button");
+      markerButton.type = "button";
+      markerButton.className = `geographic-marker marker-${location.markerClass} marker-${project.id}`;
+      markerButton.dataset.mapProject = project.id;
+      markerButton.dataset.locationKey = locationKey;
+      markerButton.setAttribute("aria-label", `${project.title}, ${location.city}, ${location.state}, approximate project location`);
+      markerButton.innerHTML = `<span aria-hidden="true">${project.markerSymbol ? escapeHTML(project.markerSymbol) : ""}</span><small>${escapeHTML(project.title)}${project.locationKeys ? ` · ${escapeHTML(location.city)}` : ""}</small>`;
+      markerButton.addEventListener("click", () => openProject(project.id, markerButton, locationKey));
+      new maplibregl.Marker({element:markerButton,anchor:"center",offset:project.locationKeys ? [0,0] : project.markerOffset})
+        .setLngLat(location.coordinates)
+        .addTo(map);
+    });
   });
+  setSelectedProject(activeProjectId,activeLocationKey);
 }
 
 function initializeMap() {
@@ -381,11 +427,35 @@ function closeProject({restoreFocus=true}={}) {
   if (map) map.keyboard.enable();
 }
 
-function openDrawer(project, trigger) {
+function renderDrawerNavigation(project, locationKey) {
+  const index = projects.findIndex(item => item.id === project.id);
+  const previous = projects[(index - 1 + projects.length) % projects.length];
+  const next = projects[(index + 1) % projects.length];
+  const previousButton = document.querySelector("#previous-project");
+  const nextButton = document.querySelector("#next-project");
+  previousButton.dataset.targetProject = previous.id;
+  previousButton.setAttribute("aria-label", `Previous project: ${previous.title}`);
+  nextButton.dataset.targetProject = next.id;
+  nextButton.setAttribute("aria-label", `Next project: ${next.title}`);
+  document.querySelector("#drawer-return-omaha").hidden = locationKey === "omaha";
+
+  const choices = document.querySelector("#drawer-location-choices");
+  choices.hidden = !project.locationKeys;
+  choices.innerHTML = project.locationKeys ? project.locationKeys.map(key => {
+    const location = ATLAS_LOCATIONS[key];
+    return `<button type="button" data-project-location="${escapeHTML(key)}" aria-current="${key === locationKey}">${escapeHTML(location.city)}, ${escapeHTML(location.state)}</button>`;
+  }).join("") : "";
+}
+
+function openDrawer(project, trigger, locationKey=getProjectLocationKeys(project)[0]) {
   closeCityPortal({restoreFocus:false});
+  setSelectedProject(project.id,locationKey);
   projectTrigger = trigger || document.activeElement;
+  const location = ATLAS_LOCATIONS[locationKey];
   document.querySelector("#drawer-number").textContent = `Field note ${project.number}`;
-  document.querySelector("#drawer-location").textContent = `${project.location} / ${project.category}`;
+  document.querySelector("#drawer-location").textContent = project.locationKeys
+    ? `${location.city}, ${location.state} · approximate city-level location / ${project.category}`
+    : `${project.location} / ${project.category}`;
   document.querySelector("#project-title").textContent = project.title;
   document.querySelector("#drawer-description").textContent = project.summary;
   document.querySelector("#drawer-stat").textContent = project.stat;
@@ -394,6 +464,7 @@ function openDrawer(project, trigger) {
   details.hidden = !project.details;
   details.innerHTML = project.details ? project.details.map(([label,value]) => `<section><h3>${escapeHTML(label)}</h3><p>${escapeHTML(value)}</p></section>`).join("") : "";
   document.querySelector("#drawer-methods").innerHTML = `<small>Methods and lenses</small>${project.methods.map(method => `<span>${escapeHTML(method)}</span>`).join("")}`;
+  renderDrawerNavigation(project,locationKey);
   scrollPosition = window.scrollY;
   drawer.hidden = false;
   document.body.classList.add("drawer-open");
@@ -406,6 +477,7 @@ function flyToLocation(destination, onArrival) {
   const target = ATLAS_LOCATIONS[destination];
   currentDestination = destination;
   setCoordinates(target.coordinates);
+  setCurrentLocationDisplay(destination);
   if (!mapReady) {
     onArrival?.();
     return;
@@ -413,62 +485,102 @@ function flyToLocation(destination, onArrival) {
   map.once("moveend", () => onArrival?.());
   const camera = {center:target.coordinates,zoom:target.zoom,bearing:target.bearing,pitch:target.pitch};
   if (reduceMotion.matches) map.jumpTo(camera);
-  else map.flyTo({...camera,duration:2200,essential:false,curve:1.25});
+  else map.flyTo({...camera,duration:1550,essential:false,curve:1.25});
 }
 
-function travelToWestDesMoines(project, trigger) {
+function getLocationLabel(locationKey) {
+  const location = ATLAS_LOCATIONS[locationKey];
+  return location ? location.city : "Project location";
+}
+
+function openArrivalContent(project, trigger, locationKey, showPortal) {
+  if (showPortal && locationKey === "westDesMoines") {
+    openCityPortal("west-des-moines",trigger);
+    return;
+  }
+  if (showPortal && locationKey === "omaha") {
+    openCityPortal("omaha",trigger);
+    return;
+  }
+  openDrawer(project,getProjectListButton(project.id) || trigger,locationKey);
+}
+
+function navigateToProject(project, trigger, locationKey, {showPortal=false}={}) {
+  const trip = ++journeySequence;
+  const previousLocationKey = currentDestination;
+  const locationChanged = previousLocationKey !== locationKey;
   window.clearTimeout(journeyTimer);
+  map?.stop();
   closeProject({restoreFocus:false});
   closeCityPortal({restoreFocus:false});
-  site.classList.add("journey-active","traveling","location-west-des-moines");
-  document.querySelectorAll(".marker-omaha").forEach(marker => marker.classList.remove("active"));
-  travelStatus.textContent = "Traveling east · Omaha → West Des Moines";
+  setSelectedProject(project.id,locationKey);
+
+  if (!locationChanged) {
+    setCoordinates(ATLAS_LOCATIONS[locationKey].coordinates);
+    returnOrigin.hidden = locationKey === "omaha";
+    openArrivalContent(project,trigger,locationKey,showPortal);
+    return;
+  }
+
+  site.classList.add("journey-active","traveling");
+  site.classList.toggle("location-west-des-moines",locationKey === "westDesMoines");
+  travelStatus.textContent = `Traveling · ${getLocationLabel(previousLocationKey)} → ${getLocationLabel(locationKey)}`;
   travelStatus.hidden = false;
   returnOrigin.hidden = true;
-  setRouteVisible(true);
-  flyToLocation("westDesMoines", () => {
+  const regionalRoute = (previousLocationKey === "omaha" && locationKey === "westDesMoines")
+    || (previousLocationKey === "westDesMoines" && locationKey === "omaha");
+  setRouteVisible(regionalRoute);
+  flyToLocation(locationKey, () => {
+    if (trip !== journeySequence) return;
     site.classList.remove("journey-active","traveling");
-    site.classList.add("location-west-des-moines");
-    travelStatus.textContent = "Arrived · West Des Moines Project Site";
-    returnOrigin.hidden = false;
-    document.querySelectorAll(".marker-west-des-moines").forEach(marker => marker.classList.add("active"));
-    openCityPortal("west-des-moines",trigger);
-    journeyTimer = window.setTimeout(() => { travelStatus.hidden = true; }, 1400);
+    setCoordinates(ATLAS_LOCATIONS[locationKey].coordinates);
+    window.requestAnimationFrame(() => setCoordinates(ATLAS_LOCATIONS[locationKey].coordinates));
+    if (!regionalRoute || locationKey === "omaha") setRouteVisible(false);
+    travelStatus.textContent = `Arrived · ${getLocationLabel(locationKey)}`;
+    returnOrigin.hidden = locationKey === "omaha";
+    setSelectedProject(project.id,locationKey);
+    openArrivalContent(project,trigger,locationKey,showPortal);
+    journeyTimer = window.setTimeout(() => { travelStatus.hidden = true; }, 1200);
   });
 }
 
 function returnToOmaha() {
+  const trip = ++journeySequence;
+  const previousLocationKey = currentDestination;
   window.clearTimeout(journeyTimer);
+  map?.stop();
   closeProject({restoreFocus:false});
   closeCityPortal({restoreFocus:false});
   site.classList.add("journey-active","returning");
   site.classList.remove("location-west-des-moines","traveling");
-  document.querySelectorAll(".marker-west-des-moines").forEach(marker => marker.classList.remove("active"));
-  travelStatus.textContent = "Returning west · West Des Moines → Omaha";
+  setSelectedProject("omaha","omaha");
+  travelStatus.textContent = `Returning · ${getLocationLabel(previousLocationKey)} → Omaha`;
   travelStatus.hidden = false;
   returnOrigin.hidden = true;
+  setRouteVisible(previousLocationKey === "westDesMoines");
   flyToLocation("omaha", () => {
+    if (trip !== journeySequence) return;
     site.classList.remove("journey-active","returning");
+    setCoordinates(ATLAS_LOCATIONS.omaha.coordinates);
+    window.requestAnimationFrame(() => setCoordinates(ATLAS_LOCATIONS.omaha.coordinates));
     setRouteVisible(false);
     travelStatus.textContent = "Returned · Omaha";
-    document.querySelectorAll(".marker-omaha").forEach(marker => marker.classList.add("active"));
+    setSelectedProject("omaha","omaha");
     openCityPortal("omaha",document.querySelector('.dock [data-go="atlas"]'));
     journeyTimer = window.setTimeout(() => { travelStatus.hidden = true; }, 1200);
   });
 }
 
-function openProject(id, trigger=document.activeElement) {
+function openProject(id, trigger=document.activeElement, requestedLocationKey=null) {
   const project = projects.find(item => item.id === id);
   if (!project) return;
-  if (project.destination === "west-des-moines" && currentDestination !== "westDesMoines") {
-    travelToWestDesMoines(project,trigger);
-    return;
-  }
-  if (project.destination === "west-des-moines" && trigger?.dataset?.mapProject) {
-    openCityPortal("west-des-moines",trigger);
-    return;
-  }
-  openDrawer(project,trigger);
+  const locationKey = requestedLocationKey || projectLocationMemory.get(project.id) || getProjectLocationKeys(project)[0];
+  const cityBeaconSelected = Boolean(trigger?.dataset?.mapProject || trigger?.classList?.contains("map-hotspot"));
+  const showPortal = cityBeaconSelected && (
+    locationKey === "westDesMoines"
+    || (locationKey === "omaha" && currentDestination !== "omaha")
+  );
+  navigateToProject(project,trigger,locationKey,{showPortal});
 }
 
 function getDrawerControls() {
@@ -478,6 +590,14 @@ function getDrawerControls() {
 
 function goTo(id) { document.getElementById(id)?.scrollIntoView({behavior:reduceMotion.matches ? "auto" : "smooth"}); }
 
+function backToProjectList() {
+  const target = getProjectListButton(activeProjectId);
+  closeProject({restoreFocus:false});
+  closeCityPortal({restoreFocus:false});
+  document.querySelector("#work").scrollIntoView({behavior:reduceMotion.matches ? "auto" : "smooth",block:"start"});
+  window.setTimeout(() => target?.focus(), reduceMotion.matches ? 0 : 450);
+}
+
 renderProjectLists();
 initializeMap();
 returnOrigin.addEventListener("click",returnToOmaha);
@@ -486,7 +606,8 @@ document.querySelector("#portal-primary").addEventListener("click",() => {
   if (!activeCityArrival) return;
   if (activeCityArrival.projectIds.length === 1) {
     const returnTarget = portalTrigger;
-    openProject(activeCityArrival.projectIds[0],returnTarget);
+    const projectId = activeCityArrival.projectIds[0];
+    openProject(projectId,getProjectListButton(projectId) || returnTarget);
     return;
   }
   const list = document.querySelector("#portal-project-list");
@@ -500,7 +621,23 @@ document.querySelector("#portal-project-list").addEventListener("click",event =>
   const button = event.target.closest("[data-portal-project]");
   if (!button) return;
   const returnTarget = portalTrigger;
-  openProject(button.dataset.portalProject,returnTarget);
+  openProject(button.dataset.portalProject,getProjectListButton(button.dataset.portalProject) || returnTarget);
+});
+document.querySelector("#previous-project").addEventListener("click",event => {
+  const projectId = event.currentTarget.dataset.targetProject;
+  openProject(projectId,getProjectListButton(projectId));
+});
+document.querySelector("#next-project").addEventListener("click",event => {
+  const projectId = event.currentTarget.dataset.targetProject;
+  openProject(projectId,getProjectListButton(projectId));
+});
+document.querySelector("#back-to-project-list").addEventListener("click",backToProjectList);
+document.querySelector("#drawer-return-omaha").addEventListener("click",returnToOmaha);
+document.querySelector("#drawer-location-choices").addEventListener("click",event => {
+  const button = event.target.closest("[data-project-location]");
+  if (!button) return;
+  const project = projects.find(item => item.id === activeProjectId);
+  if (project) navigateToProject(project,getProjectListButton(project.id),button.dataset.projectLocation);
 });
 document.querySelectorAll("[data-go]").forEach(button => button.addEventListener("click",() => goTo(button.dataset.go)));
 document.addEventListener("click",event => {
@@ -509,6 +646,12 @@ document.addEventListener("click",event => {
 });
 document.querySelectorAll("[data-close]").forEach(button => button.addEventListener("click",() => closeProject()));
 document.addEventListener("keydown",event => {
+  const keyboardProject = event.target.closest?.("[data-project]");
+  if (drawer.hidden && cityPortal.hidden && keyboardProject && (event.key === "Enter" || event.key === " ")) {
+    event.preventDefault();
+    openProject(keyboardProject.dataset.project,keyboardProject);
+    return;
+  }
   if (!cityPortal.hidden) {
     if (event.key === "Escape") {
       event.preventDefault();
