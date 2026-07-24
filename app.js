@@ -6,7 +6,7 @@
  */
 const ATLAS_LOCATIONS = {
   omaha: { city: "Omaha", state: "Nebraska", coordinates: [-95.9345, 41.2565], zoom: 11.2, bearing: -8, pitch: 34 },
-  ames: { city: "Ames", state: "Iowa", coordinates: [-93.6319, 42.0308], zoom: 12, bearing: 7, pitch: 38 }
+  westDesMoines: { city: "West Des Moines", state: "Iowa", coordinates: [-93.7113, 41.5772], zoom: 11.8, bearing: 6, pitch: 36 }
 };
 
 const projects = [
@@ -17,44 +17,74 @@ const projects = [
     summary:"Work involving community engagement analysis, scenario planning, spatial research, and implementation-focused reporting.",
     role:"Planning practice", methods:["Qualitative coding","Survey analysis","Spatial synthesis"],
     findings:[], deliverables:[], skills:[], images:[], stat:"50K+", statLabel:"resident comments analyzed",
-    location:"Omaha · approximate city-center location", destination:"omaha", markerOffset:[-34,-17]
+    location:"Omaha · approximate city-center location", destination:"omaha", markerOffset:[-42,-20]
   },
   {
-    id:"tracker", number:"02", title:"Implementation Tracker", city:"Omaha", state:"Nebraska",
+    id:"future-lab", number:"02", title:"Future Lab — Scenario Choosing Workshop", city:"Omaha", state:"Nebraska",
+    coordinates:[-95.9345,41.2565], approximate:true, category:"Scenario planning, community engagement, and data analysis",
+    program:"We Make Omaha", organization:"City of Omaha", date:"2026",
+    short:"Comparing growth scenarios and translating public choices into planning findings.",
+    summary:"Future Lab was a scenario-choosing phase of the We Make Omaha comprehensive planning process. It invited participants to compare alternative growth scenarios and identify where Omaha should grow, how development should occur, which community values should guide decisions, and which actions should receive priority.",
+    role:"Supported the analysis and communication of participant responses, including overall scenario preferences, demographic and geographic comparisons, and patterns across priorities, values, and proposed actions.",
+    methods:["Survey-response analysis","Scenario comparison","Demographic subgroup analysis","ZIP-code analysis","Spatial analysis and mapping","Data visualization","Community-engagement reporting"],
+    findings:["700 total responses","Neighborhood Hubs: 328 responses, approximately 47%","Connected Corridors: 191 responses, approximately 27%","Urban Anchors: 163 responses, approximately 23%","Business as Usual: 9 responses, approximately 1.3%"],
+    deliverables:["Translation of public input into planning findings","TODO: Morenike to provide images, charts, maps, workshop materials, and reports"],
+    skills:["Survey-response analysis","Scenario comparison","Spatial analysis and mapping","Data visualization","Community-engagement reporting"],
+    images:["TODO: Morenike to provide"],
+    stat:"700", statLabel:"total responses", location:"Omaha · approximate city-center location",
+    destination:"omaha", markerOffset:[0,-40], markerSymbol:"⌁",
+    details:[
+      ["Project overview","A 2026 scenario-choosing workshop within the We Make Omaha comprehensive planning process."],
+      ["Relationship to We Make Omaha","Future Lab was a distinct scenario-choosing phase of the broader We Make Omaha program for the City of Omaha."],
+      ["My contribution","Supported the analysis and communication of participant responses, including overall scenario preferences, demographic and geographic comparisons, and patterns across priorities, values, and proposed actions."],
+      ["Scenario results","Neighborhood Hubs: 328 responses (approximately 47%); Connected Corridors: 191 (approximately 27%); Urban Anchors: 163 (approximately 23%); Business as Usual: 9 (approximately 1.3%)."],
+      ["Participant profile","Participants ages 25–44: approximately 59%. Participants with household incomes from $50,000 to $100,000: approximately 44%. Frequently represented ZIP codes included 68106, 68104, and 68132."],
+      ["Geographic priorities","Transit Station Areas: 367 selections; Downtown and Urban Core: 353; North and South Omaha: 346."],
+      ["Development approach","Infill and redevelopment"],
+      ["Leading community value","Walkability"],
+      ["Leading action","Better bus and transit service"],
+      ["Methods","Survey-response analysis; scenario comparison; demographic subgroup analysis; ZIP-code analysis; spatial analysis and mapping; data visualization; community-engagement reporting."],
+      ["Skills demonstrated","Translation of public input into planning findings; analytical communication; geographic comparison; data visualization."],
+      ["Images, charts, maps, workshop materials, and reports","TODO: Morenike to provide"]
+    ]
+  },
+  {
+    id:"tracker", number:"03", title:"Implementation Tracker", city:"Omaha", state:"Nebraska",
     coordinates:[-95.9345,41.2565], approximate:true, category:"Civic technology and public accountability",
     short:"Making adopted commitments visible, measurable, and accountable.",
     summary:"A public-facing framework connecting plan commitments to actions, indicators, annual reporting, and place-based projects.",
     role:"Public accountability", methods:["Information design","Data governance","Public accountability"],
     findings:[], deliverables:[], skills:[], images:[], stat:"32", statLabel:"implementation indicators",
-    location:"Omaha · approximate city-center location", destination:"omaha", markerOffset:[0,-30]
+    location:"Omaha · approximate city-center location", destination:"omaha", markerOffset:[42,-20]
   },
   {
-    id:"plans", number:"03", title:"Plan Quality and Implementation Research", city:"Regional case study", state:"United States",
+    id:"plans", number:"04", title:"Plan Quality and Implementation Research", city:"Regional case study", state:"United States",
     coordinates:[-95.9345,41.2565], approximate:true, category:"Applied research",
     short:"Following the path from public vision to administrative action.",
     summary:"A comparative evaluation of comprehensive plans in Marshalltown, Iowa; Walla Walla, Washington; and Ottumwa, Iowa, including equity, implementation responsibility, and monitoring.",
     role:"Applied research", methods:["Comparative research","Content analysis","Plan evaluation"],
     findings:[], deliverables:[], skills:[], images:[], stat:"10", statLabel:"plan-quality criteria",
-    location:"Regional research · Marshalltown, Ottumwa, and Walla Walla", destination:"omaha", markerOffset:[34,-17]
+    location:"Regional research · Marshalltown, Ottumwa, and Walla Walla", destination:"omaha", markerOffset:[27,20]
   },
   {
-    id:"access", number:"04", title:"Employment Access and Housing", city:"Omaha", state:"Nebraska",
+    id:"access", number:"05", title:"Employment Access and Housing", city:"Omaha", state:"Nebraska",
     coordinates:[-95.9345,41.2565], approximate:true, category:"Current research",
     short:"Testing how affordable housing connects residents to opportunity.",
     summary:"Research examining how affordable housing locations connect residents with employment opportunities. Spatial mismatch is one explanation being tested, not a predetermined conclusion.",
     role:"Current research", methods:["GIS","Accessibility analysis","Equity research"],
     findings:[], deliverables:[], skills:[], images:[], stat:"1", statLabel:"explanation among several",
-    location:"Omaha · approximate city-center location", destination:"omaha", markerOffset:[0,9]
+    location:"Omaha · approximate city-center location", destination:"omaha", markerOffset:[-27,20]
   },
   {
-    id:"ames", number:"05", title:"Inclusivity WDSM Project", city:"Ames", state:"Iowa",
-    coordinates:[-93.6319,42.0308], approximate:true, category:"Academic research",
-    short:"An Iowa State University research project based in Ames, Iowa.",
+    id:"wdsm", number:"06", title:"Inclusivity WDSM Project", city:"West Des Moines", state:"Iowa",
+    coordinates:[-93.7113,41.5772], approximate:true, category:"Academic research",
+    institution:"Iowa State University",
+    short:"An Iowa State University project located in West Des Moines, Iowa.",
     summary:"TODO: Morenike to provide project summary.", role:"TODO: Morenike to provide",
     methods:["TODO: Morenike to provide methods"], findings:["TODO: Morenike to provide"],
     deliverables:["TODO: Morenike to provide"], skills:["TODO: Morenike to provide"], images:["TODO: Morenike to provide"],
-    stat:"ISU", statLabel:"Iowa State University", location:"Ames Research Station · approximate city-center location",
-    destination:"ames", markerOffset:[0,0],
+    stat:"ISU", statLabel:"Iowa State University", location:"West Des Moines Project Site · approximate city-level location",
+    destination:"west-des-moines", markerOffset:[0,0],
     details:[
       ["Full meaning of WDSM","TODO: Morenike to provide"],
       ["Project date","TODO: Morenike to provide"],
@@ -114,13 +144,13 @@ function showMapError() {
 }
 
 function addRouteLayers() {
-  if (!map || map.getSource("omaha-ames-route")) return;
-  map.addSource("omaha-ames-route", {
+  if (!map || map.getSource("omaha-wdsm-route")) return;
+  map.addSource("omaha-wdsm-route", {
     type:"geojson",
-    data:{type:"Feature",properties:{},geometry:{type:"LineString",coordinates:[ATLAS_LOCATIONS.omaha.coordinates,ATLAS_LOCATIONS.ames.coordinates]}}
+    data:{type:"Feature",properties:{},geometry:{type:"LineString",coordinates:[ATLAS_LOCATIONS.omaha.coordinates,ATLAS_LOCATIONS.westDesMoines.coordinates]}}
   });
-  map.addLayer({id:"regional-route",type:"line",source:"omaha-ames-route",layout:{"line-cap":"round"},paint:{"line-color":"#23c1c6","line-width":1.25,"line-opacity":0.18,"line-dasharray":[3,5]}});
-  map.addLayer({id:"active-route",type:"line",source:"omaha-ames-route",layout:{"line-cap":"round"},paint:{"line-color":"#f3aa55","line-width":2.5,"line-opacity":0,"line-blur":1.2}});
+  map.addLayer({id:"regional-route",type:"line",source:"omaha-wdsm-route",layout:{"line-cap":"round"},paint:{"line-color":"#23c1c6","line-width":1.25,"line-opacity":0.18,"line-dasharray":[3,5]}});
+  map.addLayer({id:"active-route",type:"line",source:"omaha-wdsm-route",layout:{"line-cap":"round"},paint:{"line-color":"#f3aa55","line-width":2.5,"line-opacity":0,"line-blur":1.2}});
 }
 
 function addMapMarkers() {
@@ -130,7 +160,7 @@ function addMapMarkers() {
     markerButton.className = `geographic-marker marker-${project.destination} marker-${project.id}`;
     markerButton.dataset.mapProject = project.id;
     markerButton.setAttribute("aria-label", `${project.title}, ${project.city}, ${project.state}${project.approximate ? ", approximate project location" : ""}`);
-    markerButton.innerHTML = `<span aria-hidden="true"></span><small>${escapeHTML(project.title)}</small>`;
+    markerButton.innerHTML = `<span aria-hidden="true">${project.markerSymbol ? escapeHTML(project.markerSymbol) : ""}</span><small>${escapeHTML(project.title)}</small>`;
     markerButton.addEventListener("click", () => openProject(project.id, markerButton));
     new maplibregl.Marker({element:markerButton,anchor:"center",offset:project.markerOffset})
       .setLngLat(project.coordinates)
@@ -240,20 +270,20 @@ function flyToLocation(destination, onArrival) {
   else map.flyTo({...camera,duration:2200,essential:false,curve:1.25});
 }
 
-function travelToAmes(project, trigger) {
+function travelToWestDesMoines(project, trigger) {
   window.clearTimeout(journeyTimer);
   closeProject({restoreFocus:false});
-  site.classList.add("journey-active","traveling","location-ames");
-  travelStatus.textContent = "Traveling northeast · Omaha → Ames";
+  site.classList.add("journey-active","traveling","location-west-des-moines");
+  travelStatus.textContent = "Traveling east · Omaha → West Des Moines";
   travelStatus.hidden = false;
   returnOrigin.hidden = true;
   setRouteVisible(true);
-  flyToLocation("ames", () => {
+  flyToLocation("westDesMoines", () => {
     site.classList.remove("journey-active","traveling");
-    site.classList.add("location-ames");
-    travelStatus.textContent = "Arrived · Ames Research Station";
+    site.classList.add("location-west-des-moines");
+    travelStatus.textContent = "Arrived · West Des Moines Project Site";
     returnOrigin.hidden = false;
-    document.querySelectorAll(".marker-ames").forEach(marker => marker.classList.add("active"));
+    document.querySelectorAll(".marker-west-des-moines").forEach(marker => marker.classList.add("active"));
     openDrawer(project, trigger);
     journeyTimer = window.setTimeout(() => { travelStatus.hidden = true; }, 1400);
   });
@@ -263,9 +293,9 @@ function returnToOmaha() {
   window.clearTimeout(journeyTimer);
   closeProject({restoreFocus:false});
   site.classList.add("journey-active","returning");
-  site.classList.remove("location-ames","traveling");
-  document.querySelectorAll(".marker-ames").forEach(marker => marker.classList.remove("active"));
-  travelStatus.textContent = "Returning southwest · Ames → Omaha";
+  site.classList.remove("location-west-des-moines","traveling");
+  document.querySelectorAll(".marker-west-des-moines").forEach(marker => marker.classList.remove("active"));
+  travelStatus.textContent = "Returning west · West Des Moines → Omaha";
   travelStatus.hidden = false;
   returnOrigin.hidden = true;
   flyToLocation("omaha", () => {
@@ -279,8 +309,8 @@ function returnToOmaha() {
 function openProject(id, trigger=document.activeElement) {
   const project = projects.find(item => item.id === id);
   if (!project) return;
-  if (project.destination === "ames" && currentDestination !== "ames") {
-    travelToAmes(project,trigger);
+  if (project.destination === "west-des-moines" && currentDestination !== "westDesMoines") {
+    travelToWestDesMoines(project,trigger);
     return;
   }
   openDrawer(project,trigger);

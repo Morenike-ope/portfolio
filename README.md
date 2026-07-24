@@ -1,6 +1,6 @@
 # The Living City Atlas — Morenike Atejioye
 
-An immersive geographic portfolio for an urban planner and public-sector researcher. It preserves Morenike’s cinematic Living City Atlas design while adding a real, navigable map and the Ames research destination. The site uses semantic HTML, modern CSS, vanilla JavaScript, and MapLibre GL JS and is designed for GitHub Pages at `/morenike-living-atlas/`.
+An immersive geographic portfolio for an urban planner and public-sector researcher. It preserves Morenike’s cinematic Living City Atlas design while adding a real, navigable map, the West Des Moines project destination, and Future Lab as a featured Omaha project. The site uses semantic HTML, modern CSS, vanilla JavaScript, and MapLibre GL JS and is designed for GitHub Pages at `/morenike-living-atlas/`.
 
 ## Interactive map
 
@@ -15,7 +15,7 @@ All project content, cities, and coordinates are centralized at the beginning of
 ## Edit the portfolio
 
 - **Projects, field notes, and coordinates:** edit the `projects` array and `ATLAS_LOCATIONS` object at the top of `app.js`.
-- **Ames placeholders:** search `app.js` for `TODO: Morenike to provide`.
+- **Inclusivity WDSM and Future Lab placeholders:** search `app.js` for `TODO: Morenike to provide`.
 - **About and contact:** edit the About section in `index.html`.
 - **Contact links:** replace the TODO spans in `index.html` with real `<a>` elements when URLs are available.
 - **Colors and layout:** edit the custom properties and component rules in `styles.css`.

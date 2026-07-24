@@ -83,8 +83,12 @@ body.drawer-open {
 }
 .geographic-marker:hover > small, .geographic-marker:focus-visible > small, .geographic-marker.active > small { opacity: 1; transform: none; }
 .geographic-marker:hover > span, .geographic-marker:focus-visible > span { transform: scale(1.25); }
-.marker-ames > span { border-color: var(--amber); box-shadow: 0 0 0 7px rgba(243,170,85,.13), 0 0 22px var(--amber); }
-.marker-ames.active > span { transform: scale(1.45); box-shadow: 0 0 0 11px rgba(243,170,85,.15), 0 0 32px var(--amber); }
+.marker-west-des-moines > span { border-color: var(--amber); box-shadow: 0 0 0 7px rgba(243,170,85,.13), 0 0 22px var(--amber); }
+.marker-west-des-moines.active > span { transform: scale(1.45); box-shadow: 0 0 0 11px rgba(243,170,85,.15), 0 0 32px var(--amber); }
+.marker-future-lab > span {
+  width: 18px; height: 18px; color: var(--ink); border-color: var(--teal-soft); background: var(--teal);
+  font-size: .72rem; font-weight: 900; line-height: 14px; box-shadow: 0 0 0 7px rgba(35,193,198,.16), 0 0 27px var(--teal);
+}
 .world-shade {
   position: absolute; inset: 0;
   background:
@@ -185,11 +189,14 @@ h1 em { color: var(--teal-soft); font-weight: 400; }
 .beacon-rings i { position: absolute; width: 14px; height: 14px; border-radius: 50%; background: var(--amber); box-shadow: 0 0 18px var(--amber); }
 .beacon-rings i:nth-child(2), .beacon-rings i:nth-child(3) { background: transparent; border: 1px solid rgba(243,170,85,.7); animation: pulse 2.4s infinite; }
 .beacon-rings i:nth-child(3) { animation-delay: 1.2s; }
+.featured-future-lab .beacon-rings i { background: var(--teal); box-shadow: 0 0 18px var(--teal); }
+.featured-future-lab .beacon-rings i:nth-child(2), .featured-future-lab .beacon-rings i:nth-child(3) { background: transparent; border-color: rgba(35,193,198,.72); }
 .beacon-label {
   display: flex; flex-direction: column; padding: 12px 16px; border: 1px solid var(--line);
   background: rgba(5,18,26,.72); backdrop-filter: blur(12px); border-radius: 2px;
 }
 .beacon-label small { color: var(--amber); font-size: .6rem; letter-spacing: .15em; text-transform: uppercase; }
+.featured-future-lab .beacon-label small { color: var(--teal-soft); }
 .beacon-label strong { margin-top: 5px; font-family: Georgia, serif; font-size: 1.05rem; }
 .legend-card {
   position: absolute; right: clamp(24px, 5vw, 72px); bottom: 130px; display: grid; gap: 10px;
@@ -217,7 +224,7 @@ h1 em { color: var(--teal-soft); font-weight: 400; }
   display: grid; width: min(350px,31vw); gap: 9px;
 }
 .map-hotspot { position: relative; display: flex; align-items: center; width: 100%; border: 0; background: transparent; cursor: pointer; text-align: left; }
-.destination-ames .hotspot-pulse { border-color: var(--amber); box-shadow: 0 0 0 7px rgba(243,170,85,.12), 0 0 25px var(--amber); }
+.destination-west-des-moines .hotspot-pulse { border-color: var(--amber); box-shadow: 0 0 0 7px rgba(243,170,85,.12), 0 0 25px var(--amber); }
 .hotspot-pulse {
   flex: 0 0 auto; width: 13px; height: 13px; border: 3px solid var(--teal);
   border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 7px rgba(35,193,198,.12), 0 0 25px var(--teal);
