@@ -18,7 +18,7 @@ button { color: inherit; }
 body.drawer-open { position: fixed; left: 0; right: 0; width: 100%; overflow: hidden; }
 .skip-link { position: fixed; top: 10px; left: 10px; z-index: 100; padding: 10px 14px; background: var(--teal); color: var(--ink); font-weight: 800; transform: translateY(-160%); }
 .skip-link:focus { transform: none; }
-.map-world { position: fixed; inset: 0; z-index: -2; overflow: hidden; background: var(--ink); }
+.map-world { position: fixed; inset: 0; z-index: 0; overflow: hidden; background: var(--ink); pointer-events: none; }
 .map-image { position: absolute; inset: -2%; background: url("./assets/living-city-atlas.png") center / cover no-repeat; transform: scale(1.025); transition: transform 1.75s cubic-bezier(.62,0,.22,1), background-position 1.75s cubic-bezier(.62,0,.22,1); }
 .map-shade { position: absolute; inset: 0; background: radial-gradient(circle at 74% 42%, transparent 0 18%, rgba(3,15,23,.12) 40%, rgba(3,15,23,.74) 100%), linear-gradient(90deg, rgba(2,13,20,.88), rgba(2,13,20,.18) 65%); }
 .route-map { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
@@ -47,6 +47,7 @@ body.drawer-open { position: fixed; left: 0; right: 0; width: 100%; overflow: hi
 .journey-status, .return-omaha { position: fixed; z-index: 38; right: clamp(22px,4vw,66px); border: 1px solid var(--line); background: rgba(4,18,27,.92); backdrop-filter: blur(12px); font: .62rem monospace; letter-spacing: .1em; text-transform: uppercase; }
 .journey-status { top: 98px; padding: 11px 14px; color: var(--teal-soft); }
 .return-omaha { top: 143px; padding: 10px 13px; cursor: pointer; }
+main { position: relative; z-index: 1; }
 .chapter { position: relative; min-height: 100svh; padding: 124px clamp(25px,7vw,112px) 130px; overflow: hidden; }
 .hero-copy { position: relative; z-index: 2; width: min(780px,59vw); padding-top: clamp(55px,11vh,120px); }
 .eyebrow { display: flex; align-items: center; gap: 12px; margin: 0 0 23px; color: var(--teal-soft); font: 600 .65rem monospace; letter-spacing: .17em; text-transform: uppercase; }
