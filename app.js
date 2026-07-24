@@ -100,6 +100,46 @@ const projects = [
   }
 ];
 
+/*
+ * EDITABLE CITY ARRIVAL CONTENT
+ * - Change `introduction` to revise the welcome message.
+ * - Replace `image` and update `imageAlt` / `imageCredit` when a verified local city image is available.
+ * - Edit `highlights` to change the small facts shown in the portal.
+ * - Reorder `projectIds` to change the city project-story order.
+ * - Copy an entry to add another city, then add its camera settings to ATLAS_LOCATIONS.
+ * - Change `primaryActionLabel` or `secondaryActionLabel` to rename portal buttons.
+ * The current visual uses a second, non-interactive real map because a correctly licensed
+ * West Des Moines photograph has not yet been verified.
+ */
+const cityArrivals = {
+  omaha: {
+    id:"omaha", city:"Omaha", state:"Nebraska", coordinates:[-95.9345,41.2565],
+    approximateLocation:"Omaha city center", eyebrow:"City chapter 01 · Nebraska",
+    title:"Welcome to Omaha",
+    introduction:"A city shaped by neighborhoods, public voices, and decisions about how—and for whom—it grows.",
+    supportingLine:"Explore how community input, spatial evidence, and implementation are informing Omaha’s future.",
+    image:null, imageAlt:"Abstract geographic view centered on Omaha, Nebraska",
+    imageCredit:"Geographic treatment · OpenFreeMap / OpenStreetMap",
+    projectIds:["omaha","future-lab","tracker","access"],
+    highlights:[{value:"700",label:"Future Lab responses"},{value:"32",label:"implementation indicators"},{value:"4",label:"featured projects"}],
+    primaryActionLabel:"Enter Omaha’s project stories →", secondaryActionLabel:"Explore the Omaha map",
+    journeyLabel:"City pulse detected · Omaha"
+  },
+  "west-des-moines": {
+    id:"west-des-moines", city:"West Des Moines", state:"Iowa", coordinates:[-93.7113,41.5772],
+    approximateLocation:"Approximate city-level project location", eyebrow:"City chapter 02 · Iowa",
+    title:"Welcome to West Des Moines",
+    introduction:"A growing Iowa community where questions of belonging and inclusion became the focus of an applied research project.",
+    supportingLine:"", image:null,
+    imageAlt:"Abstract geographic view centered on West Des Moines, Iowa",
+    imageCredit:"Geographic treatment · OpenFreeMap / OpenStreetMap",
+    affiliation:"Inclusivity WDSM Project · Iowa State University",
+    projectIds:["wdsm"], highlights:[{value:"ISU",label:"institutional affiliation"},{value:"1",label:"project story"},{value:"≈",label:"city-level location"}],
+    primaryActionLabel:"Enter the project story →", secondaryActionLabel:"Explore West Des Moines",
+    journeyLabel:"City pulse detected · Omaha → West Des Moines"
+  }
+};
+
 const chapters = [{id:"home",label:"Home"},{id:"atlas",label:"Atlas"},{id:"work",label:"Work"},{id:"lab",label:"Methods"},{id:"about",label:"About"}];
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const site = document.querySelector(".atlas-site");
@@ -109,11 +149,17 @@ const travelStatus = document.querySelector("#travel-status");
 const returnOrigin = document.querySelector("#return-origin");
 const drawer = document.querySelector("#drawer");
 const drawerPanel = drawer.querySelector(".project-drawer");
+const cityPortal = document.querySelector("#city-portal");
+const cityPortalCard = cityPortal.querySelector(".city-portal-card");
 let map = null;
+let portalMap = null;
 let mapReady = false;
 let currentDestination = "omaha";
 let projectTrigger = null;
+let portalTrigger = null;
+let activeCityArrival = null;
 let scrollPosition = 0;
+let portalScrollPosition = 0;
 let journeyTimer = 0;
 
 function escapeHTML(value) {
@@ -222,6 +268,105 @@ function setRouteVisible(visible) {
   if (mapReady && map.getLayer("active-route")) map.setPaintProperty("active-route","line-opacity",visible ? 0.9 : 0);
 }
 
+function setMapInteraction(enabled) {
+  if (!map) return;
+  ["boxZoom","scrollZoom","dragPan","dragRotate","keyboard","doubleClickZoom","touchZoomRotate"].forEach(control => {
+    if (map[control]?.[enabled ? "enable" : "disable"]) map[control][enabled ? "enable" : "disable"]();
+  });
+}
+
+function setPortalBackgroundInert(inert) {
+  document.querySelectorAll(".world,.topbar,.chapter-rail,.scene,.dock,.return-origin").forEach(element => {
+    element.inert = inert;
+  });
+}
+
+function initializePortalMap(city) {
+  if (!window.maplibregl) return;
+  if (!portalMap) {
+    portalMap = new maplibregl.Map({
+      container:"portal-map",
+      style:"https://tiles.openfreemap.org/styles/dark",
+      center:city.coordinates,
+      zoom:12.1,
+      bearing:-8,
+      pitch:42,
+      interactive:false,
+      attributionControl:false,
+      fadeDuration:reduceMotion.matches ? 0 : 300
+    });
+    portalMap.on("styleimagemissing", event => {
+      if (!portalMap.hasImage(event.id)) portalMap.addImage(event.id,{width:1,height:1,data:new Uint8Array([0,0,0,0])});
+    });
+    portalMap.once("load", () => cityPortal.classList.add("portal-map-ready"));
+  } else {
+    portalMap.resize();
+    portalMap.jumpTo({center:city.coordinates,zoom:12.1,bearing:-8,pitch:42});
+  }
+}
+
+function renderPortalProjects(city) {
+  const list = document.querySelector("#portal-project-list");
+  cityPortalCard.classList.remove("showing-projects");
+  list.hidden = true;
+  list.innerHTML = city.projectIds.map(id => {
+    const project = projects.find(item => item.id === id);
+    return project ? `<button type="button" data-portal-project="${escapeHTML(project.id)}"><small>${escapeHTML(project.category)}</small><strong>${escapeHTML(project.title)}</strong><span>Open field note →</span></button>` : "";
+  }).join("");
+}
+
+function getPortalControls() {
+  return [...cityPortal.querySelectorAll("button:not([disabled]):not([tabindex='-1']),[href]:not([tabindex='-1']),[tabindex]:not([tabindex='-1'])")]
+    .filter(element => !element.hidden && element.getClientRects().length);
+}
+
+function openCityPortal(cityId, trigger=document.activeElement) {
+  const city = cityArrivals[cityId];
+  if (!city) return;
+  closeProject({restoreFocus:false});
+  if (!cityPortal.hidden) closeCityPortal({restoreFocus:false});
+  activeCityArrival = city;
+  portalTrigger = trigger instanceof HTMLElement ? trigger : document.activeElement;
+  document.querySelector("#portal-eyebrow").textContent = city.eyebrow;
+  document.querySelector("#portal-title").textContent = city.title;
+  document.querySelector("#portal-introduction").textContent = city.introduction;
+  const affiliation = document.querySelector("#portal-affiliation");
+  affiliation.hidden = !city.affiliation;
+  affiliation.textContent = city.affiliation || "";
+  document.querySelector("#portal-highlights").innerHTML = city.highlights.map(item => `<div><strong>${escapeHTML(item.value)}</strong><span>${escapeHTML(item.label)}</span></div>`).join("");
+  document.querySelector("#portal-primary").textContent = city.primaryActionLabel;
+  document.querySelector("#portal-secondary").textContent = city.secondaryActionLabel;
+  document.querySelector("#portal-journey").textContent = city.journeyLabel;
+  document.querySelector("#portal-credit").textContent = city.imageCredit;
+  document.querySelector(".portal-visual").setAttribute("aria-label",city.imageAlt);
+  renderPortalProjects(city);
+  portalScrollPosition = window.scrollY;
+  cityPortal.hidden = false;
+  document.body.classList.add("portal-open");
+  document.body.style.top = `-${portalScrollPosition}px`;
+  setMapInteraction(false);
+  setPortalBackgroundInert(true);
+  initializePortalMap(city);
+  window.requestAnimationFrame(() => cityPortal.classList.add("is-visible"));
+  cityPortal.querySelector(".city-portal-close").focus();
+}
+
+function closeCityPortal({restoreFocus=true}={}) {
+  if (cityPortal.hidden) return;
+  cityPortal.classList.remove("is-visible");
+  cityPortal.hidden = true;
+  document.body.classList.remove("portal-open");
+  document.body.style.top = "";
+  setPortalBackgroundInert(false);
+  const previousScrollBehavior = document.documentElement.style.scrollBehavior;
+  document.documentElement.style.scrollBehavior = "auto";
+  window.scrollTo(0,portalScrollPosition);
+  document.documentElement.style.scrollBehavior = previousScrollBehavior;
+  setMapInteraction(true);
+  if (restoreFocus && portalTrigger instanceof HTMLElement && portalTrigger.isConnected) portalTrigger.focus();
+  portalTrigger = null;
+}
+
 function closeProject({restoreFocus=true}={}) {
   if (drawer.hidden) return;
   drawer.hidden = true;
@@ -237,6 +382,7 @@ function closeProject({restoreFocus=true}={}) {
 }
 
 function openDrawer(project, trigger) {
+  closeCityPortal({restoreFocus:false});
   projectTrigger = trigger || document.activeElement;
   document.querySelector("#drawer-number").textContent = `Field note ${project.number}`;
   document.querySelector("#drawer-location").textContent = `${project.location} / ${project.category}`;
@@ -273,7 +419,9 @@ function flyToLocation(destination, onArrival) {
 function travelToWestDesMoines(project, trigger) {
   window.clearTimeout(journeyTimer);
   closeProject({restoreFocus:false});
+  closeCityPortal({restoreFocus:false});
   site.classList.add("journey-active","traveling","location-west-des-moines");
+  document.querySelectorAll(".marker-omaha").forEach(marker => marker.classList.remove("active"));
   travelStatus.textContent = "Traveling east · Omaha → West Des Moines";
   travelStatus.hidden = false;
   returnOrigin.hidden = true;
@@ -284,7 +432,7 @@ function travelToWestDesMoines(project, trigger) {
     travelStatus.textContent = "Arrived · West Des Moines Project Site";
     returnOrigin.hidden = false;
     document.querySelectorAll(".marker-west-des-moines").forEach(marker => marker.classList.add("active"));
-    openDrawer(project, trigger);
+    openCityPortal("west-des-moines",trigger);
     journeyTimer = window.setTimeout(() => { travelStatus.hidden = true; }, 1400);
   });
 }
@@ -292,6 +440,7 @@ function travelToWestDesMoines(project, trigger) {
 function returnToOmaha() {
   window.clearTimeout(journeyTimer);
   closeProject({restoreFocus:false});
+  closeCityPortal({restoreFocus:false});
   site.classList.add("journey-active","returning");
   site.classList.remove("location-west-des-moines","traveling");
   document.querySelectorAll(".marker-west-des-moines").forEach(marker => marker.classList.remove("active"));
@@ -302,6 +451,8 @@ function returnToOmaha() {
     site.classList.remove("journey-active","returning");
     setRouteVisible(false);
     travelStatus.textContent = "Returned · Omaha";
+    document.querySelectorAll(".marker-omaha").forEach(marker => marker.classList.add("active"));
+    openCityPortal("omaha",document.querySelector('.dock [data-go="atlas"]'));
     journeyTimer = window.setTimeout(() => { travelStatus.hidden = true; }, 1200);
   });
 }
@@ -313,11 +464,15 @@ function openProject(id, trigger=document.activeElement) {
     travelToWestDesMoines(project,trigger);
     return;
   }
+  if (project.destination === "west-des-moines" && trigger?.dataset?.mapProject) {
+    openCityPortal("west-des-moines",trigger);
+    return;
+  }
   openDrawer(project,trigger);
 }
 
 function getDrawerControls() {
-  return [...drawer.querySelectorAll("button:not([disabled]),[href],input:not([disabled]),[tabindex]:not([tabindex='-1'])")]
+  return [...drawer.querySelectorAll("button:not([disabled]):not([tabindex='-1']),[href]:not([tabindex='-1']),input:not([disabled]):not([tabindex='-1']),[tabindex]:not([tabindex='-1'])")]
     .filter(element => !element.hidden && element.getClientRects().length);
 }
 
@@ -326,6 +481,27 @@ function goTo(id) { document.getElementById(id)?.scrollIntoView({behavior:reduce
 renderProjectLists();
 initializeMap();
 returnOrigin.addEventListener("click",returnToOmaha);
+document.querySelectorAll("[data-portal-close]").forEach(button => button.addEventListener("click",() => closeCityPortal()));
+document.querySelector("#portal-primary").addEventListener("click",() => {
+  if (!activeCityArrival) return;
+  if (activeCityArrival.projectIds.length === 1) {
+    const returnTarget = portalTrigger;
+    openProject(activeCityArrival.projectIds[0],returnTarget);
+    return;
+  }
+  const list = document.querySelector("#portal-project-list");
+  list.hidden = false;
+  cityPortalCard.classList.add("showing-projects");
+  const firstProject = list.querySelector("button");
+  firstProject?.focus();
+});
+document.querySelector("#portal-secondary").addEventListener("click",() => closeCityPortal());
+document.querySelector("#portal-project-list").addEventListener("click",event => {
+  const button = event.target.closest("[data-portal-project]");
+  if (!button) return;
+  const returnTarget = portalTrigger;
+  openProject(button.dataset.portalProject,returnTarget);
+});
 document.querySelectorAll("[data-go]").forEach(button => button.addEventListener("click",() => goTo(button.dataset.go)));
 document.addEventListener("click",event => {
   const projectButton = event.target.closest("[data-project]");
@@ -333,6 +509,30 @@ document.addEventListener("click",event => {
 });
 document.querySelectorAll("[data-close]").forEach(button => button.addEventListener("click",() => closeProject()));
 document.addEventListener("keydown",event => {
+  if (!cityPortal.hidden) {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      closeCityPortal();
+      return;
+    }
+    if (event.key !== "Tab") return;
+    const controls = getPortalControls();
+    if (!controls.length) {
+      event.preventDefault();
+      cityPortalCard.focus();
+      return;
+    }
+    const first = controls[0];
+    const last = controls[controls.length-1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+    return;
+  }
   if (drawer.hidden) return;
   if (event.key === "Escape") {
     event.preventDefault();

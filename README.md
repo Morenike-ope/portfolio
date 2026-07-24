@@ -12,9 +12,18 @@ An immersive geographic portfolio for an urban planner and public-sector researc
 
 All project content, cities, and coordinates are centralized at the beginning of `app.js`. City-center markers are explicitly labeled approximate when the repository does not contain a precise project site.
 
+## City welcome portals
+
+Intentional travel between Omaha and West Des Moines opens an accessible city welcome before the relevant field notes. The portal imagery is a second, non-interactive MapLibre view of the real city geography, styled with the same OpenFreeMap/OpenStreetMap sources as the atlas. No stock photography or unverified city image is used.
+
+- **City introductions, highlights, project lists, and labels:** edit the `cityArrivals` object in `app.js`.
+- **City visual treatment:** edit the `.city-portal`, `.portal-visual`, and related rules in `styles.css`.
+- **Behavior:** the portal is a modal dialog with focus trapping, Escape/backdrop/close-button dismissal, and focus return. Reduced-motion preferences skip the travel animation.
+
 ## Edit the portfolio
 
 - **Projects, field notes, and coordinates:** edit the `projects` array and `ATLAS_LOCATIONS` object at the top of `app.js`.
+- **Welcome portal content:** edit the `cityArrivals` object immediately after the project data in `app.js`.
 - **Inclusivity WDSM and Future Lab placeholders:** search `app.js` for `TODO: Morenike to provide`.
 - **About and contact:** edit the About section in `index.html`.
 - **Contact links:** replace the TODO spans in `index.html` with real `<a>` elements when URLs are available.
