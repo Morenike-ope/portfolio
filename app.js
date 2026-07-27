@@ -105,6 +105,111 @@ const projects = [
 ];
 
 /*
+ * CASE-STUDY CONTENT
+ * These additions enrich the same project records used by the map and project
+ * list. Values beginning with `TODO: Morenike to provide` are intentionally
+ * filtered by the renderer and never appear on the public site.
+ */
+const PROJECT_CASE_STUDIES = {
+  omaha: {
+    role:"Planning, engagement analysis, and implementation practice",
+    methods:["Qualitative coding","Survey analysis","Scenario planning"],
+    evidence:"50K+ qualitative responses across the broader engagement process",
+    caseStudy:[
+      {title:"Project context", body:"We Make Omaha is the City of Omaha’s comprehensive planning process, bringing public knowledge, technical analysis, and implementation planning together to guide long-term decisions."},
+      {title:"The analytical questions", items:["Which priorities appeared consistently across engagement methods?","How did preferences differ among demographic and geographic groups?","Which concerns were citywide and which were place-specific?","How could qualitative feedback become implementable policies and indicators?"]},
+      {title:"My contribution", body:"My work included qualitative coding and synthesis, survey and focus-group analysis, scenario planning, demographic and geographic comparison, public reporting, implementation planning, and coordination across departments."},
+      {title:"Engagement evidence", items:["More than 50,000 qualitative resident responses analyzed across the broader engagement process","3,083 responses to the opening survey","Approximately 300 participants in the Values and Visioning Workshop","Seven district listening sessions and multiple focus-group cohorts"]},
+      {title:"How the work was used", body:"Coding frameworks and data trackers helped translate recurring themes, subgroup differences, and place-specific concerns into planning findings and implementation priorities."},
+      {title:"Skills and tools", body:"Qualitative analysis, survey analysis, demographic comparison, geographic comparison, scenario planning, public reporting, implementation planning, and cross-departmental coordination."}
+    ]
+  },
+  "future-lab": {
+    evidence:"700 total responses",
+    caseStudy:[
+      {title:"Project context", body:"Future Lab was a distinct scenario-choosing phase within We Make Omaha. Participants compared alternative growth scenarios and identified preferred places, values, and actions for Omaha’s future."},
+      {title:"My contribution", body:"I supported analysis and communication of participant responses, including scenario comparison, demographic and ZIP-code cross-tabulation, geographic priorities, values, and preferred actions."},
+      {title:"Participant and geographic patterns", items:["Ages 25–44 represented approximately 59% of participants","Household incomes of $50,000–$100,000 represented approximately 44%","Frequently represented ZIP codes included 68106, 68104, and 68132","Leading geographic priorities included transit station areas, downtown and the urban core, and North and South Omaha"]},
+      {title:"Interpretation", body:"Walkability and better transit were prominent values and actions. The analysis translated community preferences into planning direction while keeping scenario, demographic, and geographic differences visible."},
+      {title:"Scenario results", visualization:"futureLabScenarios"},
+      {title:"Methods", body:"Survey-response analysis, scenario comparison, cross-tabulation, demographic analysis, ZIP-code analysis, spatial analysis, data visualization, and community-engagement reporting."}
+    ]
+  },
+  tracker: {
+    role:"Data governance, information design, and public accountability",
+    methods:["Performance measurement","Data governance","Information design"],
+    evidence:"32 implementation indicators",
+    caseStudy:[
+      {title:"Project context", body:"The Implementation Tracker is a public-communication and accountability framework connecting plan commitments with indicators, projects, policies, and annual reporting."},
+      {title:"Governance questions", items:["What should be measured?","How should progress be communicated?","Who is responsible for updating information?","How can residents see whether commitments are being implemented?","How should indicators connect to policies and projects?"]},
+      {title:"Contribution and structure", body:"The work organizes 32 implementation indicators alongside status and trend tracking, project mapping, policy relationships, and annual reporting."},
+      {title:"Public use", body:"Accessibility, responsive design, and plain-language progress communication help residents follow how plan commitments move toward implementation."},
+      {title:"Deliverables", body:"Public-facing progress communication, indicator and trend structure, mapped projects, policy relationships, and an annual reporting framework."}
+    ]
+  },
+  plans: {
+    role:"Comparative plan evaluation and policy research",
+    methods:["Content analysis","0–2 criteria coding","Comparative research"],
+    evidence:"10 plan-quality criteria across 3 cities",
+    caseStudy:[
+      {title:"Research context", body:"A comparative evaluation of written comprehensive plans in Marshalltown, Iowa; Ottumwa, Iowa; and Walla Walla, Washington."},
+      {title:"Evaluation framework", items:["Vision","Factual analysis","Consideration of alternatives","Goals","Substantive scope","Equity","Public participation","Organization","Implementation","Monitoring"]},
+      {title:"Method", body:"Each plan is reviewed with a clarified 0–2 coding framework, allowing consistent comparison across ten criteria and three city cases."},
+      {title:"Interpretive limit", body:"The study assesses the quality of written plans. It does not establish whether plan commitments were implemented or prove real-world outcomes."},
+      {title:"Research locations", body:"Use the location controls above to move among Marshalltown, Ottumwa, and Walla Walla."}
+    ]
+  },
+  access: {
+    role:"Ongoing spatial and accessibility research",
+    methods:["GIS","Accessibility measures","Equity analysis"],
+    evidence:"Research in progress",
+    caseStudy:[
+      {title:"Research objective", body:"This ongoing research investigates relationships among employment location, housing affordability, transportation access, and unequal access to opportunity in Omaha."},
+      {title:"Analytical approach", body:"The study examines employment accessibility, housing affordability, transportation access, the spatial distribution of jobs and workers, and demographic and socioeconomic differences."},
+      {title:"Framework under study", body:"Spatial mismatch is treated as one possible explanatory framework to test—not as a predetermined conclusion."},
+      {title:"Status", body:"Research in progress. Findings will be added only after the analysis is complete and verified."}
+    ]
+  },
+  wdsm: {
+    short:"An Iowa State University survey research project focused on inclusion in West Des Moines.",
+    summary:"A collaborative Iowa State University research project examining inclusion in West Des Moines through survey development, data collection, analysis, interpretation, and reporting.",
+    role:"Survey Team Lead",
+    methods:["Survey development","Data analysis","Research reporting"],
+    evidence:"Iowa State University · 2024",
+    stat:"2024", statLabel:"Iowa State University research",
+    caseStudy:[
+      {title:"Project context", body:"The West Des Moines Inclusivity Index: Survey Report was completed as a collaborative research project at Iowa State University."},
+      {title:"My role", body:"As Survey Team Lead, I led the survey component, including survey development, data collection, analysis, interpretation, and the final report."},
+      {title:"Institution and date", body:"Iowa State University · 2024"},
+      {title:"Research objective", body:"TODO: Morenike to provide"},
+      {title:"Key findings", body:"TODO: Morenike to provide"},
+      {title:"Related report", links:[{label:"West Des Moines Inclusivity Index: Survey Report",url:"https://doi.org/10.31274/usp-20241220-2"}]}
+    ]
+  }
+};
+
+projects.forEach(project => Object.assign(project, PROJECT_CASE_STUDIES[project.id] || {}));
+
+const ANALYTICAL_WORKFLOW = [
+  ["Question","Public priorities and implementation needs shape the inquiry."],
+  ["Data preparation","Comments, surveys, locations, policies, and indicators become analyzable records."],
+  ["Analysis","Coding, comparison, cross-tabulation, GIS, and measurement reveal patterns."],
+  ["Interpretation","Context and community knowledge test what the patterns mean."],
+  ["Communication","Maps, charts, reports, and trackers make evidence understandable."],
+  ["Implementation","Useful measures connect findings to responsibility and action."]
+];
+
+const DATA_PRACTICE = [
+  {title:"Qualitative analysis",projectId:"omaha",question:"Which priorities recur—and where do experiences differ?",data:"Resident comments, focus groups, interviews, and open-ended survey responses.",method:"Coding frameworks, synthesis, and comparison across engagement methods.",example:"More than 50,000 qualitative responses across the broader We Make Omaha process.",why:"Recurring and place-specific concerns could be translated into planning priorities."},
+  {title:"Survey analysis",projectId:"future-lab",question:"How do priorities vary across participants and places?",data:"Scenario choices, age, income, ZIP code, values, geography, and preferred actions.",method:"Cross-tabulation, subgroup comparison, and careful interpretation.",example:"700 Future Lab responses analyzed across scenarios and participant characteristics.",why:"Differences remained visible instead of being collapsed into one headline result."},
+  {title:"Spatial analysis",projectId:"access",question:"How do housing, jobs, transportation, and opportunity relate across space?",data:"Geographic, housing, employment, transportation, and demographic records.",method:"GIS, accessibility measures, and equity-oriented spatial comparison.",example:"Ongoing Employment Access and Housing research in Omaha.",why:"Geography helps test—not assume—possible barriers to opportunity."},
+  {title:"Scenario analysis",projectId:"future-lab",question:"What do preferences across alternative growth futures reveal?",data:"Four scenario choices and related priorities, values, and actions.",method:"Scenario comparison with demographic and geographic cross-tabs.",example:"Neighborhood Hubs received 328 reported selections, approximately 47%.",why:"Scenario preferences could inform planning direction without erasing subgroup patterns."},
+  {title:"Data visualization",projectId:"future-lab",question:"How can complex findings become legible without losing context?",data:"Survey results, categories, locations, and comparison groups.",method:"Accessible charts, maps, tables, dashboards, and explanatory captions.",example:"A labeled scenario-results chart with an accessible data table.",why:"Decision-makers and residents can see both the pattern and the evidence behind it."},
+  {title:"Performance measurement",projectId:"tracker",question:"How can residents see whether adopted commitments are advancing?",data:"Indicators, status, trends, mapped projects, policies, and annual updates.",method:"Indicator design, reporting structure, and public information design.",example:"32 implementation indicators connected to public-facing progress communication.",why:"Accountability becomes observable rather than buried in internal systems."},
+  {title:"Data governance",projectId:"tracker",question:"Who maintains public data, and how does it remain reliable over time?",data:"Indicator definitions, documentation, update responsibilities, and reporting cycles.",method:"Standards, ownership, continuity, access, and institutional coordination.",example:"An annual reporting framework linking indicators, policies, and projects.",why:"A useful tracker depends on maintainable data—not only a polished interface."}
+];
+
+/*
  * EDITABLE CITY ARRIVAL CONTENT
  * - Change `introduction` to revise the welcome message.
  * - Replace `image` and update `imageAlt` / `imageCredit` when a verified local city image is available.
@@ -196,7 +301,7 @@ const BEYOND_THE_MAP = {
   }
 };
 
-const chapters = [{id:"home",label:"Home"},{id:"atlas",label:"Atlas"},{id:"work",label:"Work"},{id:"lab",label:"Methods"},{id:"about",label:"About"}];
+const chapters = [{id:"home",label:"Home"},{id:"projects",label:"Projects"},{id:"data-practice",label:"Data Practice"},{id:"about",label:"About"},{id:"contact",label:"Contact"}];
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const site = document.querySelector(".atlas-site");
 const mapState = document.querySelector("#map-state");
@@ -226,14 +331,19 @@ function escapeHTML(value) {
   return String(value).replace(/[&<>"']/g, character => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[character]));
 }
 
+function isPublicValue(value) {
+  return value != null && !String(value).startsWith("TODO: Morenike to provide");
+}
+
 function getProjectLocationKeys(project) {
   if (project.locationKeys?.length) return project.locationKeys;
   return [project.destination === "west-des-moines" ? "westDesMoines" : "omaha"];
 }
 
 function getProjectListButton(projectId) {
-  return document.querySelector(`#project-stack [data-project="${projectId}"]`)
-    || document.querySelector(`#hotspot-field [data-project="${projectId}"]`);
+  const gridButton = document.querySelector(`#project-stack [data-project="${projectId}"]`);
+  const hotspotButton = document.querySelector(`#hotspot-field [data-project="${projectId}"]`);
+  return document.querySelector("#project-grid-view")?.hidden ? (hotspotButton || gridButton) : (gridButton || hotspotButton);
 }
 
 function setSelectedProject(projectId, locationKey) {
@@ -254,8 +364,42 @@ function renderProjectLists() {
   const projectStack = document.querySelector("#project-stack");
   projects.forEach((project, index) => {
     hotspotField.insertAdjacentHTML("beforeend", `<button class="map-hotspot hotspot-${index+1} destination-${project.destination}" type="button" data-project="${project.id}" aria-label="Open ${escapeHTML(project.title)}"><span class="hotspot-pulse"></span><span class="hotspot-card"><small>${escapeHTML(project.location)} · ${project.number}</small><strong>${escapeHTML(project.title)}</strong><em>${escapeHTML(project.category)}</em></span></button>`);
-    projectStack.insertAdjacentHTML("beforeend", `<button class="project-tile" type="button" data-project="${project.id}" aria-label="Open ${escapeHTML(project.title)} project details"><span class="tile-number">${project.number}</span><span class="tile-copy"><small>${escapeHTML(project.category)}</small><strong>${escapeHTML(project.title)}</strong><em>${escapeHTML(project.short)}</em></span><span class="tile-stat"><strong>${escapeHTML(project.stat)}</strong><small>${escapeHTML(project.statLabel)}</small></span><span class="tile-arrow" aria-hidden="true">↗</span></button>`);
+    projectStack.insertAdjacentHTML("beforeend", `<button class="project-tile" type="button" data-project="${project.id}" aria-label="View ${escapeHTML(project.title)} case study">
+      <span class="tile-number">${project.number}</span>
+      <span class="tile-copy"><small>${escapeHTML(project.category)} · ${escapeHTML(project.city)}, ${escapeHTML(project.state)}</small><strong>${escapeHTML(project.title)}</strong><em>${escapeHTML(project.short)}</em>
+      <span class="tile-role">My role · ${escapeHTML(project.role)}</span><span class="tile-methods">${project.methods.slice(0,3).map(method => `<i>${escapeHTML(method)}</i>`).join("")}</span>
+      <span class="tile-action">View case study ↗</span></span>
+      <span class="tile-stat"><strong>${escapeHTML(project.stat)}</strong><small>${escapeHTML(project.evidence || project.statLabel)}</small></span>
+    </button>`);
   });
+}
+
+function setProjectView(view, {focus=false}={}) {
+  const mapView = document.querySelector("#project-map-view");
+  const gridView = document.querySelector("#project-grid-view");
+  const showGrid = view === "grid";
+  mapView.hidden = showGrid;
+  gridView.hidden = !showGrid;
+  document.querySelectorAll("[data-project-view]").forEach(button => {
+    const active = button.dataset.projectView === view;
+    button.setAttribute("aria-pressed",String(active));
+    if (active && focus) button.focus();
+  });
+  if (!showGrid && map) window.setTimeout(() => map.resize(),0);
+}
+
+function renderDataPractice() {
+  const workflow = document.querySelector("#analytical-workflow");
+  workflow.innerHTML = `<ol>${ANALYTICAL_WORKFLOW.map(([stage,note],index) => `<li><span>${String(index+1).padStart(2,"0")}</span><strong>${escapeHTML(stage)}</strong><small>${escapeHTML(note)}</small></li>`).join("")}</ol>
+    <p>Not always linear: community knowledge can reshape the question, while implementation needs determine which measures are useful.</p>`;
+  document.querySelector("#data-practice-list").innerHTML = DATA_PRACTICE.map((area,index) => `
+    <details class="practice-detail"${index === 0 ? " open" : ""}>
+      <summary><span>${String(index+1).padStart(2,"0")}</span><strong>${escapeHTML(area.title)}</strong><em>Explore method</em></summary>
+      <div class="practice-detail-body">
+        <dl><div><dt>Question</dt><dd>${escapeHTML(area.question)}</dd></div><div><dt>Data</dt><dd>${escapeHTML(area.data)}</dd></div><div><dt>Method</dt><dd>${escapeHTML(area.method)}</dd></div><div><dt>Real example</dt><dd>${escapeHTML(area.example)}</dd></div><div><dt>Why it mattered</dt><dd>${escapeHTML(area.why)}</dd></div></dl>
+        <button type="button" data-method-project="${escapeHTML(area.projectId)}">Open related case study ↗</button>
+      </div>
+    </details>`).join("");
 }
 
 function renderBeyondTheMap() {
@@ -587,6 +731,32 @@ function renderDrawerNavigation(project, locationKey) {
   }).join("") : "";
 }
 
+function renderFutureLabScenarios() {
+  const rows = [
+    ["Neighborhood Hubs",328,"47%"],
+    ["Connected Corridors",191,"27%"],
+    ["Urban Anchors",163,"23%"],
+    ["Business as Usual",9,"1.3%"]
+  ];
+  return `<figure class="scenario-figure" aria-labelledby="scenario-chart-title">
+    <figcaption id="scenario-chart-title">Reported Future Lab scenario selections</figcaption>
+    <div class="scenario-bars" aria-hidden="true">${rows.map(([label,count,percent]) => `<div><span>${escapeHTML(label)}</span><i style="--bar:${count / 3.28}%"></i><strong>${count} · ${percent}</strong></div>`).join("")}</div>
+    <div class="table-wrap" role="region" aria-label="Future Lab scenario results table" tabindex="0"><table><thead><tr><th>Scenario</th><th>Responses</th><th>Approximate share</th></tr></thead><tbody>${rows.map(row => `<tr><th>${escapeHTML(row[0])}</th><td>${row[1]}</td><td>${row[2]}</td></tr>`).join("")}</tbody></table></div>
+    <p>The four reported scenario counts total 691; percentages are approximate. The project recorded 700 total responses.</p>
+  </figure>`;
+}
+
+function renderCaseStudySection(section, index) {
+  if (!isPublicValue(section.body) && !section.items?.some(isPublicValue) && !section.links?.some(link => isPublicValue(link.label) && isPublicValue(link.url)) && !section.visualization) return "";
+  const body = isPublicValue(section.body) ? `<p>${escapeHTML(section.body)}</p>` : "";
+  const items = section.items?.filter(isPublicValue);
+  const list = items?.length ? `<ul>${items.map(item => `<li>${escapeHTML(item)}</li>`).join("")}</ul>` : "";
+  const links = section.links?.filter(link => isPublicValue(link.label) && isPublicValue(link.url));
+  const linkMarkup = links?.length ? `<div class="case-links">${links.map(link => `<a href="${escapeHTML(link.url)}" target="_blank" rel="noopener noreferrer">${escapeHTML(link.label)} ↗</a>`).join("")}</div>` : "";
+  const visualization = section.visualization === "futureLabScenarios" ? renderFutureLabScenarios() : "";
+  return `<details class="case-study-section"${index === 0 ? " open" : ""}><summary><span>${String(index+1).padStart(2,"0")}</span><h3>${escapeHTML(section.title)}</h3></summary><div>${body}${list}${visualization}${linkMarkup}</div></details>`;
+}
+
 function openDrawer(project, trigger, locationKey=getProjectLocationKeys(project)[0]) {
   closeCityPortal({restoreFocus:false});
   setSelectedProject(project.id,locationKey);
@@ -601,9 +771,10 @@ function openDrawer(project, trigger, locationKey=getProjectLocationKeys(project
   document.querySelector("#drawer-stat").textContent = project.stat;
   document.querySelector("#drawer-stat-label").textContent = project.statLabel;
   const details = document.querySelector("#field-note-details");
-  details.hidden = !project.details;
-  details.innerHTML = project.details ? project.details.map(([label,value]) => `<section><h3>${escapeHTML(label)}</h3><p>${escapeHTML(value)}</p></section>`).join("") : "";
-  document.querySelector("#drawer-methods").innerHTML = `<small>Methods and lenses</small>${project.methods.map(method => `<span>${escapeHTML(method)}</span>`).join("")}`;
+  const caseStudy = (project.caseStudy || []).map(renderCaseStudySection).join("");
+  details.hidden = !caseStudy;
+  details.innerHTML = caseStudy;
+  document.querySelector("#drawer-methods").innerHTML = `<small>Methods and lenses</small>${project.methods.filter(isPublicValue).map(method => `<span>${escapeHTML(method)}</span>`).join("")}`;
   renderDrawerNavigation(project,locationKey);
   scrollPosition = window.scrollY;
   drawer.hidden = false;
@@ -706,7 +877,7 @@ function returnToOmaha() {
     setRouteVisible(false);
     travelStatus.textContent = "Returned · Omaha";
     setSelectedProject("omaha","omaha");
-    openCityPortal("omaha",document.querySelector('.dock [data-go="atlas"]'));
+    openCityPortal("omaha",document.querySelector('.dock [data-go="projects"]'));
     journeyTimer = window.setTimeout(() => { travelStatus.hidden = true; }, 1200);
   });
 }
@@ -728,17 +899,18 @@ function getDrawerControls() {
     .filter(element => !element.hidden && element.getClientRects().length);
 }
 
-function goTo(id) { document.getElementById(id)?.scrollIntoView({behavior:reduceMotion.matches ? "auto" : "smooth"}); }
+function goTo(id) { document.getElementById(id)?.scrollIntoView({behavior:reduceMotion.matches ? "auto" : "smooth",block:"start"}); }
 
 function backToProjectList() {
-  const target = getProjectListButton(activeProjectId);
   closeProject({restoreFocus:false});
   closeCityPortal({restoreFocus:false});
-  document.querySelector("#work").scrollIntoView({behavior:reduceMotion.matches ? "auto" : "smooth",block:"start"});
-  window.setTimeout(() => target?.focus(), reduceMotion.matches ? 0 : 450);
+  setProjectView("grid");
+  document.querySelector("#projects").scrollIntoView({behavior:reduceMotion.matches ? "auto" : "smooth",block:"start"});
+  window.setTimeout(() => getProjectListButton(activeProjectId)?.focus(), reduceMotion.matches ? 0 : 450);
 }
 
 renderProjectLists();
+renderDataPractice();
 renderBeyondTheMap();
 initializeBeyondMapReveal();
 initializeMap();
@@ -782,7 +954,14 @@ document.querySelector("#drawer-location-choices").addEventListener("click",even
   if (project) navigateToProject(project,getProjectListButton(project.id),button.dataset.projectLocation);
 });
 document.querySelectorAll("[data-go]").forEach(button => button.addEventListener("click",() => goTo(button.dataset.go)));
+document.querySelectorAll("[data-project-view]").forEach(button => button.addEventListener("click",() => setProjectView(button.dataset.projectView)));
 document.addEventListener("click",event => {
+  const methodProject = event.target.closest("[data-method-project]");
+  if (methodProject) {
+    setProjectView("grid");
+    openProject(methodProject.dataset.methodProject,methodProject);
+    return;
+  }
   const projectButton = event.target.closest("[data-project]");
   if (projectButton) openProject(projectButton.dataset.project,projectButton);
 });

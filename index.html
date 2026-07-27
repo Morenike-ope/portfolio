@@ -8,9 +8,9 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 rx=%226%22 fill=%22%23071a26%22/><text x=%225%22 y=%2222%22 fill=%22%2323c1c6%22 font-size=%2215%22 font-family=%22Arial%22 font-weight=%22700%22>MA</text></svg>">
   <link rel="preconnect" href="https://tiles.openfreemap.org" crossorigin>
   <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.12.0/dist/maplibre-gl.css">
-  <link rel="stylesheet" href="./styles.css?v=8">
+  <link rel="stylesheet" href="./styles.css?v=11">
   <script src="https://unpkg.com/maplibre-gl@5.12.0/dist/maplibre-gl.js" defer></script>
-  <script src="./app.js?v=7" defer></script>
+  <script src="./app.js?v=9" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -40,9 +40,16 @@
       <div class="scene-content hero-content">
         <p class="kicker"><span></span> Welcome to my living city atlas</p>
         <h1>I study how cities <em>listen, decide,</em> and move.</h1>
-        <p class="lede">My work connects public knowledge, spatial analysis, and implementation—turning community priorities into decisions people can see and measure.</p>
+        <p class="lede">I use community knowledge, data analysis, and spatial research to understand how cities make decisions—and whether those decisions lead to visible results.</p>
+        <div class="practice-framework" aria-label="My practice moves from listening, through analysis, to implementation">
+          <div><strong>Listen</strong><span>Qualitative coding, surveys, focus groups, interviews, and public engagement.</span></div>
+          <i aria-hidden="true"></i>
+          <div><strong>Analyze</strong><span>Spatial, demographic, survey, scenario, equity, and visual analysis.</span></div>
+          <i aria-hidden="true"></i>
+          <div><strong>Implement</strong><span>Indicators, data governance, reporting systems, coordination, and accountability.</span></div>
+        </div>
         <div class="hero-actions">
-          <button class="atlas-button" type="button" data-go="atlas">Enter the atlas <span>↘</span></button>
+          <button class="atlas-button" type="button" data-go="projects">Explore projects <span>↘</span></button>
           <button class="text-button" type="button" data-go="about">Read my story</button>
         </div>
       </div>
@@ -58,36 +65,49 @@
       <div class="scroll-cue"><span>Scroll to travel</span><i></i></div>
     </section>
 
-    <section class="scene atlas-scene" id="atlas">
+    <section class="scene projects-scene" id="projects">
       <div class="scene-heading">
-        <p class="kicker"><span></span> Explore the field</p>
-        <h2>Six projects where my work comes alive.</h2>
-        <p>Select a location to open its field note.</p>
+        <p class="kicker"><span></span> Project atlas</p>
+        <h2>Communities, evidence, and public decisions—in place.</h2>
+        <p>Explore how my work with communities, data, and public institutions has taken shape across places and projects.</p>
       </div>
-      <div class="hotspot-field" id="hotspot-field" aria-label="Project destinations"></div>
-      <div class="atlas-key"><span>FIELD INDEX</span><strong>06 projects</strong><small>Planning · Data · Research · Access</small></div>
+      <div class="project-view-toggle" role="group" aria-label="Choose a project atlas view">
+        <button type="button" data-project-view="map" aria-pressed="true">Map view</button>
+        <button type="button" data-project-view="grid" aria-pressed="false">Project list</button>
+      </div>
+      <div class="project-view project-map-view" id="project-map-view">
+        <div class="hotspot-field" id="hotspot-field" aria-label="Accessible project destinations"></div>
+        <div class="atlas-key"><span>FIELD INDEX</span><strong>06 projects</strong><small>Planning · Data · Research · Access</small></div>
+      </div>
+      <div class="project-view project-grid-view" id="project-grid-view" hidden>
+        <div class="project-stack" id="project-stack"></div>
+      </div>
     </section>
 
-    <section class="scene work-scene" id="work">
-      <div class="scene-heading work-heading"><p class="kicker"><span></span> Selected work</p><h2>Projects built for public use.</h2></div>
-      <div class="project-stack" id="project-stack"></div>
-    </section>
-
-    <section class="scene lab-scene" id="lab">
-      <div class="lab-intro">
-        <p class="kicker"><span></span> Methods lab</p>
-        <h2>Opportunity is not one number.</h2>
-        <p>Move the three inputs to see how housing, transportation, and job access combine. This simplified demonstration shows the logic behind accessibility research—not a finding about any real neighborhood.</p>
+    <section class="scene data-practice-scene" id="data-practice">
+      <div class="data-practice-intro">
+        <p class="kicker"><span></span> Data practice</p>
+        <h2>Evidence becomes useful when people can act on it.</h2>
+        <p>Across projects, I move between community knowledge, spatial patterns, analytical choices, and the systems needed to keep results visible.</p>
       </div>
-      <div class="lab-console">
-        <div class="console-top"><span>ACCESS MODEL / DEMO</span><span>LIVE INPUT</span></div>
-        <div class="score-orbit" id="score-orbit"><div><strong id="access-score">58</strong><span>combined access</span></div></div>
-        <div class="sliders">
-          <label><span><b>Affordable housing</b><output id="housing-output" for="housing">62</output></span><input id="housing" type="range" min="0" max="100" value="62"></label>
-          <label><span><b>Transit connection</b><output id="transit-output" for="transit">44</output></span><input id="transit" type="range" min="0" max="100" value="44"></label>
-          <label><span><b>Nearby jobs</b><output id="jobs-output" for="jobs">71</output></span><input id="jobs" type="range" min="0" max="100" value="71"></label>
+      <div class="analytical-workflow" id="analytical-workflow" aria-label="Selected analytical workflow"></div>
+      <div class="data-practice-list" id="data-practice-list"></div>
+      <div class="interactive-example">
+        <div class="interactive-example-copy">
+          <p class="kicker"><span></span> Secondary interactive example</p>
+          <h3>Opportunity is not one number.</h3>
+          <p>Adjust three inputs to explore the logic behind accessibility research. This is a simplified demonstration, not a finding about a real neighborhood.</p>
         </div>
-        <p class="model-note" id="model-note" aria-live="polite"></p>
+        <div class="lab-console">
+          <div class="console-top"><span>ACCESS MODEL / DEMO</span><span>LIVE INPUT</span></div>
+          <div class="score-orbit" id="score-orbit"><div><strong id="access-score">58</strong><span>combined access</span></div></div>
+          <div class="sliders">
+            <label><span><b>Affordable housing</b><output id="housing-output" for="housing">62</output></span><input id="housing" aria-label="Affordable housing" type="range" min="0" max="100" value="62"></label>
+            <label><span><b>Transit connection</b><output id="transit-output" for="transit">44</output></span><input id="transit" aria-label="Transit connection" type="range" min="0" max="100" value="44"></label>
+            <label><span><b>Nearby jobs</b><output id="jobs-output" for="jobs">71</output></span><input id="jobs" aria-label="Nearby jobs" type="range" min="0" max="100" value="71"></label>
+          </div>
+          <p class="model-note" id="model-note" aria-live="polite"></p>
+        </div>
       </div>
     </section>
 
@@ -112,7 +132,9 @@
           </div>
           <div class="beyond-map-grid" id="beyond-map-grid"></div>
         </section>
-        <div class="contact-placeholders" aria-label="Contact links">
+        <section class="contact-section" id="contact" aria-labelledby="contact-title">
+          <h3 id="contact-title">Contact</h3>
+          <div class="contact-placeholders" aria-label="Contact links">
           <a class="contact-link" href="mailto:opeyemiatejioye@gmail.com" aria-label="Email Morenike Atejioye at opeyemiatejioye@gmail.com">
             <span>Email</span><strong>opeyemiatejioye@gmail.com</strong><i aria-hidden="true">↗</i>
           </a>
@@ -122,17 +144,18 @@
           <a class="contact-link" href="./assets/Morenike_Atejioye_Resume.pdf" target="_blank" rel="noopener noreferrer" aria-label="Open Morenike Atejioye's résumé PDF in a new tab">
             <span>Résumé</span><strong>View résumé</strong><i aria-hidden="true">↗</i>
           </a>
-        </div>
-        <div class="contact-line"><span>Open to research and civic innovation conversations.</span><button type="button" data-go="home">Return to origin ↑</button></div>
+          </div>
+          <div class="contact-line"><span>Open to research and civic innovation conversations.</span><button type="button" data-go="home">Return to origin ↑</button></div>
+        </section>
       </div>
     </section>
 
     <nav class="dock" aria-label="Atlas navigation">
       <button type="button" class="active" data-go="home" aria-label="Home"><span>⌂</span><small>Home</small></button>
-      <button type="button" data-go="atlas" aria-label="Atlas"><span>⌖</span><small>Atlas</small></button>
-      <button type="button" data-go="work" aria-label="Work"><span>▦</span><small>Work</small></button>
-      <button type="button" data-go="lab" aria-label="Methods"><span>∿</span><small>Methods</small></button>
+      <button type="button" data-go="projects" aria-label="Projects"><span>⌖</span><small>Projects</small></button>
+      <button type="button" data-go="data-practice" aria-label="Data Practice"><span>∿</span><small>Data</small></button>
       <button type="button" data-go="about" aria-label="About"><span>◉</span><small>About</small></button>
+      <button type="button" data-go="contact" aria-label="Contact"><span>↗</span><small>Contact</small></button>
     </nav>
 
     <div class="city-portal" id="city-portal" role="dialog" aria-modal="true" aria-labelledby="portal-title" aria-describedby="portal-introduction" hidden>
