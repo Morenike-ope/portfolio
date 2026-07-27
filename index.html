@@ -8,7 +8,7 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 rx=%226%22 fill=%22%23071a26%22/><text x=%225%22 y=%2222%22 fill=%22%2323c1c6%22 font-size=%2215%22 font-family=%22Arial%22 font-weight=%22700%22>MA</text></svg>">
   <link rel="preconnect" href="https://tiles.openfreemap.org" crossorigin>
   <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.12.0/dist/maplibre-gl.css">
-  <link rel="stylesheet" href="./styles.css?v=11">
+  <link rel="stylesheet" href="./styles.css?v=12">
   <script src="https://unpkg.com/maplibre-gl@5.12.0/dist/maplibre-gl.js" defer></script>
   <script src="./app.js?v=9" defer></script>
 </head>
@@ -115,9 +115,23 @@
       <div class="about-card">
         <p class="kicker"><span></span> About the cartographer</p>
         <h2>I am interested in what happens after the plan is adopted.</h2>
-        <div class="about-columns">
-          <p>I am a City Planner in Long Range Planning with the City of Omaha. My work sits between urban planning, public administration, data governance, community engagement, and implementation.</p>
-          <p>I study how institutions collect community knowledge, coordinate across departments, and make implementation visible and accountable to the people they serve.</p>
+        <div class="about-editorial-grid">
+          <figure class="about-portrait">
+            <div class="portrait-frame">
+              <picture>
+                <source type="image/webp" srcset="./assets/Morenike-640.webp 640w, ./assets/Morenike-1080.webp 1080w" sizes="(max-width: 640px) 220px, (max-width: 980px) 38vw, 410px">
+                <img src="./assets/Morenike.JPG" width="3877" height="4846" alt="Portrait of Morenike Atejioye" loading="lazy" decoding="async">
+              </picture>
+              <span class="portrait-coordinate" aria-hidden="true">41.2565° N · 95.9345° W</span>
+            </div>
+            <figcaption><strong>Morenike Atejioye</strong><span>Urban Planner · Applied Researcher · Data Analyst</span></figcaption>
+          </figure>
+          <div class="about-narrative">
+            <div class="about-columns">
+              <p>I am a City Planner in Long Range Planning with the City of Omaha. My work sits between urban planning, public administration, data governance, community engagement, and implementation.</p>
+              <p>I study how institutions collect community knowledge, coordinate across departments, and make implementation visible and accountable to the people they serve.</p>
+            </div>
+          </div>
         </div>
         <div class="profile-grid">
           <div><small>Methods</small><strong>Spatial analysis · qualitative coding · survey analysis</strong></div>
