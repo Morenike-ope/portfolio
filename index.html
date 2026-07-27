@@ -6,22 +6,14 @@
   <meta name="description" content="The Living City Atlas: planning, Future Lab scenario analysis, public engagement, data governance, and applied research work by Morenike Atejioye.">
   <title>Morenike Atejioye | Living City Atlas</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 rx=%226%22 fill=%22%23071a26%22/><text x=%225%22 y=%2222%22 fill=%22%2323c1c6%22 font-size=%2215%22 font-family=%22Arial%22 font-weight=%22700%22>MA</text></svg>">
-  <link rel="preconnect" href="https://tiles.openfreemap.org" crossorigin>
-  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.12.0/dist/maplibre-gl.css">
-  <link rel="stylesheet" href="./styles.css?v=15">
-  <script src="https://unpkg.com/maplibre-gl@5.12.0/dist/maplibre-gl.js" defer></script>
-  <script src="./app.js?v=11" defer></script>
+  <link rel="stylesheet" href="./styles.css?v=16">
+  <script src="./app.js?v=12" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
   <main class="atlas-site" id="main-content" tabindex="-1">
     <div class="world">
-      <div class="map-fallback" aria-hidden="true"></div>
-      <div id="atlas-map" class="atlas-map" role="region" aria-label="Interactive project atlas centered on Omaha, Nebraska. Use arrow keys to pan and plus or minus to zoom." tabindex="0"></div>
-      <div class="map-state" id="map-state" role="status" aria-live="polite">
-        <span class="map-loader" aria-hidden="true"></span>
-        <span id="map-state-text">Loading geographic atlas</span>
-      </div>
+      <div class="atlas-backdrop" aria-hidden="true"></div>
       <div class="world-shade"></div>
       <div class="contour contour-a"></div><div class="contour contour-b"></div><div class="scan-line"></div>
     </div>
@@ -29,10 +21,7 @@
     <header class="topbar">
       <button class="monogram" type="button" data-go="home" aria-label="Return home">MA</button>
       <div class="top-identity"><strong>Morenike Atejioye</strong><span>Urban Planner · Applied Researcher · Data Analyst</span></div>
-      <div class="coordinates" aria-live="polite"><span id="latitude">41.2565° N</span><span id="longitude">95.9345° W</span></div>
     </header>
-    <div class="travel-status" id="travel-status" role="status" aria-live="polite" hidden></div>
-    <button class="return-origin" id="return-origin" type="button" hidden>Return to Omaha ↙</button>
 
     <aside class="chapter-rail" aria-label="Current chapter"><span id="chapter-number">01</span><i></i><small id="chapter-label">Home</small></aside>
 
@@ -49,11 +38,7 @@
           <div><strong>Implement</strong><span>Indicators, data governance, reporting systems, coordination, and accountability.</span></div>
         </div>
       </div>
-      <button class="featured-beacon featured-future-lab" type="button" data-project="future-lab">
-        <span class="beacon-rings"><i></i><i></i><i></i></span>
-        <span class="beacon-label"><small>Featured project · We Make Omaha</small><strong>Future Lab</strong></span>
-      </button>
-      <div class="legend-card" id="atlas-legend" aria-label="Atlas legend"></div>
+      <div class="featured-project-field" id="featured-projects" aria-label="Featured projects"></div>
       <div class="scroll-cue"><span>Scroll to travel</span><i></i></div>
     </section>
 
@@ -63,16 +48,8 @@
         <h2>Communities, evidence, and public decisions—in place.</h2>
         <p>Explore how my work with communities, data, and public institutions has taken shape across places and projects.</p>
       </div>
-      <div class="project-view-toggle" role="group" aria-label="Choose a project atlas view">
-        <button type="button" data-project-view="map" aria-pressed="true">Map view</button>
-        <button type="button" data-project-view="grid" aria-pressed="false">Project list</button>
-      </div>
-      <div class="project-view project-map-view" id="project-map-view">
-        <div class="atlas-key"><span>FIELD INDEX</span><strong>06 projects</strong><small>Planning · Data · Research · Access</small></div>
-      </div>
-      <div class="project-view project-grid-view" id="project-grid-view" hidden>
-        <div class="project-stack" id="project-stack"></div>
-      </div>
+      <div class="project-list-label"><span>Project list</span><strong>06 projects</strong><small>Planning · Data · Research · Access</small></div>
+      <div class="project-stack" id="project-stack"></div>
     </section>
 
     <section class="scene data-practice-scene" id="data-practice">
@@ -161,33 +138,6 @@
       <button type="button" data-go="contact" aria-label="Contact"><span>↗</span><small>Contact</small></button>
     </nav>
 
-    <div class="city-portal" id="city-portal" role="dialog" aria-modal="true" aria-labelledby="portal-title" aria-describedby="portal-introduction" hidden>
-      <button class="city-portal-backdrop" type="button" data-portal-close tabindex="-1" aria-label="Close city welcome"></button>
-      <section class="city-portal-card" tabindex="-1">
-        <button class="city-portal-close" type="button" data-portal-close aria-label="Close city welcome">×</button>
-        <div class="portal-rings" aria-hidden="true"><i></i><i></i><i></i></div>
-        <div class="portal-visual">
-          <div class="portal-map" id="portal-map" aria-hidden="true"></div>
-          <div class="portal-image-fallback" aria-hidden="true"></div>
-          <div class="portal-city-light" aria-hidden="true"></div>
-        </div>
-        <div class="portal-copy">
-          <p class="portal-eyebrow" id="portal-eyebrow"></p>
-          <h2 id="portal-title"></h2>
-          <p class="portal-introduction" id="portal-introduction"></p>
-          <p class="portal-affiliation" id="portal-affiliation" hidden></p>
-          <div class="portal-highlights" id="portal-highlights"></div>
-          <div class="portal-actions">
-            <button class="portal-primary" id="portal-primary" type="button"></button>
-            <button class="portal-secondary" id="portal-secondary" type="button"></button>
-          </div>
-          <div class="portal-project-list" id="portal-project-list" aria-label="City project stories" hidden></div>
-        </div>
-        <p class="portal-journey" id="portal-journey"></p>
-        <p class="portal-credit" id="portal-credit"></p>
-      </section>
-    </div>
-
     <div class="drawer-shell" id="drawer" role="dialog" aria-modal="true" aria-labelledby="project-title" aria-describedby="drawer-description" hidden>
       <button class="drawer-backdrop" type="button" data-close tabindex="-1" aria-label="Close project details"></button>
       <article class="project-drawer" tabindex="-1">
@@ -198,7 +148,6 @@
           <button type="button" id="previous-project">← Previous project</button>
           <button type="button" id="back-to-project-list">Back to project list</button>
           <button type="button" id="next-project">Next project →</button>
-          <button type="button" id="drawer-return-omaha" hidden>Return to Omaha</button>
         </nav>
         <div class="drawer-location-choices" id="drawer-location-choices" aria-label="Research locations" hidden></div>
         <h2 id="project-title"></h2>

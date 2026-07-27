@@ -1,48 +1,43 @@
 /*
  * EDITABLE PROJECT ATLAS DATA
- * Project text and real geographic coordinates live here. City-center coordinates
- * are intentionally labeled approximate where no precise project site is known.
+ * Project text and location metadata live here. City-center coordinates are
+ * retained as project facts where no precise project site is known.
  * Keep every TODO until Morenike supplies verified Inclusivity WDSM information.
  */
-const ATLAS_LOCATIONS = {
-  omaha: { city: "Omaha", state: "Nebraska", coordinates: [-95.9345, 41.2565], zoom: 11.2, bearing: -8, pitch: 34, markerClass:"omaha" },
-  westDesMoines: { city: "West Des Moines", state: "Iowa", coordinates: [-93.7113, 41.5772], zoom: 11.8, bearing: 6, pitch: 36, markerClass:"west-des-moines" },
-  marshalltown: { city: "Marshalltown", state: "Iowa", coordinates: [-92.9123, 42.0489], zoom: 11.7, bearing: -4, pitch: 32, markerClass:"marshalltown" },
-  ottumwa: { city: "Ottumwa", state: "Iowa", coordinates: [-92.4083, 41.0160], zoom: 11.7, bearing: 4, pitch: 32, markerClass:"ottumwa" },
-  wallaWalla: { city: "Walla Walla", state: "Washington", coordinates: [-118.3430, 46.0646], zoom: 11.5, bearing: -5, pitch: 34, markerClass:"walla-walla" }
+const PROJECT_LOCATIONS = {
+  omaha: { city: "Omaha", state: "Nebraska", coordinates: [-95.9345, 41.2565] },
+  westDesMoines: { city: "West Des Moines", state: "Iowa", coordinates: [-93.7113, 41.5772] },
+  marshalltown: { city: "Marshalltown", state: "Iowa", coordinates: [-92.9123, 42.0489] },
+  ottumwa: { city: "Ottumwa", state: "Iowa", coordinates: [-92.4083, 41.0160] },
+  wallaWalla: { city: "Walla Walla", state: "Washington", coordinates: [-118.3430, 46.0646] }
 };
 
 /*
- * MAP MARKER EDITING
- * - `markerCategory` controls the marker treatment and matching legend entry.
- *   Supported values are planning, research, and presentation.
- * - `markerTooltip` controls the short label revealed on hover, focus, or touch.
- * - `showOnMap:false` removes a project from map markers without removing its
- *   project-list or case-study record.
- * The legend only shows categories used by a visible project, so an unverified
- * presentation is never implied. Add `markerCategory:"presentation"` only to a
- * real presentation record.
+ * FEATURED PROJECT EDITING
+ * - `featured:false` removes a project from the homepage without affecting its
+ *   Project List card or case study.
+ * - `featuredOrder` changes homepage order and desktop placement.
+ * - `featuredLabel` and `featuredStat` override homepage presentation only.
+ * - `featuredAccent` supports "teal" or "amber".
+ * - `animationDelay` and `animationDuration` stagger the restrained signal.
+ *   Set `featuredAnimated:false` to keep an individual feature static.
+ * Add a new project by copying a complete project record and assigning a unique
+ * id, number, verified content, and featured presentation fields.
  */
-const ATLAS_MARKER_CATEGORIES = {
-  planning: { label:"Planning practice", symbol:"dot" },
-  research: { label:"Applied research", symbol:"ring" },
-  presentation: { label:"Presentations", symbol:"diamond" }
-};
-
 const projects = [
   {
     id:"omaha", number:"01", title:"We Make Omaha", city:"Omaha", state:"Nebraska",
-    markerCategory:"planning", markerTooltip:"Omaha projects", showOnMap:true,
+    featured:true, featuredOrder:1, featuredLabel:"Comprehensive planning", featuredStat:"50K+ responses", featuredAccent:"teal", animationDelay:"0s", animationDuration:"5.8s",
     coordinates:[-95.9345,41.2565], approximate:true, category:"Comprehensive planning",
     short:"Turning community knowledge into a citywide planning framework.",
     summary:"Work involving community engagement analysis, scenario planning, spatial research, and implementation-focused reporting.",
     role:"Planning practice", methods:["Qualitative coding","Survey analysis","Spatial synthesis"],
     findings:[], deliverables:[], skills:[], images:[], stat:"50K+", statLabel:"resident comments analyzed",
-    location:"Omaha · approximate city-center location", destination:"omaha", markerOffset:[-42,-20]
+    location:"Omaha · approximate city-center location", locationKey:"omaha"
   },
   {
     id:"future-lab", number:"02", title:"Future Lab — Scenario Choosing Workshop", city:"Omaha", state:"Nebraska",
-    markerCategory:"planning", markerTooltip:"Omaha projects", showOnMap:true,
+    featured:true, featuredOrder:2, featuredLabel:"Scenario choosing", featuredStat:"700 responses", featuredAccent:"amber", animationDelay:".7s", animationDuration:"6.4s",
     coordinates:[-95.9345,41.2565], approximate:true, category:"Scenario planning, community engagement, and data analysis",
     program:"We Make Omaha", organization:"City of Omaha", date:"2026",
     short:"Comparing growth scenarios and translating public choices into planning findings.",
@@ -54,7 +49,7 @@ const projects = [
     skills:["Survey-response analysis","Scenario comparison","Spatial analysis and mapping","Data visualization","Community-engagement reporting"],
     images:["TODO: Morenike to provide"],
     stat:"700", statLabel:"total responses", location:"Omaha · approximate city-center location",
-    destination:"omaha", markerOffset:[0,-40], markerSymbol:"⌁",
+    locationKey:"omaha",
     details:[
       ["Project overview","A 2026 scenario-choosing workshop within the We Make Omaha comprehensive planning process."],
       ["Relationship to We Make Omaha","Future Lab was a distinct scenario-choosing phase of the broader We Make Omaha program for the City of Omaha."],
@@ -72,38 +67,38 @@ const projects = [
   },
   {
     id:"tracker", number:"03", title:"Implementation Tracker", city:"Omaha", state:"Nebraska",
-    markerCategory:"planning", markerTooltip:"Omaha projects", showOnMap:true,
+    featured:true, featuredOrder:3, featuredLabel:"Public accountability", featuredStat:"32 indicators", featuredAccent:"teal", animationDelay:"1.4s", animationDuration:"7.1s",
     coordinates:[-95.9345,41.2565], approximate:true, category:"Civic technology and public accountability",
     short:"Making adopted commitments visible, measurable, and accountable.",
     summary:"A public-facing framework connecting plan commitments to actions, indicators, annual reporting, and place-based projects.",
     role:"Public accountability", methods:["Information design","Data governance","Public accountability"],
     findings:[], deliverables:[], skills:[], images:[], stat:"32", statLabel:"implementation indicators",
-    location:"Omaha · approximate city-center location", destination:"omaha", markerOffset:[42,-20]
+    location:"Omaha · approximate city-center location", locationKey:"omaha"
   },
   {
     id:"plans", number:"04", title:"Plan Quality and Implementation Research", city:"Marshalltown", state:"Iowa",
-    markerCategory:"research", markerTooltip:"Plan Quality research", showOnMap:true,
+    featured:true, featuredOrder:4, featuredLabel:"Comparative research", featuredStat:"3 cities · 10 criteria", featuredAccent:"amber", animationDelay:"2.1s", animationDuration:"6.8s",
     coordinates:[-92.9123,42.0489], approximate:true, category:"Applied research",
     short:"Following the path from public vision to administrative action.",
     summary:"A comparative evaluation of comprehensive plans in Marshalltown, Iowa; Walla Walla, Washington; and Ottumwa, Iowa, including equity, implementation responsibility, and monitoring.",
     role:"Applied research", methods:["Comparative research","Content analysis","Plan evaluation"],
     findings:[], deliverables:[], skills:[], images:[], stat:"10", statLabel:"plan-quality criteria",
-    location:"Regional research · Marshalltown, Ottumwa, and Walla Walla", destination:"plan-research", markerOffset:[0,0],
+    location:"Regional research · Marshalltown, Ottumwa, and Walla Walla",
     locationKeys:["marshalltown","ottumwa","wallaWalla"]
   },
   {
     id:"access", number:"05", title:"Employment Access and Housing", city:"Omaha", state:"Nebraska",
-    markerCategory:"research", markerTooltip:"Omaha projects", showOnMap:true,
+    featured:true, featuredOrder:5, featuredLabel:"Current research", featuredStat:"Research in progress", featuredAccent:"teal", animationDelay:"2.8s", animationDuration:"7.6s",
     coordinates:[-95.9345,41.2565], approximate:true, category:"Current research",
     short:"Testing how affordable housing connects residents to opportunity.",
     summary:"Research examining how affordable housing locations connect residents with employment opportunities. Spatial mismatch is one explanation being tested, not a predetermined conclusion.",
     role:"Current research", methods:["GIS","Accessibility analysis","Equity research"],
     findings:[], deliverables:[], skills:[], images:[], stat:"1", statLabel:"explanation among several",
-    location:"Omaha · approximate city-center location", destination:"omaha", markerOffset:[-27,20]
+    location:"Omaha · approximate city-center location", locationKey:"omaha"
   },
   {
     id:"wdsm", number:"06", title:"Inclusivity WDSM Project", city:"West Des Moines", state:"Iowa",
-    markerCategory:"research", markerTooltip:"Inclusivity WDSM Project", showOnMap:true,
+    featured:true, featuredOrder:6, featuredLabel:"Academic research", featuredStat:"Iowa State · 2024", featuredAccent:"amber", animationDelay:"3.5s", animationDuration:"6.1s",
     coordinates:[-93.7113,41.5772], approximate:true, category:"Academic research",
     institution:"Iowa State University",
     short:"An Iowa State University project located in West Des Moines, Iowa.",
@@ -111,7 +106,7 @@ const projects = [
     methods:["TODO: Morenike to provide methods"], findings:["TODO: Morenike to provide"],
     deliverables:["TODO: Morenike to provide"], skills:["TODO: Morenike to provide"], images:["TODO: Morenike to provide"],
     stat:"ISU", statLabel:"Iowa State University", location:"West Des Moines Project Site · approximate city-level location",
-    destination:"west-des-moines", markerOffset:[0,0],
+    locationKey:"westDesMoines",
     details:[
       ["Full meaning of WDSM","TODO: Morenike to provide"],
       ["Project date","TODO: Morenike to provide"],
@@ -233,46 +228,6 @@ const DATA_PRACTICE = [
 ];
 
 /*
- * EDITABLE CITY ARRIVAL CONTENT
- * - Change `introduction` to revise the welcome message.
- * - Replace `image` and update `imageAlt` / `imageCredit` when a verified local city image is available.
- * - Edit `highlights` to change the small facts shown in the portal.
- * - Reorder `projectIds` to change the city project-story order.
- * - Copy an entry to add another city, then add its camera settings to ATLAS_LOCATIONS.
- * - Change `primaryActionLabel` or `secondaryActionLabel` to rename portal buttons.
- * The current visual uses a second, non-interactive real map because a correctly licensed
- * West Des Moines photograph has not yet been verified.
- */
-const cityArrivals = {
-  omaha: {
-    id:"omaha", city:"Omaha", state:"Nebraska", coordinates:[-95.9345,41.2565],
-    approximateLocation:"Omaha city center", eyebrow:"City chapter 01 · Nebraska",
-    title:"Welcome to Omaha",
-    introduction:"A city shaped by neighborhoods, public voices, and decisions about how—and for whom—it grows.",
-    supportingLine:"Explore how community input, spatial evidence, and implementation are informing Omaha’s future.",
-    image:null, imageAlt:"Abstract geographic view centered on Omaha, Nebraska",
-    imageCredit:"Geographic treatment · OpenFreeMap / OpenStreetMap",
-    projectIds:["omaha","future-lab","tracker","access"],
-    highlights:[{value:"700",label:"Future Lab responses"},{value:"32",label:"implementation indicators"},{value:"4",label:"featured projects"}],
-    primaryActionLabel:"Enter Omaha’s project stories →", secondaryActionLabel:"Explore the Omaha map",
-    journeyLabel:"City pulse detected · Omaha"
-  },
-  "west-des-moines": {
-    id:"west-des-moines", city:"West Des Moines", state:"Iowa", coordinates:[-93.7113,41.5772],
-    approximateLocation:"Approximate city-level project location", eyebrow:"City chapter 02 · Iowa",
-    title:"Welcome to West Des Moines",
-    introduction:"A growing Iowa community where questions of belonging and inclusion became the focus of an applied research project.",
-    supportingLine:"", image:null,
-    imageAlt:"Abstract geographic view centered on West Des Moines, Iowa",
-    imageCredit:"Geographic treatment · OpenFreeMap / OpenStreetMap",
-    affiliation:"Inclusivity WDSM Project · Iowa State University",
-    projectIds:["wdsm"], highlights:[{value:"ISU",label:"institutional affiliation"},{value:"1",label:"project story"},{value:"≈",label:"city-level location"}],
-    primaryActionLabel:"Enter the project story →", secondaryActionLabel:"Explore West Des Moines",
-    journeyLabel:"City pulse detected · Omaha → West Des Moines"
-  }
-};
-
-/*
  * EDITABLE BEYOND THE MAP DATA
  * Update this small object whenever Morenike's listening or reading changes.
  * Keep `song` and `album` blank until a verified title is supplied; blank fields
@@ -327,25 +282,10 @@ const BEYOND_THE_MAP = {
 const chapters = [{id:"home",label:"Home"},{id:"projects",label:"Projects"},{id:"data-practice",label:"Data Practice"},{id:"about",label:"About"},{id:"contact",label:"Contact"}];
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const site = document.querySelector(".atlas-site");
-const mapState = document.querySelector("#map-state");
-const mapStateText = document.querySelector("#map-state-text");
-const travelStatus = document.querySelector("#travel-status");
-const returnOrigin = document.querySelector("#return-origin");
 const drawer = document.querySelector("#drawer");
 const drawerPanel = drawer.querySelector(".project-drawer");
-const cityPortal = document.querySelector("#city-portal");
-const cityPortalCard = cityPortal.querySelector(".city-portal-card");
-let map = null;
-let portalMap = null;
-let mapReady = false;
-let currentDestination = "omaha";
 let projectTrigger = null;
-let portalTrigger = null;
-let activeCityArrival = null;
 let scrollPosition = 0;
-let portalScrollPosition = 0;
-let journeyTimer = 0;
-let journeySequence = 0;
 let activeProjectId = "omaha";
 let activeLocationKey = "omaha";
 const projectLocationMemory = new Map();
@@ -360,7 +300,7 @@ function isPublicValue(value) {
 
 function getProjectLocationKeys(project) {
   if (project.locationKeys?.length) return project.locationKeys;
-  return [project.destination === "west-des-moines" ? "westDesMoines" : "omaha"];
+  return [project.locationKey || "omaha"];
 }
 
 function getProjectListButton(projectId) {
@@ -371,10 +311,6 @@ function setSelectedProject(projectId, locationKey) {
   activeProjectId = projectId;
   activeLocationKey = locationKey;
   projectLocationMemory.set(projectId,locationKey);
-  document.querySelectorAll("[data-map-project]").forEach(marker => {
-    const markerProjects = marker.dataset.projectIds?.split(",") || [];
-    marker.classList.toggle("active", markerProjects.includes(projectId) && marker.dataset.locationKey === locationKey);
-  });
   document.querySelectorAll("[data-project]").forEach(button => {
     if (button.dataset.project === projectId) button.setAttribute("aria-current","true");
     else button.removeAttribute("aria-current");
@@ -394,31 +330,29 @@ function renderProjectLists() {
   });
 }
 
-function renderAtlasLegend() {
-  const legend = document.querySelector("#atlas-legend");
-  if (!legend) return;
-  const visibleCategories = [...new Set(projects
-    .filter(project => project.showOnMap !== false)
-    .map(project => project.markerCategory)
-    .filter(category => ATLAS_MARKER_CATEGORIES[category]))];
-  legend.innerHTML = visibleCategories.map(category => {
-    const item = ATLAS_MARKER_CATEGORIES[category];
-    return `<span><i class="legend-symbol legend-${escapeHTML(item.symbol)}" aria-hidden="true"></i>${escapeHTML(item.label)}</span>`;
-  }).join("") + `<span><i class="legend-line" aria-hidden="true"></i>Public knowledge route</span>`;
-}
-
-function setProjectView(view, {focus=false}={}) {
-  const mapView = document.querySelector("#project-map-view");
-  const gridView = document.querySelector("#project-grid-view");
-  const showGrid = view === "grid";
-  mapView.hidden = showGrid;
-  gridView.hidden = !showGrid;
-  document.querySelectorAll("[data-project-view]").forEach(button => {
-    const active = button.dataset.projectView === view;
-    button.setAttribute("aria-pressed",String(active));
-    if (active && focus) button.focus();
-  });
-  if (!showGrid && map) window.setTimeout(() => map.resize(),0);
+function renderFeaturedProjects() {
+  const field = document.querySelector("#featured-projects");
+  const featuredProjects = projects
+    .filter(project => project.featured !== false)
+    .sort((a,b) => (a.featuredOrder || 99) - (b.featuredOrder || 99));
+  field.innerHTML = featuredProjects.map((project,index) => {
+    const animated = project.featuredAnimated !== false;
+    const accent = project.featuredAccent === "amber" ? "amber" : "teal";
+    const location = `${project.city}, ${project.state}`;
+    const evidence = project.featuredStat || project.evidence || project.statLabel;
+    return `<button class="featured-project feature-${index+1} accent-${accent}${animated ? "" : " signal-static"}" type="button"
+      data-project="${escapeHTML(project.id)}"
+      style="--feature-delay:${escapeHTML(project.animationDelay || "0s")};--feature-duration:${escapeHTML(project.animationDuration || "6.5s")}"
+      aria-label="Open case study: ${escapeHTML(project.title)}, ${escapeHTML(location)}">
+      <span class="featured-signal" aria-hidden="true"><i></i></span>
+      <span class="featured-copy">
+        <small>${escapeHTML(project.featuredLabel || project.category)} · ${escapeHTML(location)}</small>
+        <strong>${escapeHTML(project.title)}</strong>
+        <em>${escapeHTML(project.short)}</em>
+        <b>${escapeHTML(evidence)}</b>
+      </span>
+    </button>`;
+  }).join("");
 }
 
 function renderDataPractice() {
@@ -523,307 +457,6 @@ function initializeBeyondMapReveal() {
   panels.forEach(panel => observer.observe(panel));
 }
 
-function formatCoordinate(value, positive, negative) {
-  return `${Math.abs(value).toFixed(4)}° ${value >= 0 ? positive : negative}`;
-}
-
-function setCoordinates(coordinates) {
-  document.querySelector("#latitude").textContent = formatCoordinate(coordinates[1], "N", "S");
-  document.querySelector("#longitude").textContent = formatCoordinate(coordinates[0], "E", "W");
-}
-
-function setCurrentLocationDisplay(locationKey) {
-  const location = ATLAS_LOCATIONS[locationKey];
-  if (!location) return;
-  document.querySelector("#atlas-map").setAttribute(
-    "aria-label",
-    `Interactive project atlas centered on ${location.city}, ${location.state}. Use arrow keys to pan and plus or minus to zoom.`
-  );
-  mapStateText.textContent = `Viewing ${location.city}, ${location.state}`;
-}
-
-function showMapError() {
-  mapState.classList.add("map-error");
-  mapStateText.textContent = "Geographic atlas unavailable · project list remains active";
-}
-
-function addRouteLayers() {
-  if (!map || map.getSource("omaha-wdsm-route")) return;
-  map.addSource("omaha-wdsm-route", {
-    type:"geojson",
-    data:{type:"Feature",properties:{},geometry:{type:"LineString",coordinates:[ATLAS_LOCATIONS.omaha.coordinates,ATLAS_LOCATIONS.westDesMoines.coordinates]}}
-  });
-  map.addLayer({id:"regional-route",type:"line",source:"omaha-wdsm-route",layout:{"line-cap":"round"},paint:{"line-color":"#23c1c6","line-width":1.25,"line-opacity":0.18,"line-dasharray":[3,5]}});
-  map.addLayer({id:"active-route",type:"line",source:"omaha-wdsm-route",layout:{"line-cap":"round"},paint:{"line-color":"#f3aa55","line-width":2.5,"line-opacity":0,"line-blur":1.2}});
-}
-
-function addMapMarkers() {
-  const locationGroups = new Map();
-  projects.filter(project => project.showOnMap !== false).forEach(project => {
-    getProjectLocationKeys(project).forEach(locationKey => {
-      if (!locationGroups.has(locationKey)) locationGroups.set(locationKey,[]);
-      locationGroups.get(locationKey).push(project);
-    });
-  });
-
-  locationGroups.forEach((locationProjects, locationKey) => {
-    const location = ATLAS_LOCATIONS[locationKey];
-    const markerButton = document.createElement("button");
-    const primaryProject = locationProjects[0];
-    const category = locationProjects.some(project => project.markerCategory === "presentation")
-      ? "presentation"
-      : primaryProject.markerCategory || "planning";
-    const sharedLocation = locationProjects.length > 1;
-    const tooltip = sharedLocation
-      ? `${location.city} · ${locationProjects.length} projects`
-      : `${primaryProject.markerTooltip || primaryProject.title} · ${location.city}`;
-    const tooltipId = `marker-tooltip-${locationKey}`;
-
-    markerButton.type = "button";
-    markerButton.className = `geographic-marker marker-${location.markerClass} marker-category-${category}`;
-    markerButton.dataset.mapProject = primaryProject.id;
-    markerButton.dataset.projectIds = locationProjects.map(project => project.id).join(",");
-    markerButton.dataset.locationKey = locationKey;
-    markerButton.setAttribute("aria-label", sharedLocation
-      ? `${location.city}, ${location.state}: ${locationProjects.length} projects. Open project choices.`
-      : `${primaryProject.title}, ${location.city}, ${location.state}, approximate project location.`);
-    markerButton.setAttribute("aria-describedby",tooltipId);
-    markerButton.setAttribute("aria-haspopup","dialog");
-    markerButton.setAttribute("aria-expanded","false");
-    markerButton.innerHTML = `<span class="marker-core" aria-hidden="true"></span><small id="${tooltipId}" role="tooltip">${escapeHTML(tooltip)}</small>`;
-
-    markerButton.addEventListener("pointerdown", event => {
-      markerButton.dataset.pointerType = event.pointerType;
-    });
-    const activateMarker = () => {
-      markerButton.classList.remove("tooltip-open");
-      markerButton.classList.add("visited");
-      markerButton.setAttribute("aria-expanded","false");
-      if (sharedLocation && cityArrivals[primaryProject.destination]) {
-        openCityPortal(primaryProject.destination,markerButton);
-      } else {
-        openProject(primaryProject.id,markerButton,locationKey);
-      }
-    };
-    markerButton.addEventListener("click", event => {
-      if (markerButton.dataset.pointerType === "touch" && !markerButton.classList.contains("tooltip-open")) {
-        event.preventDefault();
-        document.querySelectorAll(".geographic-marker.tooltip-open").forEach(marker => {
-          marker.classList.remove("tooltip-open");
-          marker.setAttribute("aria-expanded","false");
-        });
-        markerButton.classList.add("tooltip-open");
-        markerButton.setAttribute("aria-expanded","true");
-        return;
-      }
-      activateMarker();
-    });
-    markerButton.addEventListener("keydown", event => {
-      if (event.key !== "Enter" && event.key !== " ") return;
-      event.preventDefault();
-      markerButton.dataset.pointerType = "keyboard";
-      activateMarker();
-    });
-
-    new maplibregl.Marker({element:markerButton,anchor:"center"})
-      .setLngLat(location.coordinates)
-      .addTo(map);
-  });
-  setSelectedProject(activeProjectId,activeLocationKey);
-}
-
-function initializeMap() {
-  if (!window.maplibregl) {
-    showMapError();
-    return;
-  }
-  try {
-    const origin = ATLAS_LOCATIONS.omaha;
-    map = new maplibregl.Map({
-      container:"atlas-map",
-      style:"https://tiles.openfreemap.org/styles/dark",
-      center:origin.coordinates,
-      zoom:origin.zoom,
-      bearing:origin.bearing,
-      pitch:origin.pitch,
-      attributionControl:false,
-      cooperativeGestures:true,
-      dragRotate:false,
-      maxPitch:55,
-      minZoom:3
-    });
-    map.on("styleimagemissing", event => {
-      if (!map.hasImage(event.id)) {
-        map.addImage(event.id,{width:1,height:1,data:new Uint8Array([0,0,0,0])});
-      }
-    });
-    map.addControl(new maplibregl.NavigationControl({showCompass:false,visualizePitch:false}), "bottom-right");
-    map.addControl(new maplibregl.AttributionControl({compact:true,customAttribution:"OpenFreeMap"}), "bottom-right");
-    const attribution = document.querySelector("#atlas-map .maplibregl-ctrl-attrib");
-    const attributionToggle = attribution?.querySelector(".maplibregl-ctrl-attrib-button");
-    const compactAttribution = window.matchMedia("(max-width: 920px), (hover: none), (pointer: coarse)");
-    const spaciousDesktop = window.matchMedia("(min-width: 1180px) and (min-height: 700px) and (hover: hover) and (pointer: fine)");
-    const setAttributionOpen = open => {
-      if (!attribution) return;
-      attribution.open = open;
-      attribution.classList.toggle("maplibregl-compact-show",open);
-      attributionToggle?.setAttribute("aria-expanded",String(open));
-    };
-    attributionToggle?.setAttribute("role","button");
-    attributionToggle?.addEventListener("click", event => {
-      event.preventDefault();
-      setAttributionOpen(!attribution.open);
-    });
-    const syncAttributionMode = () => setAttributionOpen(spaciousDesktop.matches && !compactAttribution.matches);
-    attribution?.addEventListener("toggle", () => {
-      attribution.classList.toggle("maplibregl-compact-show",attribution.open);
-      attributionToggle?.setAttribute("aria-expanded",String(attribution.open));
-    });
-    attribution?.addEventListener("keydown", event => {
-      if ((event.key === "Enter" || event.key === " " || event.key === "Spacebar") && event.target === attributionToggle) {
-        event.preventDefault();
-        setAttributionOpen(!attribution.open);
-        return;
-      }
-      if (event.key === "Escape" && attribution.open) {
-        event.preventDefault();
-        setAttributionOpen(false);
-        attributionToggle?.focus({preventScroll:true});
-      }
-    });
-    document.addEventListener("pointerdown", event => {
-      if (!compactAttribution.matches || !attribution?.open || attribution.contains(event.target)) return;
-      setAttributionOpen(false);
-    });
-    compactAttribution.addEventListener("change",syncAttributionMode);
-    spaciousDesktop.addEventListener("change",syncAttributionMode);
-    syncAttributionMode();
-    map.keyboard.enable();
-    map.once("load", () => {
-      mapReady = true;
-      addRouteLayers();
-      addMapMarkers();
-      mapState.classList.add("map-loaded");
-      mapStateText.textContent = "Geographic atlas ready";
-      window.setTimeout(() => { mapState.hidden = true; }, 700);
-    });
-    map.on("move", () => {
-      if (!mapReady || site.classList.contains("journey-active")) return;
-      const center = map.getCenter();
-      setCoordinates([center.lng,center.lat]);
-    });
-    map.on("error", event => {
-      if (!mapReady || !event.error?.message?.includes("404")) showMapError();
-    });
-  } catch (error) {
-    console.error("The geographic atlas could not initialize.", error);
-    showMapError();
-  }
-}
-
-function setRouteVisible(visible) {
-  if (mapReady && map.getLayer("active-route")) map.setPaintProperty("active-route","line-opacity",visible ? 0.9 : 0);
-}
-
-function setMapInteraction(enabled) {
-  if (!map) return;
-  ["boxZoom","scrollZoom","dragPan","dragRotate","keyboard","doubleClickZoom","touchZoomRotate"].forEach(control => {
-    if (map[control]?.[enabled ? "enable" : "disable"]) map[control][enabled ? "enable" : "disable"]();
-  });
-}
-
-function setPortalBackgroundInert(inert) {
-  document.querySelectorAll(".world,.topbar,.chapter-rail,.scene,.dock,.return-origin").forEach(element => {
-    element.inert = inert;
-  });
-}
-
-function initializePortalMap(city) {
-  if (!window.maplibregl) return;
-  if (!portalMap) {
-    portalMap = new maplibregl.Map({
-      container:"portal-map",
-      style:"https://tiles.openfreemap.org/styles/dark",
-      center:city.coordinates,
-      zoom:12.1,
-      bearing:-8,
-      pitch:42,
-      interactive:false,
-      attributionControl:false,
-      fadeDuration:reduceMotion.matches ? 0 : 300
-    });
-    portalMap.on("styleimagemissing", event => {
-      if (!portalMap.hasImage(event.id)) portalMap.addImage(event.id,{width:1,height:1,data:new Uint8Array([0,0,0,0])});
-    });
-    portalMap.once("load", () => cityPortal.classList.add("portal-map-ready"));
-  } else {
-    portalMap.resize();
-    portalMap.jumpTo({center:city.coordinates,zoom:12.1,bearing:-8,pitch:42});
-  }
-}
-
-function renderPortalProjects(city) {
-  const list = document.querySelector("#portal-project-list");
-  cityPortalCard.classList.remove("showing-projects");
-  list.hidden = true;
-  list.innerHTML = city.projectIds.map(id => {
-    const project = projects.find(item => item.id === id);
-    return project ? `<button type="button" data-portal-project="${escapeHTML(project.id)}"><small>${escapeHTML(project.category)}</small><strong>${escapeHTML(project.title)}</strong><span>Open field note →</span></button>` : "";
-  }).join("");
-}
-
-function getPortalControls() {
-  return [...cityPortal.querySelectorAll("button:not([disabled]):not([tabindex='-1']),[href]:not([tabindex='-1']),[tabindex]:not([tabindex='-1'])")]
-    .filter(element => !element.hidden && element.getClientRects().length);
-}
-
-function openCityPortal(cityId, trigger=document.activeElement) {
-  const city = cityArrivals[cityId];
-  if (!city) return;
-  closeProject({restoreFocus:false});
-  if (!cityPortal.hidden) closeCityPortal({restoreFocus:false});
-  activeCityArrival = city;
-  portalTrigger = trigger instanceof HTMLElement ? trigger : document.activeElement;
-  document.querySelector("#portal-eyebrow").textContent = city.eyebrow;
-  document.querySelector("#portal-title").textContent = city.title;
-  document.querySelector("#portal-introduction").textContent = city.introduction;
-  const affiliation = document.querySelector("#portal-affiliation");
-  affiliation.hidden = !city.affiliation;
-  affiliation.textContent = city.affiliation || "";
-  document.querySelector("#portal-highlights").innerHTML = city.highlights.map(item => `<div><strong>${escapeHTML(item.value)}</strong><span>${escapeHTML(item.label)}</span></div>`).join("");
-  document.querySelector("#portal-primary").textContent = city.primaryActionLabel;
-  document.querySelector("#portal-secondary").textContent = city.secondaryActionLabel;
-  document.querySelector("#portal-journey").textContent = city.journeyLabel;
-  document.querySelector("#portal-credit").textContent = city.imageCredit;
-  document.querySelector(".portal-visual").setAttribute("aria-label",city.imageAlt);
-  renderPortalProjects(city);
-  portalScrollPosition = window.scrollY;
-  cityPortal.hidden = false;
-  document.body.classList.add("portal-open");
-  document.body.style.top = `-${portalScrollPosition}px`;
-  setMapInteraction(false);
-  setPortalBackgroundInert(true);
-  initializePortalMap(city);
-  window.requestAnimationFrame(() => cityPortal.classList.add("is-visible"));
-  cityPortal.querySelector(".city-portal-close").focus();
-}
-
-function closeCityPortal({restoreFocus=true}={}) {
-  if (cityPortal.hidden) return;
-  cityPortal.classList.remove("is-visible");
-  cityPortal.hidden = true;
-  document.body.classList.remove("portal-open");
-  document.body.style.top = "";
-  setPortalBackgroundInert(false);
-  const previousScrollBehavior = document.documentElement.style.scrollBehavior;
-  document.documentElement.style.scrollBehavior = "auto";
-  window.scrollTo(0,portalScrollPosition);
-  document.documentElement.style.scrollBehavior = previousScrollBehavior;
-  setMapInteraction(true);
-  if (restoreFocus && portalTrigger instanceof HTMLElement && portalTrigger.isConnected) portalTrigger.focus();
-  portalTrigger = null;
-}
-
 function closeProject({restoreFocus=true}={}) {
   if (drawer.hidden) return;
   drawer.hidden = true;
@@ -835,7 +468,6 @@ function closeProject({restoreFocus=true}={}) {
   document.documentElement.style.scrollBehavior = previousScrollBehavior;
   if (restoreFocus && projectTrigger instanceof HTMLElement && projectTrigger.isConnected) projectTrigger.focus();
   projectTrigger = null;
-  if (map) map.keyboard.enable();
 }
 
 function renderDrawerNavigation(project, locationKey) {
@@ -848,12 +480,11 @@ function renderDrawerNavigation(project, locationKey) {
   previousButton.setAttribute("aria-label", `Previous project: ${previous.title}`);
   nextButton.dataset.targetProject = next.id;
   nextButton.setAttribute("aria-label", `Next project: ${next.title}`);
-  document.querySelector("#drawer-return-omaha").hidden = locationKey === "omaha";
 
   const choices = document.querySelector("#drawer-location-choices");
   choices.hidden = !project.locationKeys;
   choices.innerHTML = project.locationKeys ? project.locationKeys.map(key => {
-    const location = ATLAS_LOCATIONS[key];
+    const location = PROJECT_LOCATIONS[key];
     return `<button type="button" data-project-location="${escapeHTML(key)}" aria-current="${key === locationKey}">${escapeHTML(location.city)}, ${escapeHTML(location.state)}</button>`;
   }).join("") : "";
 }
@@ -885,10 +516,9 @@ function renderCaseStudySection(section, index) {
 }
 
 function openDrawer(project, trigger, locationKey=getProjectLocationKeys(project)[0]) {
-  closeCityPortal({restoreFocus:false});
   setSelectedProject(project.id,locationKey);
   projectTrigger = trigger || document.activeElement;
-  const location = ATLAS_LOCATIONS[locationKey];
+  const location = PROJECT_LOCATIONS[locationKey];
   document.querySelector("#drawer-number").textContent = `Field note ${project.number}`;
   document.querySelector("#drawer-location").textContent = project.locationKeys
     ? `${location.city}, ${location.state} · approximate city-level location / ${project.category}`
@@ -907,118 +537,15 @@ function openDrawer(project, trigger, locationKey=getProjectLocationKeys(project
   drawer.hidden = false;
   document.body.classList.add("drawer-open");
   document.body.style.top = `-${scrollPosition}px`;
-  if (map) map.keyboard.disable();
   drawer.querySelector(".drawer-close").focus();
-}
-
-function flyToLocation(destination, onArrival) {
-  const target = ATLAS_LOCATIONS[destination];
-  currentDestination = destination;
-  setCoordinates(target.coordinates);
-  setCurrentLocationDisplay(destination);
-  if (!mapReady) {
-    onArrival?.();
-    return;
-  }
-  map.once("moveend", () => onArrival?.());
-  const camera = {center:target.coordinates,zoom:target.zoom,bearing:target.bearing,pitch:target.pitch};
-  if (reduceMotion.matches) map.jumpTo(camera);
-  else map.flyTo({...camera,duration:1550,essential:false,curve:1.25});
-}
-
-function getLocationLabel(locationKey) {
-  const location = ATLAS_LOCATIONS[locationKey];
-  return location ? location.city : "Project location";
-}
-
-function openArrivalContent(project, trigger, locationKey, showPortal) {
-  if (showPortal && locationKey === "westDesMoines") {
-    openCityPortal("west-des-moines",trigger);
-    return;
-  }
-  if (showPortal && locationKey === "omaha") {
-    openCityPortal("omaha",trigger);
-    return;
-  }
-  openDrawer(project,getProjectListButton(project.id) || trigger,locationKey);
-}
-
-function navigateToProject(project, trigger, locationKey, {showPortal=false}={}) {
-  const trip = ++journeySequence;
-  const previousLocationKey = currentDestination;
-  const locationChanged = previousLocationKey !== locationKey;
-  window.clearTimeout(journeyTimer);
-  map?.stop();
-  closeProject({restoreFocus:false});
-  closeCityPortal({restoreFocus:false});
-  setSelectedProject(project.id,locationKey);
-
-  if (!locationChanged) {
-    setCoordinates(ATLAS_LOCATIONS[locationKey].coordinates);
-    returnOrigin.hidden = locationKey === "omaha";
-    openArrivalContent(project,trigger,locationKey,showPortal);
-    return;
-  }
-
-  site.classList.add("journey-active","traveling");
-  site.classList.toggle("location-west-des-moines",locationKey === "westDesMoines");
-  travelStatus.textContent = `Traveling · ${getLocationLabel(previousLocationKey)} → ${getLocationLabel(locationKey)}`;
-  travelStatus.hidden = false;
-  returnOrigin.hidden = true;
-  const regionalRoute = (previousLocationKey === "omaha" && locationKey === "westDesMoines")
-    || (previousLocationKey === "westDesMoines" && locationKey === "omaha");
-  setRouteVisible(regionalRoute);
-  flyToLocation(locationKey, () => {
-    if (trip !== journeySequence) return;
-    site.classList.remove("journey-active","traveling");
-    setCoordinates(ATLAS_LOCATIONS[locationKey].coordinates);
-    window.requestAnimationFrame(() => setCoordinates(ATLAS_LOCATIONS[locationKey].coordinates));
-    if (!regionalRoute || locationKey === "omaha") setRouteVisible(false);
-    travelStatus.textContent = `Arrived · ${getLocationLabel(locationKey)}`;
-    returnOrigin.hidden = locationKey === "omaha";
-    setSelectedProject(project.id,locationKey);
-    openArrivalContent(project,trigger,locationKey,showPortal);
-    journeyTimer = window.setTimeout(() => { travelStatus.hidden = true; }, 1200);
-  });
-}
-
-function returnToOmaha() {
-  const trip = ++journeySequence;
-  const previousLocationKey = currentDestination;
-  window.clearTimeout(journeyTimer);
-  map?.stop();
-  closeProject({restoreFocus:false});
-  closeCityPortal({restoreFocus:false});
-  site.classList.add("journey-active","returning");
-  site.classList.remove("location-west-des-moines","traveling");
-  setSelectedProject("omaha","omaha");
-  travelStatus.textContent = `Returning · ${getLocationLabel(previousLocationKey)} → Omaha`;
-  travelStatus.hidden = false;
-  returnOrigin.hidden = true;
-  setRouteVisible(previousLocationKey === "westDesMoines");
-  flyToLocation("omaha", () => {
-    if (trip !== journeySequence) return;
-    site.classList.remove("journey-active","returning");
-    setCoordinates(ATLAS_LOCATIONS.omaha.coordinates);
-    window.requestAnimationFrame(() => setCoordinates(ATLAS_LOCATIONS.omaha.coordinates));
-    setRouteVisible(false);
-    travelStatus.textContent = "Returned · Omaha";
-    setSelectedProject("omaha","omaha");
-    openCityPortal("omaha",document.querySelector('.dock [data-go="projects"]'));
-    journeyTimer = window.setTimeout(() => { travelStatus.hidden = true; }, 1200);
-  });
 }
 
 function openProject(id, trigger=document.activeElement, requestedLocationKey=null) {
   const project = projects.find(item => item.id === id);
   if (!project) return;
   const locationKey = requestedLocationKey || projectLocationMemory.get(project.id) || getProjectLocationKeys(project)[0];
-  const cityBeaconSelected = Boolean(trigger?.dataset?.mapProject);
-  const showPortal = cityBeaconSelected && (
-    locationKey === "westDesMoines"
-    || (locationKey === "omaha" && currentDestination !== "omaha")
-  );
-  navigateToProject(project,trigger,locationKey,{showPortal});
+  closeProject({restoreFocus:false});
+  openDrawer(project,trigger,locationKey);
 }
 
 function getDrawerControls() {
@@ -1030,40 +557,17 @@ function goTo(id) { document.getElementById(id)?.scrollIntoView({behavior:reduce
 
 function backToProjectList() {
   closeProject({restoreFocus:false});
-  closeCityPortal({restoreFocus:false});
-  setProjectView("grid");
   document.querySelector("#projects").scrollIntoView({behavior:reduceMotion.matches ? "auto" : "smooth",block:"start"});
   window.setTimeout(() => getProjectListButton(activeProjectId)?.focus(), reduceMotion.matches ? 0 : 450);
 }
 
 renderProjectLists();
-renderAtlasLegend();
+renderFeaturedProjects();
 renderDataPractice();
 renderBeyondTheMap();
 initializeBeyondMapReveal();
-initializeMap();
-returnOrigin.addEventListener("click",returnToOmaha);
-document.querySelectorAll("[data-portal-close]").forEach(button => button.addEventListener("click",() => closeCityPortal()));
-document.querySelector("#portal-primary").addEventListener("click",() => {
-  if (!activeCityArrival) return;
-  if (activeCityArrival.projectIds.length === 1) {
-    const returnTarget = portalTrigger;
-    const projectId = activeCityArrival.projectIds[0];
-    openProject(projectId,getProjectListButton(projectId) || returnTarget);
-    return;
-  }
-  const list = document.querySelector("#portal-project-list");
-  list.hidden = false;
-  cityPortalCard.classList.add("showing-projects");
-  const firstProject = list.querySelector("button");
-  firstProject?.focus();
-});
-document.querySelector("#portal-secondary").addEventListener("click",() => closeCityPortal());
-document.querySelector("#portal-project-list").addEventListener("click",event => {
-  const button = event.target.closest("[data-portal-project]");
-  if (!button) return;
-  const returnTarget = portalTrigger;
-  openProject(button.dataset.portalProject,getProjectListButton(button.dataset.portalProject) || returnTarget);
+document.addEventListener("visibilitychange",() => {
+  document.body.classList.toggle("signals-paused",document.hidden);
 });
 document.querySelector("#previous-project").addEventListener("click",event => {
   const projectId = event.currentTarget.dataset.targetProject;
@@ -1074,25 +578,16 @@ document.querySelector("#next-project").addEventListener("click",event => {
   openProject(projectId,getProjectListButton(projectId));
 });
 document.querySelector("#back-to-project-list").addEventListener("click",backToProjectList);
-document.querySelector("#drawer-return-omaha").addEventListener("click",returnToOmaha);
 document.querySelector("#drawer-location-choices").addEventListener("click",event => {
   const button = event.target.closest("[data-project-location]");
   if (!button) return;
   const project = projects.find(item => item.id === activeProjectId);
-  if (project) navigateToProject(project,getProjectListButton(project.id),button.dataset.projectLocation);
+  if (project) openProject(project.id,getProjectListButton(project.id),button.dataset.projectLocation);
 });
 document.querySelectorAll("[data-go]").forEach(button => button.addEventListener("click",() => goTo(button.dataset.go)));
-document.querySelectorAll("[data-project-view]").forEach(button => button.addEventListener("click",() => setProjectView(button.dataset.projectView)));
 document.addEventListener("click",event => {
-  if (!event.target.closest(".geographic-marker")) {
-    document.querySelectorAll(".geographic-marker.tooltip-open").forEach(marker => {
-      marker.classList.remove("tooltip-open");
-      marker.setAttribute("aria-expanded","false");
-    });
-  }
   const methodProject = event.target.closest("[data-method-project]");
   if (methodProject) {
-    setProjectView("grid");
     openProject(methodProject.dataset.methodProject,methodProject);
     return;
   }
@@ -1102,33 +597,9 @@ document.addEventListener("click",event => {
 document.querySelectorAll("[data-close]").forEach(button => button.addEventListener("click",() => closeProject()));
 document.addEventListener("keydown",event => {
   const keyboardProject = event.target.closest?.("[data-project]");
-  if (drawer.hidden && cityPortal.hidden && keyboardProject && (event.key === "Enter" || event.key === " ")) {
+  if (drawer.hidden && keyboardProject && (event.key === "Enter" || event.key === " ")) {
     event.preventDefault();
     openProject(keyboardProject.dataset.project,keyboardProject);
-    return;
-  }
-  if (!cityPortal.hidden) {
-    if (event.key === "Escape") {
-      event.preventDefault();
-      closeCityPortal();
-      return;
-    }
-    if (event.key !== "Tab") return;
-    const controls = getPortalControls();
-    if (!controls.length) {
-      event.preventDefault();
-      cityPortalCard.focus();
-      return;
-    }
-    const first = controls[0];
-    const last = controls[controls.length-1];
-    if (event.shiftKey && document.activeElement === first) {
-      event.preventDefault();
-      last.focus();
-    } else if (!event.shiftKey && document.activeElement === last) {
-      event.preventDefault();
-      first.focus();
-    }
     return;
   }
   if (drawer.hidden) return;
