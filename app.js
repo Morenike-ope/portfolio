@@ -144,6 +144,58 @@ const cityArrivals = {
   }
 };
 
+/*
+ * EDITABLE BEYOND THE MAP DATA
+ * Update this small object whenever Morenike's listening or reading changes.
+ * Keep `song` and `album` blank until a verified title is supplied; blank fields
+ * are intentionally hidden by the renderer. Artwork and destination links below
+ * were verified against the matching official Apple pages on July 24, 2026.
+ *
+ * HOW TO UPDATE
+ * - Change the artist: edit `listening.artist`, `artwork`, and `artworkAlt`.
+ * - Add a song or album: enter a verified title in `listening.song` or `.album`.
+ * - Replace the Apple Music destination: edit `listening.url`.
+ * - Change the current book: edit every field inside `reading.current`.
+ * - Move a book to recently finished: copy its fields into `reading.recent`, then
+ *   replace `reading.current` with the new current book.
+ * - Add another book: add another reading record and render it using the same
+ *   accessible book-card pattern in `renderBeyondTheMap`.
+ * - Replace covers or Apple Books links: update that book's `cover`, `coverAlt`,
+ *   and `url` together after verifying the title and author on Apple Books.
+ */
+const BEYOND_THE_MAP = {
+  listening: {
+    artist:"Imagine Dragons",
+    status:"Currently in rotation",
+    service:"Apple Music",
+    song:"",
+    album:"",
+    url:"https://music.apple.com/us/artist/imagine-dragons/358714030",
+    artwork:"https://is1-ssl.mzstatic.com/image/thumb/Video211/v4/42/bf/95/42bf95fe-ba4d-2f0e-0697-2c488741bfa5/Job0c1ca847-69bf-490b-98c3-0806790836d2-166868814-PreviewImage_preview_image_nonvideo_sdr-Time1713981230503.png/1200x675mv.webp",
+    artworkAlt:"Imagine Dragons artist artwork from Apple Music"
+  },
+  reading: {
+    current: {
+      title:"The Girls in the Snow",
+      author:"Stacy Green",
+      status:"Currently reading",
+      service:"Apple Books",
+      url:"https://books.apple.com/us/book/the-girls-in-the-snow/id1524446911",
+      cover:"https://is1-ssl.mzstatic.com/image/thumb/Publication124/v4/f3/01/d5/f301d5d3-8d83-2447-5ce6-04c5ce43a9e4/The-Girls-in-the-Snow-Apple.jpg/536x0w.webp",
+      coverAlt:"Book cover of The Girls in the Snow by Stacy Green"
+    },
+    recent: {
+      title:"Murder at the Mayfair Hotel",
+      author:"C.J. Archer",
+      status:"Recently finished",
+      service:"Apple Books",
+      url:"https://books.apple.com/us/book/murder-at-the-mayfair-hotel/id1522811768",
+      cover:"https://is1-ssl.mzstatic.com/image/thumb/Publication114/v4/ab/02/5d/ab025d4d-2cac-95f3-75af-aecf393f074b/MatMH_ebook_Final.jpg/536x0w.webp",
+      coverAlt:"Book cover of Murder at the Mayfair Hotel by C.J. Archer"
+    }
+  }
+};
+
 const chapters = [{id:"home",label:"Home"},{id:"atlas",label:"Atlas"},{id:"work",label:"Work"},{id:"lab",label:"Methods"},{id:"about",label:"About"}];
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const site = document.querySelector(".atlas-site");
@@ -204,6 +256,94 @@ function renderProjectLists() {
     hotspotField.insertAdjacentHTML("beforeend", `<button class="map-hotspot hotspot-${index+1} destination-${project.destination}" type="button" data-project="${project.id}" aria-label="Open ${escapeHTML(project.title)}"><span class="hotspot-pulse"></span><span class="hotspot-card"><small>${escapeHTML(project.location)} · ${project.number}</small><strong>${escapeHTML(project.title)}</strong><em>${escapeHTML(project.category)}</em></span></button>`);
     projectStack.insertAdjacentHTML("beforeend", `<button class="project-tile" type="button" data-project="${project.id}" aria-label="Open ${escapeHTML(project.title)} project details"><span class="tile-number">${project.number}</span><span class="tile-copy"><small>${escapeHTML(project.category)}</small><strong>${escapeHTML(project.title)}</strong><em>${escapeHTML(project.short)}</em></span><span class="tile-stat"><strong>${escapeHTML(project.stat)}</strong><small>${escapeHTML(project.statLabel)}</small></span><span class="tile-arrow" aria-hidden="true">↗</span></button>`);
   });
+}
+
+function renderBeyondTheMap() {
+  const container = document.querySelector("#beyond-map-grid");
+  if (!container) return;
+  const listening = BEYOND_THE_MAP.listening;
+  const currentBook = BEYOND_THE_MAP.reading.current;
+  const recentBook = BEYOND_THE_MAP.reading.recent;
+  const listeningDetails = [listening.song, listening.album]
+    .filter(Boolean)
+    .map(detail => `<span>${escapeHTML(detail)}</span>`)
+    .join("");
+
+  container.innerHTML = `
+    <article class="personal-panel listening-panel">
+      <div class="personal-panel-heading">
+        <span class="personal-icon" aria-hidden="true">♫</span>
+        <div><small>Listening</small><h4>What I’m listening to</h4></div>
+      </div>
+      <div class="listening-artwork media-frame">
+        <div class="media-fallback" aria-hidden="true"><span>♫</span></div>
+        <img src="${escapeHTML(listening.artwork)}" alt="${escapeHTML(listening.artworkAlt)}" loading="lazy" decoding="async">
+        <span class="soundwave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+      </div>
+      <div class="listening-copy">
+        <span class="personal-status">${escapeHTML(listening.status)}</span>
+        <h5>${escapeHTML(listening.artist)}</h5>
+        ${listeningDetails ? `<p class="listening-details">${listeningDetails}</p>` : ""}
+        <span class="service-label">${escapeHTML(listening.service)}</span>
+        <a class="personal-link" href="${escapeHTML(listening.url)}" target="_blank" rel="noopener noreferrer" aria-label="Listen to ${escapeHTML(listening.artist)} on Apple Music in a new tab">Listen on Apple Music <span aria-hidden="true">↗</span></a>
+      </div>
+    </article>
+    <article class="personal-panel reading-panel">
+      <div class="personal-panel-heading">
+        <span class="personal-icon" aria-hidden="true">⌑</span>
+        <div><small>Reading</small><h4>What I’m reading</h4></div>
+      </div>
+      <div class="current-book">
+        <div class="book-cover media-frame">
+          <div class="media-fallback book-fallback" aria-hidden="true"><span>Read</span></div>
+          <img src="${escapeHTML(currentBook.cover)}" alt="${escapeHTML(currentBook.coverAlt)}" loading="lazy" decoding="async">
+        </div>
+        <div class="book-copy">
+          <span class="personal-status">${escapeHTML(currentBook.status)}</span>
+          <h5>${escapeHTML(currentBook.title)}</h5>
+          <p>${escapeHTML(currentBook.author)}</p>
+          <span class="service-label">${escapeHTML(currentBook.service)}</span>
+          <a class="personal-link" href="${escapeHTML(currentBook.url)}" target="_blank" rel="noopener noreferrer" aria-label="View ${escapeHTML(currentBook.title)} by ${escapeHTML(currentBook.author)} in Apple Books in a new tab">View in Apple Books <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+      <div class="recent-book">
+        <div class="recent-cover media-frame">
+          <div class="media-fallback book-fallback" aria-hidden="true"><span>Read</span></div>
+          <img src="${escapeHTML(recentBook.cover)}" alt="${escapeHTML(recentBook.coverAlt)}" loading="lazy" decoding="async">
+        </div>
+        <div class="recent-copy">
+          <span class="personal-status muted">${escapeHTML(recentBook.status)}</span>
+          <h5>${escapeHTML(recentBook.title)}</h5>
+          <p>${escapeHTML(recentBook.author)} · ${escapeHTML(recentBook.service)}</p>
+        </div>
+        <a class="recent-link" href="${escapeHTML(recentBook.url)}" target="_blank" rel="noopener noreferrer" aria-label="View ${escapeHTML(recentBook.title)} by ${escapeHTML(recentBook.author)} in Apple Books in a new tab">View in Apple Books <span aria-hidden="true">↗</span></a>
+      </div>
+    </article>`;
+
+  container.querySelectorAll(".media-frame img").forEach(image => {
+    image.addEventListener("error", () => {
+      image.hidden = true;
+      image.closest(".media-frame")?.classList.add("media-unavailable");
+    }, {once:true});
+  });
+}
+
+function initializeBeyondMapReveal() {
+  const section = document.querySelector("#beyond-map");
+  const panels = [...document.querySelectorAll("#beyond-map .personal-panel")];
+  if (!section || !panels.length || reduceMotion.matches || !("IntersectionObserver" in window)) {
+    panels.forEach(panel => panel.classList.add("revealed"));
+    return;
+  }
+  section.classList.add("reveal-ready");
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add("revealed");
+      observer.unobserve(entry.target);
+    });
+  }, {threshold:0.16});
+  panels.forEach(panel => observer.observe(panel));
 }
 
 function formatCoordinate(value, positive, negative) {
@@ -599,6 +739,8 @@ function backToProjectList() {
 }
 
 renderProjectLists();
+renderBeyondTheMap();
+initializeBeyondMapReveal();
 initializeMap();
 returnOrigin.addEventListener("click",returnToOmaha);
 document.querySelectorAll("[data-portal-close]").forEach(button => button.addEventListener("click",() => closeCityPortal()));
