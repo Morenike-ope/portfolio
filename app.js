@@ -12,9 +12,27 @@ const ATLAS_LOCATIONS = {
   wallaWalla: { city: "Walla Walla", state: "Washington", coordinates: [-118.3430, 46.0646], zoom: 11.5, bearing: -5, pitch: 34, markerClass:"walla-walla" }
 };
 
+/*
+ * MAP MARKER EDITING
+ * - `markerCategory` controls the marker treatment and matching legend entry.
+ *   Supported values are planning, research, and presentation.
+ * - `markerTooltip` controls the short label revealed on hover, focus, or touch.
+ * - `showOnMap:false` removes a project from map markers without removing its
+ *   project-list or case-study record.
+ * The legend only shows categories used by a visible project, so an unverified
+ * presentation is never implied. Add `markerCategory:"presentation"` only to a
+ * real presentation record.
+ */
+const ATLAS_MARKER_CATEGORIES = {
+  planning: { label:"Planning practice", symbol:"dot" },
+  research: { label:"Applied research", symbol:"ring" },
+  presentation: { label:"Presentations", symbol:"diamond" }
+};
+
 const projects = [
   {
     id:"omaha", number:"01", title:"We Make Omaha", city:"Omaha", state:"Nebraska",
+    markerCategory:"planning", markerTooltip:"Omaha projects", showOnMap:true,
     coordinates:[-95.9345,41.2565], approximate:true, category:"Comprehensive planning",
     short:"Turning community knowledge into a citywide planning framework.",
     summary:"Work involving community engagement analysis, scenario planning, spatial research, and implementation-focused reporting.",
@@ -24,6 +42,7 @@ const projects = [
   },
   {
     id:"future-lab", number:"02", title:"Future Lab — Scenario Choosing Workshop", city:"Omaha", state:"Nebraska",
+    markerCategory:"planning", markerTooltip:"Omaha projects", showOnMap:true,
     coordinates:[-95.9345,41.2565], approximate:true, category:"Scenario planning, community engagement, and data analysis",
     program:"We Make Omaha", organization:"City of Omaha", date:"2026",
     short:"Comparing growth scenarios and translating public choices into planning findings.",
@@ -53,6 +72,7 @@ const projects = [
   },
   {
     id:"tracker", number:"03", title:"Implementation Tracker", city:"Omaha", state:"Nebraska",
+    markerCategory:"planning", markerTooltip:"Omaha projects", showOnMap:true,
     coordinates:[-95.9345,41.2565], approximate:true, category:"Civic technology and public accountability",
     short:"Making adopted commitments visible, measurable, and accountable.",
     summary:"A public-facing framework connecting plan commitments to actions, indicators, annual reporting, and place-based projects.",
@@ -62,6 +82,7 @@ const projects = [
   },
   {
     id:"plans", number:"04", title:"Plan Quality and Implementation Research", city:"Marshalltown", state:"Iowa",
+    markerCategory:"research", markerTooltip:"Plan Quality research", showOnMap:true,
     coordinates:[-92.9123,42.0489], approximate:true, category:"Applied research",
     short:"Following the path from public vision to administrative action.",
     summary:"A comparative evaluation of comprehensive plans in Marshalltown, Iowa; Walla Walla, Washington; and Ottumwa, Iowa, including equity, implementation responsibility, and monitoring.",
@@ -72,6 +93,7 @@ const projects = [
   },
   {
     id:"access", number:"05", title:"Employment Access and Housing", city:"Omaha", state:"Nebraska",
+    markerCategory:"research", markerTooltip:"Omaha projects", showOnMap:true,
     coordinates:[-95.9345,41.2565], approximate:true, category:"Current research",
     short:"Testing how affordable housing connects residents to opportunity.",
     summary:"Research examining how affordable housing locations connect residents with employment opportunities. Spatial mismatch is one explanation being tested, not a predetermined conclusion.",
@@ -81,6 +103,7 @@ const projects = [
   },
   {
     id:"wdsm", number:"06", title:"Inclusivity WDSM Project", city:"West Des Moines", state:"Iowa",
+    markerCategory:"research", markerTooltip:"Inclusivity WDSM Project", showOnMap:true,
     coordinates:[-93.7113,41.5772], approximate:true, category:"Academic research",
     institution:"Iowa State University",
     short:"An Iowa State University project located in West Des Moines, Iowa.",
@@ -341,9 +364,7 @@ function getProjectLocationKeys(project) {
 }
 
 function getProjectListButton(projectId) {
-  const gridButton = document.querySelector(`#project-stack [data-project="${projectId}"]`);
-  const hotspotButton = document.querySelector(`#hotspot-field [data-project="${projectId}"]`);
-  return document.querySelector("#project-grid-view")?.hidden ? (hotspotButton || gridButton) : (gridButton || hotspotButton);
+  return document.querySelector(`#project-stack [data-project="${projectId}"]`);
 }
 
 function setSelectedProject(projectId, locationKey) {
@@ -351,7 +372,8 @@ function setSelectedProject(projectId, locationKey) {
   activeLocationKey = locationKey;
   projectLocationMemory.set(projectId,locationKey);
   document.querySelectorAll("[data-map-project]").forEach(marker => {
-    marker.classList.toggle("active", marker.dataset.mapProject === projectId && marker.dataset.locationKey === locationKey);
+    const markerProjects = marker.dataset.projectIds?.split(",") || [];
+    marker.classList.toggle("active", markerProjects.includes(projectId) && marker.dataset.locationKey === locationKey);
   });
   document.querySelectorAll("[data-project]").forEach(button => {
     if (button.dataset.project === projectId) button.setAttribute("aria-current","true");
@@ -360,10 +382,8 @@ function setSelectedProject(projectId, locationKey) {
 }
 
 function renderProjectLists() {
-  const hotspotField = document.querySelector("#hotspot-field");
   const projectStack = document.querySelector("#project-stack");
-  projects.forEach((project, index) => {
-    hotspotField.insertAdjacentHTML("beforeend", `<button class="map-hotspot hotspot-${index+1} destination-${project.destination}" type="button" data-project="${project.id}" aria-label="Open ${escapeHTML(project.title)}"><span class="hotspot-pulse"></span><span class="hotspot-card"><small>${escapeHTML(project.location)} · ${project.number}</small><strong>${escapeHTML(project.title)}</strong><em>${escapeHTML(project.category)}</em></span></button>`);
+  projects.forEach(project => {
     projectStack.insertAdjacentHTML("beforeend", `<button class="project-tile" type="button" data-project="${project.id}" aria-label="View ${escapeHTML(project.title)} case study">
       <span class="tile-number">${project.number}</span>
       <span class="tile-copy"><small>${escapeHTML(project.category)} · ${escapeHTML(project.city)}, ${escapeHTML(project.state)}</small><strong>${escapeHTML(project.title)}</strong><em>${escapeHTML(project.short)}</em>
@@ -372,6 +392,19 @@ function renderProjectLists() {
       <span class="tile-stat"><strong>${escapeHTML(project.stat)}</strong><small>${escapeHTML(project.evidence || project.statLabel)}</small></span>
     </button>`);
   });
+}
+
+function renderAtlasLegend() {
+  const legend = document.querySelector("#atlas-legend");
+  if (!legend) return;
+  const visibleCategories = [...new Set(projects
+    .filter(project => project.showOnMap !== false)
+    .map(project => project.markerCategory)
+    .filter(category => ATLAS_MARKER_CATEGORIES[category]))];
+  legend.innerHTML = visibleCategories.map(category => {
+    const item = ATLAS_MARKER_CATEGORIES[category];
+    return `<span><i class="legend-symbol legend-${escapeHTML(item.symbol)}" aria-hidden="true"></i>${escapeHTML(item.label)}</span>`;
+  }).join("") + `<span><i class="legend-line" aria-hidden="true"></i>Public knowledge route</span>`;
 }
 
 function setProjectView(view, {focus=false}={}) {
@@ -525,21 +558,76 @@ function addRouteLayers() {
 }
 
 function addMapMarkers() {
-  projects.forEach(project => {
+  const locationGroups = new Map();
+  projects.filter(project => project.showOnMap !== false).forEach(project => {
     getProjectLocationKeys(project).forEach(locationKey => {
-      const location = ATLAS_LOCATIONS[locationKey];
-      const markerButton = document.createElement("button");
-      markerButton.type = "button";
-      markerButton.className = `geographic-marker marker-${location.markerClass} marker-${project.id}`;
-      markerButton.dataset.mapProject = project.id;
-      markerButton.dataset.locationKey = locationKey;
-      markerButton.setAttribute("aria-label", `${project.title}, ${location.city}, ${location.state}, approximate project location`);
-      markerButton.innerHTML = `<span aria-hidden="true">${project.markerSymbol ? escapeHTML(project.markerSymbol) : ""}</span><small>${escapeHTML(project.title)}${project.locationKeys ? ` · ${escapeHTML(location.city)}` : ""}</small>`;
-      markerButton.addEventListener("click", () => openProject(project.id, markerButton, locationKey));
-      new maplibregl.Marker({element:markerButton,anchor:"center",offset:project.locationKeys ? [0,0] : project.markerOffset})
-        .setLngLat(location.coordinates)
-        .addTo(map);
+      if (!locationGroups.has(locationKey)) locationGroups.set(locationKey,[]);
+      locationGroups.get(locationKey).push(project);
     });
+  });
+
+  locationGroups.forEach((locationProjects, locationKey) => {
+    const location = ATLAS_LOCATIONS[locationKey];
+    const markerButton = document.createElement("button");
+    const primaryProject = locationProjects[0];
+    const category = locationProjects.some(project => project.markerCategory === "presentation")
+      ? "presentation"
+      : primaryProject.markerCategory || "planning";
+    const sharedLocation = locationProjects.length > 1;
+    const tooltip = sharedLocation
+      ? `${location.city} · ${locationProjects.length} projects`
+      : `${primaryProject.markerTooltip || primaryProject.title} · ${location.city}`;
+    const tooltipId = `marker-tooltip-${locationKey}`;
+
+    markerButton.type = "button";
+    markerButton.className = `geographic-marker marker-${location.markerClass} marker-category-${category}`;
+    markerButton.dataset.mapProject = primaryProject.id;
+    markerButton.dataset.projectIds = locationProjects.map(project => project.id).join(",");
+    markerButton.dataset.locationKey = locationKey;
+    markerButton.setAttribute("aria-label", sharedLocation
+      ? `${location.city}, ${location.state}: ${locationProjects.length} projects. Open project choices.`
+      : `${primaryProject.title}, ${location.city}, ${location.state}, approximate project location.`);
+    markerButton.setAttribute("aria-describedby",tooltipId);
+    markerButton.setAttribute("aria-haspopup","dialog");
+    markerButton.setAttribute("aria-expanded","false");
+    markerButton.innerHTML = `<span class="marker-core" aria-hidden="true"></span><small id="${tooltipId}" role="tooltip">${escapeHTML(tooltip)}</small>`;
+
+    markerButton.addEventListener("pointerdown", event => {
+      markerButton.dataset.pointerType = event.pointerType;
+    });
+    const activateMarker = () => {
+      markerButton.classList.remove("tooltip-open");
+      markerButton.classList.add("visited");
+      markerButton.setAttribute("aria-expanded","false");
+      if (sharedLocation && cityArrivals[primaryProject.destination]) {
+        openCityPortal(primaryProject.destination,markerButton);
+      } else {
+        openProject(primaryProject.id,markerButton,locationKey);
+      }
+    };
+    markerButton.addEventListener("click", event => {
+      if (markerButton.dataset.pointerType === "touch" && !markerButton.classList.contains("tooltip-open")) {
+        event.preventDefault();
+        document.querySelectorAll(".geographic-marker.tooltip-open").forEach(marker => {
+          marker.classList.remove("tooltip-open");
+          marker.setAttribute("aria-expanded","false");
+        });
+        markerButton.classList.add("tooltip-open");
+        markerButton.setAttribute("aria-expanded","true");
+        return;
+      }
+      activateMarker();
+    });
+    markerButton.addEventListener("keydown", event => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      event.preventDefault();
+      markerButton.dataset.pointerType = "keyboard";
+      activateMarker();
+    });
+
+    new maplibregl.Marker({element:markerButton,anchor:"center"})
+      .setLngLat(location.coordinates)
+      .addTo(map);
   });
   setSelectedProject(activeProjectId,activeLocationKey);
 }
@@ -582,6 +670,10 @@ function initializeMap() {
       attributionToggle?.setAttribute("aria-expanded",String(open));
     };
     attributionToggle?.setAttribute("role","button");
+    attributionToggle?.addEventListener("click", event => {
+      event.preventDefault();
+      setAttributionOpen(!attribution.open);
+    });
     const syncAttributionMode = () => setAttributionOpen(spaciousDesktop.matches && !compactAttribution.matches);
     attribution?.addEventListener("toggle", () => {
       attribution.classList.toggle("maplibregl-compact-show",attribution.open);
@@ -921,7 +1013,7 @@ function openProject(id, trigger=document.activeElement, requestedLocationKey=nu
   const project = projects.find(item => item.id === id);
   if (!project) return;
   const locationKey = requestedLocationKey || projectLocationMemory.get(project.id) || getProjectLocationKeys(project)[0];
-  const cityBeaconSelected = Boolean(trigger?.dataset?.mapProject || trigger?.classList?.contains("map-hotspot"));
+  const cityBeaconSelected = Boolean(trigger?.dataset?.mapProject);
   const showPortal = cityBeaconSelected && (
     locationKey === "westDesMoines"
     || (locationKey === "omaha" && currentDestination !== "omaha")
@@ -945,6 +1037,7 @@ function backToProjectList() {
 }
 
 renderProjectLists();
+renderAtlasLegend();
 renderDataPractice();
 renderBeyondTheMap();
 initializeBeyondMapReveal();
@@ -991,6 +1084,12 @@ document.querySelector("#drawer-location-choices").addEventListener("click",even
 document.querySelectorAll("[data-go]").forEach(button => button.addEventListener("click",() => goTo(button.dataset.go)));
 document.querySelectorAll("[data-project-view]").forEach(button => button.addEventListener("click",() => setProjectView(button.dataset.projectView)));
 document.addEventListener("click",event => {
+  if (!event.target.closest(".geographic-marker")) {
+    document.querySelectorAll(".geographic-marker.tooltip-open").forEach(marker => {
+      marker.classList.remove("tooltip-open");
+      marker.setAttribute("aria-expanded","false");
+    });
+  }
   const methodProject = event.target.closest("[data-method-project]");
   if (methodProject) {
     setProjectView("grid");
