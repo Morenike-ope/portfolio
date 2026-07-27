@@ -571,6 +571,41 @@ function initializeMap() {
     });
     map.addControl(new maplibregl.NavigationControl({showCompass:false,visualizePitch:false}), "bottom-right");
     map.addControl(new maplibregl.AttributionControl({compact:true,customAttribution:"OpenFreeMap"}), "bottom-right");
+    const attribution = document.querySelector("#atlas-map .maplibregl-ctrl-attrib");
+    const attributionToggle = attribution?.querySelector(".maplibregl-ctrl-attrib-button");
+    const compactAttribution = window.matchMedia("(max-width: 920px), (hover: none), (pointer: coarse)");
+    const spaciousDesktop = window.matchMedia("(min-width: 1180px) and (min-height: 700px) and (hover: hover) and (pointer: fine)");
+    const setAttributionOpen = open => {
+      if (!attribution) return;
+      attribution.open = open;
+      attribution.classList.toggle("maplibregl-compact-show",open);
+      attributionToggle?.setAttribute("aria-expanded",String(open));
+    };
+    attributionToggle?.setAttribute("role","button");
+    const syncAttributionMode = () => setAttributionOpen(spaciousDesktop.matches && !compactAttribution.matches);
+    attribution?.addEventListener("toggle", () => {
+      attribution.classList.toggle("maplibregl-compact-show",attribution.open);
+      attributionToggle?.setAttribute("aria-expanded",String(attribution.open));
+    });
+    attribution?.addEventListener("keydown", event => {
+      if ((event.key === "Enter" || event.key === " " || event.key === "Spacebar") && event.target === attributionToggle) {
+        event.preventDefault();
+        setAttributionOpen(!attribution.open);
+        return;
+      }
+      if (event.key === "Escape" && attribution.open) {
+        event.preventDefault();
+        setAttributionOpen(false);
+        attributionToggle?.focus({preventScroll:true});
+      }
+    });
+    document.addEventListener("pointerdown", event => {
+      if (!compactAttribution.matches || !attribution?.open || attribution.contains(event.target)) return;
+      setAttributionOpen(false);
+    });
+    compactAttribution.addEventListener("change",syncAttributionMode);
+    spaciousDesktop.addEventListener("change",syncAttributionMode);
+    syncAttributionMode();
     map.keyboard.enable();
     map.once("load", () => {
       mapReady = true;
