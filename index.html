@@ -8,9 +8,9 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 rx=%226%22 fill=%22%23071a26%22/><text x=%225%22 y=%2222%22 fill=%22%2323c1c6%22 font-size=%2215%22 font-family=%22Arial%22 font-weight=%22700%22>MA</text></svg>">
   <link rel="preconnect" href="https://tiles.openfreemap.org" crossorigin>
   <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.12.0/dist/maplibre-gl.css">
-  <link rel="stylesheet" href="./styles.css?v=15">
+  <link rel="stylesheet" href="./styles.css?v=17">
   <script src="https://unpkg.com/maplibre-gl@5.12.0/dist/maplibre-gl.js" defer></script>
-  <script src="./app.js?v=11" defer></script>
+  <script src="./app.js?v=13" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -49,10 +49,6 @@
           <div><strong>Implement</strong><span>Indicators, data governance, reporting systems, coordination, and accountability.</span></div>
         </div>
       </div>
-      <button class="featured-beacon featured-future-lab" type="button" data-project="future-lab">
-        <span class="beacon-rings"><i></i><i></i><i></i></span>
-        <span class="beacon-label"><small>Featured project · We Make Omaha</small><strong>Future Lab</strong></span>
-      </button>
       <div class="legend-card" id="atlas-legend" aria-label="Atlas legend"></div>
       <div class="scroll-cue"><span>Scroll to travel</span><i></i></div>
     </section>
@@ -63,9 +59,8 @@
         <h2>Communities, evidence, and public decisions—in place.</h2>
         <p>Explore how my work with communities, data, and public institutions has taken shape across places and projects.</p>
       </div>
-      <div class="project-view-toggle" role="group" aria-label="Choose a project atlas view">
-        <button type="button" data-project-view="map" aria-pressed="true">Map view</button>
-        <button type="button" data-project-view="grid" aria-pressed="false">Project list</button>
+      <div class="project-view-toggle">
+        <button type="button" data-project-list-toggle aria-controls="project-grid-view" aria-expanded="false" aria-pressed="false" aria-label="Show project list">Project list</button>
       </div>
       <div class="project-view project-map-view" id="project-map-view">
         <div class="atlas-key"><span>FIELD INDEX</span><strong>06 projects</strong><small>Planning · Data · Research · Access</small></div>
