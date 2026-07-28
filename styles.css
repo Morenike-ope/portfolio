@@ -186,7 +186,7 @@ body.drawer-open {
   pointer-events: none;
 }
 .scene-content { position: relative; z-index: 2; }
-.hero-content { width: min(720px, 58vw); padding-top: clamp(60px, 12vh, 130px); }
+.hero-content { width: min(860px, 60vw); padding-top: clamp(60px, 12vh, 130px); }
 .kicker {
   display: flex; align-items: center; gap: 12px; margin: 0 0 24px; color: var(--teal-soft);
   font-family: var(--font-geist-mono), monospace; font-size: .68rem; font-weight: 600;
@@ -195,14 +195,14 @@ body.drawer-open {
 .kicker > span { width: 34px; height: 1px; background: var(--teal); box-shadow: 0 0 12px var(--teal); }
 h1, h2 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; }
 h1 {
-  margin: 0; max-width: 850px; font-size: clamp(4rem, 7.6vw, 8.7rem);
-  line-height: .88; letter-spacing: -.065em; text-wrap: balance;
+  margin: 0; max-width: 860px; font-size: clamp(3.6rem, 4.75vw, 5.5rem);
+  line-height: .94; letter-spacing: -.05em; text-wrap: balance;
   text-shadow: 0 8px 40px rgba(0,0,0,.35); animation: titleIn 900ms both;
 }
 h1 em { color: var(--teal-soft); font-weight: 400; }
 .lede {
-  max-width: 620px; margin: 32px 0 0; color: #d2dcda; font-size: clamp(1rem, 1.35vw, 1.25rem);
-  line-height: 1.7; text-shadow: 0 2px 18px rgba(0,0,0,.8);
+  max-width: 660px; margin: 28px 0 0; color: #d2dcda; font-size: clamp(.95rem, 1.15vw, 1.12rem);
+  line-height: 1.65; text-shadow: 0 2px 18px rgba(0,0,0,.8);
 }
 .hero-actions { display: flex; align-items: center; gap: 26px; margin-top: 38px; }
 .atlas-button, .text-button {
@@ -596,6 +596,7 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--amber); out
   .coordinates, .chapter-rail { display: none; }
   .legend-card { right: auto; left: 24px; }
   .hero-content { width: min(720px, 85vw); }
+  .hero-content h1 { font-size: clamp(3.5rem, 7.2vw, 4.3rem); line-height: .96; }
   .project-stack { width: 88vw; }
   .lab-scene { grid-template-columns: 1fr; align-content: center; }
   .lab-intro { max-width: 760px; }
@@ -619,8 +620,8 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--amber); out
     padding: 2px 32px 2px 8px;
   }
   .hero-content { width: 100%; padding-top: 60px; }
-  h1 { font-size: clamp(3.9rem, 19vw, 6.3rem); }
-  .lede { font-size: .95rem; }
+  .hero-content h1 { font-size: clamp(2.35rem, 9.75vw, 2.85rem); line-height: .98; letter-spacing: -.04em; }
+  .lede { margin-top: 22px; font-size: .95rem; }
   .hero-actions { align-items: flex-start; flex-direction: column; }
   .atlas-button { min-width: 100%; }
   .geographic-marker > small {
@@ -852,9 +853,10 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--amber); out
 }
 
 @media (max-height: 820px) and (min-width: 641px) {
+  .hero-scene { padding-top:40px; }
   .hero-content { padding-top:20px; }
   .hero-content .kicker { margin-bottom:14px; }
-  .hero-content h1 { font-size:clamp(4rem,6.4vw,6.7rem); }
+  .hero-content h1 { font-size:clamp(2.6rem,4.2vw,4rem); }
   .hero-content .lede { margin-top:20px; font-size:.95rem; line-height:1.5; }
   .practice-framework { margin-top:14px; }
   .practice-framework div { padding:8px 12px; }
@@ -866,5 +868,5 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--amber); out
   .hero-actions { margin-top:16px; }
 }
 @media (max-height: 500px) and (min-width: 641px) {
-  .legend-card { bottom: 190px; }
+  .legend-card { left: 0; bottom: 16px; }
 }
