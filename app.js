@@ -422,20 +422,6 @@ function renderAtlasLegend() {
   }).join("") + `<span><i class="legend-line" aria-hidden="true"></i>Public knowledge route</span>`;
 }
 
-function setProjectView(view, {focus=false}={}) {
-  const mapView = document.querySelector("#project-map-view");
-  const gridView = document.querySelector("#project-grid-view");
-  const listButton = document.querySelector("[data-project-list-toggle]");
-  const showGrid = view === "grid";
-  mapView.hidden = showGrid;
-  gridView.hidden = !showGrid;
-  listButton?.setAttribute("aria-pressed",String(showGrid));
-  listButton?.setAttribute("aria-expanded",String(showGrid));
-  listButton?.setAttribute("aria-label",showGrid ? "Hide project list" : "Show project list");
-  if (focus) listButton?.focus();
-  if (!showGrid && map) window.setTimeout(() => map.resize(),0);
-}
-
 function renderDataPractice() {
   const workflow = document.querySelector("#analytical-workflow");
   workflow.innerHTML = `<ol>${ANALYTICAL_WORKFLOW.map(([stage,note],index) => `<li><span>${String(index+1).padStart(2,"0")}</span><strong>${escapeHTML(stage)}</strong><small>${escapeHTML(note)}</small></li>`).join("")}</ol>
@@ -1099,7 +1085,6 @@ function goTo(id) {
 function backToProjectList() {
   closeProject({restoreFocus:false});
   closeCityPortal({restoreFocus:false});
-  setProjectView("grid");
   document.querySelector("#projects").scrollIntoView({behavior:reduceMotion.matches ? "auto" : "smooth",block:"start"});
   window.setTimeout(() => getProjectListButton(activeProjectId)?.focus(), reduceMotion.matches ? 0 : 450);
 }
@@ -1150,9 +1135,6 @@ document.querySelector("#drawer-location-choices").addEventListener("click",even
   if (project) navigateToProject(project,getProjectListButton(project.id),button.dataset.projectLocation);
 });
 document.querySelectorAll("[data-go]").forEach(button => button.addEventListener("click",() => goTo(button.dataset.go)));
-document.querySelector("[data-project-list-toggle]").addEventListener("click",event => {
-  setProjectView(document.querySelector("#project-grid-view").hidden ? "grid" : "map",{focus:true});
-});
 window.addEventListener("resize",() => {
   window.clearTimeout(overviewResizeTimer);
   overviewResizeTimer = window.setTimeout(refreshMarkerLayout,150);
@@ -1160,7 +1142,6 @@ window.addEventListener("resize",() => {
 document.addEventListener("click",event => {
   const methodProject = event.target.closest("[data-method-project]");
   if (methodProject) {
-    setProjectView("grid");
     openProject(methodProject.dataset.methodProject,methodProject);
     return;
   }
