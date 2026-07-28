@@ -364,6 +364,7 @@ let activeLocationKey = "omaha";
 const projectLocationMemory = new Map();
 const atlasMarkers = [];
 let overviewResizeTimer = 0;
+let overviewUserMoved = false;
 
 function escapeHTML(value) {
   return String(value).replace(/[&<>"']/g, character => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[character]));
@@ -609,19 +610,36 @@ function showProjectOverview({animate=false}={}) {
   travelStatus.hidden = true;
   setRouteVisible(false);
   site.classList.remove("journey-active","traveling","returning","location-west-des-moines");
-  map.fitBounds(bounds,{
-    padding:getOverviewPadding(),
-    maxZoom:5,
+  overviewUserMoved = false;
+  const duration = animate && !reduceMotion.matches ? 900 : 0;
+  if (window.innerWidth > 1100) {
+    map.easeTo({
+      center:[-105.2649,41.2022],
+      zoom:4.63,
+      bearing:0,
+      pitch:8,
+      padding:{top:0,right:0,bottom:0,left:0},
+      duration,
+      essential:false
+    });
+    return;
+  }
+  const padding = getOverviewPadding();
+  const camera = map.cameraForBounds(bounds,{padding,maxZoom:5});
+  map.easeTo({
+    ...camera,
+    zoom:camera.zoom - (window.innerWidth <= 640 ? 0 : .15),
     bearing:0,
     pitch:8,
-    duration:animate && !reduceMotion.matches ? 900 : 0,
+    padding,
+    duration,
     essential:false
   });
 }
 
 function refreshMarkerLayout() {
   atlasMarkers.forEach(({marker,project,locationKey}) => marker.setOffset(getMarkerOffset(project,locationKey)));
-  if (currentDestination === "overview") showProjectOverview();
+  if (currentDestination === "overview" && !overviewUserMoved) showProjectOverview();
 }
 
 function addMapMarkers() {
@@ -739,6 +757,11 @@ function initializeMap() {
     spaciousDesktop.addEventListener("change",syncAttributionMode);
     syncAttributionMode();
     map.keyboard.enable();
+    ["dragstart","zoomstart","rotatestart","pitchstart"].forEach(eventName => {
+      map.on(eventName,event => {
+        if (currentDestination === "overview" && event.originalEvent) overviewUserMoved = true;
+      });
+    });
     map.once("load", () => {
       mapReady = true;
       addRouteLayers();
