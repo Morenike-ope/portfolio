@@ -23,7 +23,7 @@ body {
 }
 button, input { font: inherit; }
 button { color: inherit; }
-body.drawer-open, body.portal-open {
+body.drawer-open {
   position: fixed;
   left: 0;
   right: 0;
@@ -533,126 +533,6 @@ input[type="range"] { width: 100%; accent-color: var(--teal); cursor: pointer; }
 .dock button span { font-size: 1.1rem; }
 .dock button small { margin-top: 3px; font-size: .49rem; letter-spacing: .08em; text-transform: uppercase; }
 
-.city-portal {
-  position: fixed; inset: 0; z-index: 70; display: grid; place-items: center end;
-  padding: 94px clamp(24px,5vw,80px) 90px;
-}
-.city-portal[hidden] { display: none; }
-.city-portal-backdrop {
-  position: absolute; inset: 0; border: 0; cursor: pointer;
-  background:
-    radial-gradient(circle at 24% 48%, rgba(3,13,20,.3) 0 23%, rgba(3,13,20,.72) 68%),
-    rgba(2,10,15,.34);
-  backdrop-filter: blur(1.5px);
-}
-.city-portal-card {
-  position: relative; width: min(64vw,calc(100svh - 184px),780px); aspect-ratio: 1;
-  border: 1px solid rgba(243,170,85,.78); border-radius: 50%; overflow: hidden;
-  background: #071a26; box-shadow: 0 0 0 13px rgba(35,193,198,.07), 0 0 0 30px rgba(35,193,198,.035), 0 0 70px rgba(243,170,85,.2);
-  opacity: 0; transform: scale(.95); transition: opacity 420ms ease, transform 700ms cubic-bezier(.2,.75,.25,1);
-}
-.city-portal.is-visible .city-portal-card { opacity: 1; transform: scale(1); }
-.city-portal-close {
-  position: absolute; z-index: 8; top: 8%; right: 10%; display: grid; place-items: center;
-  width: 46px; height: 46px; border: 1px solid rgba(238,233,222,.45); border-radius: 50%;
-  background: rgba(4,15,22,.78); color: var(--cream); font-size: 1.4rem; cursor: pointer; backdrop-filter: blur(10px);
-}
-.city-portal-close:hover { border-color: var(--amber); color: var(--amber); }
-.portal-rings, .portal-rings i { position: absolute; inset: 0; border-radius: 50%; pointer-events: none; }
-.portal-rings { z-index: 6; }
-.portal-rings i { border: 1px solid rgba(243,170,85,.5); opacity: 0; transform: scale(.9); }
-.portal-rings i:nth-child(2) { inset: 12px; border-color: rgba(35,193,198,.32); }
-.portal-rings i:nth-child(3) { inset: 28px; border-color: rgba(243,170,85,.23); }
-.city-portal.is-visible .portal-rings i { animation: portalRingIn 900ms 150ms ease-out forwards; }
-.city-portal.is-visible .portal-rings i:nth-child(2) { animation-delay: 280ms; }
-.city-portal.is-visible .portal-rings i:nth-child(3) { animation-delay: 410ms; }
-.portal-visual { position: absolute; inset: 0; overflow: hidden; border-radius: 50%; background: #0a2530; }
-.portal-map, .portal-image-fallback { position: absolute; inset: 0; }
-.portal-map { opacity: 0; transition: opacity 500ms ease; }
-.portal-map-ready .portal-map { opacity: .86; filter: brightness(1.55) contrast(1.12) saturate(.82); }
-.portal-image-fallback {
-  background:
-    radial-gradient(circle at 72% 18%, rgba(243,170,85,.25), transparent 24%),
-    radial-gradient(circle at 35% 58%, rgba(35,193,198,.18), transparent 32%),
-    linear-gradient(145deg,#0b2b37,#06151f 65%);
-}
-.portal-city-light {
-  position: absolute; inset: 0; z-index: 2; border-radius: 50%; pointer-events: none;
-  background:
-    radial-gradient(circle at 76% 24%, rgba(243,170,85,.34), transparent 3%, transparent 22%),
-    linear-gradient(180deg, rgba(3,13,20,.04) 0 25%, rgba(3,13,20,.32) 51%, rgba(3,13,20,.94) 91%),
-    radial-gradient(circle at center, transparent 45%, rgba(3,13,20,.62) 100%);
-}
-.portal-city-light::after {
-  content: ""; position: absolute; inset: 0; opacity: .7;
-  background-image:
-    radial-gradient(circle at 19% 29%, var(--amber) 0 1px, transparent 2px),
-    radial-gradient(circle at 81% 34%, var(--teal) 0 1px, transparent 2px),
-    radial-gradient(circle at 73% 69%, var(--amber) 0 1px, transparent 2px),
-    radial-gradient(circle at 28% 72%, var(--teal) 0 1px, transparent 2px);
-}
-.portal-copy {
-  position: absolute; z-index: 5; left: 10%; right: 10%; bottom: 10%;
-  display: flex; flex-direction: column; align-items: center; text-align: center;
-}
-.portal-eyebrow {
-  margin: 0 0 8px; color: var(--amber); font-family: var(--font-geist-mono),monospace;
-  font-size: .58rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
-}
-.portal-copy h2 {
-  max-width: 90%; margin: 0; color: var(--cream); font-family: Georgia,serif; font-size: clamp(2.6rem,4.7vw,5rem);
-  font-weight: 400; line-height: .94; letter-spacing: -.055em; text-shadow: 0 8px 30px rgba(0,0,0,.8);
-}
-.portal-introduction {
-  max-width: 600px; margin: 14px auto 0; color: #d7e0dd; font-family: Georgia,serif;
-  font-size: clamp(.76rem,1.1vw,1rem); line-height: 1.5; text-shadow: 0 2px 14px #02080c;
-}
-.portal-affiliation {
-  margin: 10px 0 0; color: var(--teal-soft); font-size: .66rem; letter-spacing: .1em; text-transform: uppercase;
-}
-.portal-highlights { display: flex; justify-content: center; gap: 0; margin: 18px 0; }
-.portal-highlights div {
-  display: grid; min-width: 116px; padding: 0 18px; border-right: 1px solid rgba(130,215,216,.34);
-}
-.portal-highlights div:last-child { border-right: 0; }
-.portal-highlights strong { color: var(--teal-soft); font-family: Georgia,serif; font-size: 1.4rem; font-weight: 400; }
-.portal-highlights span { margin-top: 2px; color: #b5c5c7; font-size: .52rem; letter-spacing: .08em; text-transform: uppercase; }
-.portal-actions { display: flex; align-items: center; justify-content: center; gap: 18px; width: 100%; }
-.portal-primary, .portal-secondary {
-  min-height: 46px; border: 0; cursor: pointer; font-weight: 750; transition: transform 160ms ease, background 160ms ease;
-}
-.portal-primary { min-width: min(330px,55%); padding: 13px 20px; background: var(--teal); color: var(--ink); }
-.portal-secondary {
-  min-width: 0; max-width: 34%; padding: 12px 3px; border-bottom: 1px solid rgba(238,233,222,.45);
-  background: transparent; color: var(--cream); font-size: .78rem; line-height: 1.2; white-space: normal;
-}
-.portal-primary:hover { transform: translateY(-2px); background: #5ed6d9; }
-.portal-secondary:hover { color: var(--teal-soft); }
-.portal-journey {
-  position: absolute; z-index: 6; left: 50%; bottom: 3.5%; width: max-content; max-width: 70%; margin: 0;
-  color: #a5b9bc; font-family: var(--font-geist-mono),monospace; font-size: .48rem; letter-spacing: .13em;
-  text-transform: uppercase; transform: translateX(-50%);
-}
-.portal-credit {
-  position: absolute; z-index: 6; right: 12%; top: 6.5%; margin: 0; color: rgba(210,225,225,.58);
-  font-size: .42rem; letter-spacing: .08em;
-}
-.portal-project-list {
-  width: min(560px,90%); max-height: 250px; margin-top: 18px; overflow-y: auto;
-  border-top: 1px solid rgba(130,215,216,.34); scrollbar-color: var(--teal) var(--navy);
-}
-.portal-project-list button {
-  width: 100%; display: grid; grid-template-columns: 1fr auto; gap: 4px 18px; padding: 12px 6px;
-  border: 0; border-bottom: 1px solid rgba(130,215,216,.2); background: rgba(4,15,22,.74); text-align: left; cursor: pointer;
-}
-.portal-project-list small { grid-column: 1; color: var(--teal-soft); font-size: .5rem; letter-spacing: .1em; text-transform: uppercase; }
-.portal-project-list strong { grid-column: 1; font-family: Georgia,serif; font-size: .96rem; font-weight: 400; }
-.portal-project-list span { grid-column: 2; grid-row: 1 / 3; align-self: center; color: var(--amber); font-size: .6rem; }
-.showing-projects .portal-introduction,
-.showing-projects .portal-affiliation,
-.showing-projects .portal-highlights,
-.showing-projects .portal-actions { display: none; }
-
 .drawer-shell { position: fixed; inset: 0; z-index: 80; display: grid; grid-template-columns: 1fr minmax(400px, 620px); }
 .drawer-shell[hidden] { display: none; }
 .drawer-backdrop { border: 0; background: rgba(2,8,12,.68); backdrop-filter: blur(5px); cursor: pointer; }
@@ -700,7 +580,6 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--amber); out
 @keyframes titleIn { from { opacity: 0; transform: translateY(20px); } }
 @keyframes drawerIn { from { opacity: 0; transform: translateX(55px); } }
 @keyframes mapSpin { to { transform: rotate(360deg); } }
-@keyframes portalRingIn { 55% { opacity: .8; } 100% { opacity: .48; transform: scale(1); } }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
@@ -720,9 +599,6 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--amber); out
   .project-stack { width: 88vw; }
   .lab-scene { grid-template-columns: 1fr; align-content: center; }
   .lab-intro { max-width: 760px; }
-  .city-portal { padding: 88px 28px 82px; }
-  .city-portal-card { width: min(76vw,calc(100svh - 170px),680px); }
-  .portal-copy h2 { font-size: clamp(2.5rem,7vw,4.4rem); }
 }
 @media (max-width: 640px) {
   .topbar { height: 70px; padding: 0 18px; }
@@ -788,29 +664,6 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--amber); out
   .contact-placeholders { grid-template-columns: 1fr; width: 100%; }
   .dock { bottom: 10px; width: calc(100% - 20px); justify-content: space-around; }
   .dock button { width: 19%; height: 50px; }
-  .city-portal { align-items: end; padding: 76px 10px 70px; }
-  .city-portal-backdrop { background: rgba(2,10,15,.7); backdrop-filter: blur(2px); }
-  .city-portal-card {
-    width: 100%; max-height: calc(100svh - 150px); aspect-ratio: auto; min-height: 0; height: min(690px,calc(100svh - 150px));
-    border-radius: 28px; overflow-y: auto; box-shadow: 0 0 0 7px rgba(35,193,198,.06), 0 0 45px rgba(243,170,85,.16);
-  }
-  .portal-rings { display: none; }
-  .portal-visual { position: relative; width: 74vw; height: 74vw; max-width: 300px; max-height: 300px; margin: 20px auto 0; border: 1px solid rgba(243,170,85,.65); }
-  .portal-copy { position: relative; left: auto; right: auto; bottom: auto; padding: 18px 20px 70px; }
-  .portal-copy h2 { max-width: 100%; font-size: clamp(2.55rem,12vw,4rem); }
-  .portal-introduction { font-size: .86rem; }
-  .portal-highlights { width: 100%; margin: 17px 0; }
-  .portal-highlights div { flex: 1; min-width: 0; padding: 0 7px; }
-  .portal-highlights strong { font-size: 1.2rem; }
-  .portal-highlights span { font-size: .45rem; }
-  .portal-actions { align-items: stretch; flex-direction: column; gap: 8px; }
-  .portal-primary, .portal-secondary { width: 100%; max-width: none; min-width: 0; min-height: 46px; }
-  .portal-secondary { border: 1px solid rgba(238,233,222,.28); }
-  .city-portal-close { position: fixed; top: 84px; right: 22px; width: 44px; height: 44px; }
-  .portal-journey { position: absolute; bottom: 18px; max-width: 85%; text-align: center; }
-  .portal-credit { position: relative; right: auto; top: auto; margin: -58px 20px 42px; text-align: center; }
-  .portal-project-list { width: 100%; max-height: none; }
-  .showing-projects .portal-copy { padding-top: 12px; }
   .drawer-shell { grid-template-columns: 1fr; }
   .drawer-backdrop { display: none; }
   .project-drawer {
@@ -826,43 +679,6 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--amber); out
 }
 
 @keyframes quietWave { from { transform: scaleY(.55); opacity: .55; } to { transform: scaleY(1.08); opacity: 1; } }
-
-/* Keep the arrival useful on short landscape screens instead of shrinking the
-   circular desktop composition until its copy becomes unreadable. */
-@media (max-height: 600px) {
-  .city-portal { place-items: center; padding: 16px; }
-  .city-portal-card {
-    display: grid; grid-template-columns: minmax(210px, 34%) minmax(0, 1fr);
-    width: min(92vw, 840px); height: min(520px, calc(100svh - 32px)); max-height: calc(100svh - 32px);
-    aspect-ratio: auto; border-radius: 28px; overflow-y: auto;
-  }
-  .portal-rings { display: none; }
-  .portal-visual {
-    position: relative; inset: auto; grid-column: 1; grid-row: 1;
-    width: 100%; height: 100%; min-height: 300px; margin: 0;
-    border-radius: 27px 0 0 27px;
-  }
-  .portal-copy {
-    position: relative; inset: auto; grid-column: 2; grid-row: 1;
-    align-self: center; padding: 34px 30px 42px;
-  }
-  .portal-copy h2 { max-width: 100%; font-size: clamp(2.15rem, 5vw, 3.35rem); line-height: .94; }
-  .portal-eyebrow { margin-bottom: 5px; }
-  .portal-introduction { margin-top: 8px; font-size: .75rem; line-height: 1.35; }
-  .portal-affiliation { margin-top: 6px; font-size: .52rem; }
-  .portal-highlights { width: 100%; margin: 10px 0; }
-  .portal-highlights div { flex: 1; min-width: 0; padding: 0 8px; }
-  .portal-highlights strong { font-size: 1.05rem; }
-  .portal-highlights span { font-size: .41rem; }
-  .portal-actions { gap: 9px; }
-  .portal-primary, .portal-secondary { min-width: 0; min-height: 42px; padding: 9px 12px; font-size: .7rem; }
-  .portal-primary { flex: 1.25; }
-  .portal-secondary { flex: .75; }
-  .city-portal-close { position: absolute; top: 14px; right: 14px; width: 44px; height: 44px; }
-  .portal-journey { left: 67%; bottom: 10px; max-width: 55%; text-align: center; }
-  .portal-credit { left: 18px; right: auto; top: 14px; max-width: 28%; }
-  .portal-project-list { max-height: 190px; margin-top: 10px; }
-}
 
 /* Information architecture revision: the approved atlas system now supports
    one Project Atlas and a project-linked Data Practice section. */
