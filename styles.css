@@ -184,7 +184,7 @@ body.drawer-open {
   position: relative; z-index: 2; min-height: 100svh; padding: 120px clamp(26px, 7vw, 112px) 130px;
   scroll-margin-top: 0; overflow: hidden; pointer-events: none;
 }
-.scene button, .scene input, .project-stack, .lab-console, .about-card { pointer-events: auto; }
+.scene button, .scene input, .scene a, .project-stack, .lab-console, .about-card { pointer-events: auto; }
 .scene::after {
   content: ""; position: absolute; inset: 0; z-index: -1;
   background: linear-gradient(180deg, transparent 70%, rgba(3,13,20,.5));
@@ -769,7 +769,7 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--amber); out
 .featured-tool dl div { display:grid; grid-template-columns:120px minmax(0,1fr); gap:18px; padding:15px 0; border-top:1px solid var(--line); }
 .featured-tool dt { color:var(--teal-soft); font-size:.56rem; letter-spacing:.11em; line-height:1.5; text-transform:uppercase; }
 .featured-tool dd { margin:0; color:#b9c8c9; font-size:.74rem; line-height:1.6; }
-.featured-tool-inline-link { color:var(--teal-soft); text-decoration:underline; text-decoration-color:rgba(130,215,216,.5); text-underline-offset:3px; }
+.featured-tool-inline-link { color:var(--teal-soft); cursor:pointer; text-decoration:underline; text-decoration-color:rgba(130,215,216,.5); text-underline-offset:3px; }
 .featured-tool-inline-link:hover { color:var(--cream); text-decoration-color:var(--amber); }
 .featured-tool-inline-link:focus-visible { outline:2px solid var(--amber); outline-offset:3px; border-radius:2px; }
 .featured-tool-methods { display:flex; flex-wrap:wrap; gap:7px; margin-top:22px; }
