@@ -236,7 +236,7 @@ const ANALYTICAL_WORKFLOW = [
 ];
 
 const FEATURED_TOOLS = [
-  {projectId:"tracker", title:"Implementation Tracker", action:"Explore the Tracker", url:"https://wemakeomaha.github.io/implementation-tracker/?section=home"},
+  {projectId:"tracker", title:"Implementation Tracker", action:"Explore the tracker", liveUrl:"https://wemakeomaha.github.io/implementation-tracker/?section=home"},
   {projectId:"omaha", title:"Community Input Toolkit", action:"View project"}
 ];
 
@@ -386,15 +386,13 @@ function renderDataPractice() {
         <p class="featured-tool-summary">${escapeHTML(project.short)}</p>
         <dl>
           <div><dt>Planning question</dt><dd>${escapeHTML(questions.items[0])}</dd></div>
-          <div><dt>My contribution</dt><dd>${escapeHTML(contribution.body)}</dd></div>
+          <div><dt>My contribution</dt><dd>${escapeHTML(contribution.body)}${tool.liveUrl ? ` <a class="featured-tool-inline-link" href="${escapeHTML(tool.liveUrl)}" target="_blank" rel="noopener noreferrer">View the live Implementation Tracker</a>.` : ""}</dd></div>
         </dl>
         <div class="featured-tool-methods" aria-label="Key methods and capabilities">${project.methods.map(method => `<span>${escapeHTML(method)}</span>`).join("")}</div>
       </div>
       <div class="featured-tool-footer">
         <p><strong>${escapeHTML(project.evidence)}</strong><span>Verified project evidence</span></p>
-        ${tool.url
-          ? `<a href="${escapeHTML(tool.url)}" target="_blank" rel="noopener noreferrer">${escapeHTML(tool.action)} <small>(opens in new tab)</small> <span aria-hidden="true">↗</span></a>`
-          : `<button type="button" data-project="${escapeHTML(project.id)}" aria-label="${escapeHTML(tool.action)}: ${escapeHTML(project.title)}">${escapeHTML(tool.action)} <span aria-hidden="true">↗</span></button>`}
+        <button type="button" data-project="${escapeHTML(project.id)}" aria-label="${escapeHTML(tool.action)}: ${escapeHTML(project.title)}">${escapeHTML(tool.action)} <span aria-hidden="true">↗</span></button>
       </div>
     </article>`;
   }).join("");
