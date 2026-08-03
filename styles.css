@@ -772,9 +772,19 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--amber); out
 .featured-tool-footer p span { display:block; margin-top:4px; color:#82999e; font-size:.52rem; letter-spacing:.08em; text-transform:uppercase; }
 .featured-tool-footer button { min-height:44px; padding:10px 0; border:0; border-bottom:1px solid var(--teal); background:transparent; color:var(--teal-soft); cursor:pointer; font-size:.67rem; letter-spacing:.07em; text-transform:uppercase; white-space:nowrap; }
 .featured-tool-footer button:hover { color:var(--cream); border-color:var(--amber); }
-.interactive-example { display:grid; grid-template-columns:minmax(0,.75fr) minmax(420px,1.25fr); gap:50px; align-items:center; margin-top:80px; padding-top:70px; border-top:1px solid var(--line); }
+.interactive-example {
+  display:grid; grid-template-columns:minmax(0,1fr) minmax(480px,.9fr); align-items:center;
+  justify-content:space-between; gap:clamp(56px,8vw,150px); width:100%;
+  margin-top:80px; padding-top:70px; border-top:1px solid var(--line);
+}
+.interactive-example-copy { max-width:760px; }
+.interactive-example .lab-console { width:min(100%,720px); justify-self:end; }
 .interactive-example-copy h3 { margin:14px 0; font-family:Georgia,serif; font-size:clamp(2.5rem,5vw,5rem); font-weight:400; line-height:.95; }
 .interactive-example-copy > p:last-child { color:#b7c6c7; line-height:1.7; }
+
+@media (max-width:1100px) and (min-width:921px) {
+  .interactive-example { grid-template-columns:minmax(0,1fr) minmax(440px,.9fr); gap:clamp(36px,5vw,56px); }
+}
 
 .contact-section { scroll-margin-top: 100px; margin-top: 58px; padding-top: 45px; border-top: 1px solid var(--line); }
 .contact-section > h3 { margin:0 0 22px; font-family:Georgia,serif; font-size:clamp(2rem,4vw,3.5rem); font-weight:400; }
