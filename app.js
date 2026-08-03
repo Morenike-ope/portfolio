@@ -236,7 +236,7 @@ const ANALYTICAL_WORKFLOW = [
 ];
 
 const FEATURED_TOOLS = [
-  {projectId:"tracker", title:"Implementation Tracker", action:"Explore the tracker"},
+  {projectId:"tracker", title:"Implementation Tracker", action:"Explore the Tracker", url:"https://wemakeomaha.github.io/implementation-tracker/?section=home"},
   {projectId:"omaha", title:"Community Input Toolkit", action:"View project"}
 ];
 
@@ -392,7 +392,9 @@ function renderDataPractice() {
       </div>
       <div class="featured-tool-footer">
         <p><strong>${escapeHTML(project.evidence)}</strong><span>Verified project evidence</span></p>
-        <button type="button" data-project="${escapeHTML(project.id)}" aria-label="${escapeHTML(tool.action)}: ${escapeHTML(project.title)}">${escapeHTML(tool.action)} <span aria-hidden="true">↗</span></button>
+        ${tool.url
+          ? `<a href="${escapeHTML(tool.url)}" target="_blank" rel="noopener noreferrer">${escapeHTML(tool.action)} <small>(opens in new tab)</small> <span aria-hidden="true">↗</span></a>`
+          : `<button type="button" data-project="${escapeHTML(project.id)}" aria-label="${escapeHTML(tool.action)}: ${escapeHTML(project.title)}">${escapeHTML(tool.action)} <span aria-hidden="true">↗</span></button>`}
       </div>
     </article>`;
   }).join("");

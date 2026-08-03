@@ -770,8 +770,10 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--amber); out
 .featured-tool-footer p { margin:0; }
 .featured-tool-footer p strong { display:block; color:var(--amber); font-family:Georgia,serif; font-size:1.35rem; font-weight:400; }
 .featured-tool-footer p span { display:block; margin-top:4px; color:#82999e; font-size:.52rem; letter-spacing:.08em; text-transform:uppercase; }
-.featured-tool-footer button { min-height:44px; padding:10px 0; border:0; border-bottom:1px solid var(--teal); background:transparent; color:var(--teal-soft); cursor:pointer; font-size:.67rem; letter-spacing:.07em; text-transform:uppercase; white-space:nowrap; }
-.featured-tool-footer button:hover { color:var(--cream); border-color:var(--amber); }
+.featured-tool-footer :is(a,button) { min-height:44px; display:inline-flex; align-items:center; gap:5px; padding:10px 0; border:0; border-bottom:1px solid var(--teal); background:transparent; color:var(--teal-soft); cursor:pointer; font-size:.67rem; letter-spacing:.07em; text-decoration:none; text-transform:uppercase; white-space:nowrap; }
+.featured-tool-footer :is(a,button):hover { color:var(--cream); border-color:var(--amber); }
+.featured-tool-footer :is(a,button):focus-visible { outline:2px solid var(--amber); outline-offset:4px; }
+.featured-tool-footer a small { color:#8fa6aa; font-size:.68em; letter-spacing:.03em; text-transform:none; }
 .interactive-example {
   display:grid; grid-template-columns:minmax(0,1fr) minmax(480px,.9fr); align-items:center;
   justify-content:space-between; gap:clamp(56px,8vw,150px); width:100%;
@@ -860,7 +862,7 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--amber); out
   .featured-tool-copy h3 { font-size:clamp(2.35rem,12vw,3.5rem); }
   .featured-tool dl div { grid-template-columns:1fr; gap:7px; }
   .featured-tool-footer { align-items:flex-start; flex-direction:column; gap:18px; }
-  .featured-tool-footer button { width:100%; text-align:left; }
+  .featured-tool-footer :is(a,button) { width:100%; text-align:left; }
   .interactive-example { grid-template-columns:1fr; gap:24px; margin-top:50px; padding-top:45px; }
   .about-editorial-grid {
     grid-template-columns:1fr;
