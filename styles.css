@@ -50,6 +50,11 @@ body.drawer-open {
 .atlas-map.maplibregl-map { font-family: var(--font-geist-sans), Arial, sans-serif; }
 .map-loaded + .world-shade,
 .atlas-map.maplibregl-map { opacity: 1; }
+.atlas-site.map-static .world,
+.atlas-site.map-static .atlas-map { pointer-events: none; }
+.atlas-site.map-static .maplibregl-control-container,
+.atlas-site.map-static .maplibregl-marker,
+.atlas-site.map-static .map-state { display: none !important; }
 .map-state {
   position: absolute; z-index: 7; left: 50%; top: 50%; display: flex; align-items: center; gap: 11px;
   padding: 11px 15px; border: 1px solid var(--line); background: rgba(4,15,22,.88); color: var(--teal-soft);

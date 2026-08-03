@@ -295,6 +295,8 @@ const BEYOND_THE_MAP = {
 const chapters = [{id:"home",label:"Home"},{id:"projects",label:"Projects"},{id:"data-practice",label:"Data Practice"},{id:"about",label:"About"},{id:"contact",label:"Contact"}];
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const site = document.querySelector(".atlas-site");
+const atlasMapElement = document.querySelector("#atlas-map");
+const dataPracticeSection = document.querySelector("#data-practice");
 const mapState = document.querySelector("#map-state");
 const mapStateText = document.querySelector("#map-state-text");
 const travelStatus = document.querySelector("#travel-status");
@@ -314,6 +316,9 @@ const projectLocationMemory = new Map();
 const atlasMarkers = [];
 let overviewResizeTimer = 0;
 let overviewUserMoved = false;
+let mapStatic = false;
+let mapModeFrame = 0;
+let resetOverviewOnResume = false;
 
 function escapeHTML(value) {
   return String(value).replace(/[&<>"']/g, character => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[character]));
@@ -548,7 +553,7 @@ function getOverviewPadding() {
 }
 
 function showProjectOverview({animate=false}={}) {
-  if (!mapReady) return;
+  if (!mapReady || mapStatic) return;
   const bounds = new maplibregl.LngLatBounds();
   projects.filter(project => project.showOnMap !== false).forEach(project => {
     getProjectLocationKeys(project).forEach(locationKey => bounds.extend(ATLAS_LOCATIONS[locationKey].coordinates));
@@ -586,8 +591,82 @@ function showProjectOverview({animate=false}={}) {
 }
 
 function refreshMarkerLayout() {
+  if (mapStatic) return;
   atlasMarkers.forEach(({marker,project,locationKey}) => marker.setOffset(getMarkerOffset(project,locationKey)));
   if (currentDestination === "overview" && !overviewUserMoved) showProjectOverview();
+}
+
+function setMapHandlerState(handler, enabled) {
+  if (!handler) return;
+  if (enabled) handler.enable();
+  else handler.disable();
+}
+
+function applyMapInteractionMode() {
+  site.classList.toggle("map-static",mapStatic);
+  atlasMapElement.toggleAttribute("aria-hidden",mapStatic);
+  if (mapStatic) {
+    atlasMapElement.removeAttribute("role");
+    atlasMapElement.removeAttribute("aria-label");
+    atlasMapElement.tabIndex = -1;
+  } else {
+    atlasMapElement.setAttribute("role","region");
+    atlasMapElement.tabIndex = 0;
+    if (currentDestination === "overview") {
+      atlasMapElement.setAttribute("aria-label","Interactive project atlas centered on Omaha, Nebraska. Use arrow keys to pan and plus or minus to zoom.");
+    } else {
+      setCurrentLocationDisplay(currentDestination);
+    }
+  }
+
+  const controls = atlasMapElement.querySelector(".maplibregl-control-container");
+  controls?.toggleAttribute("aria-hidden",mapStatic);
+  atlasMarkers.forEach(({marker}) => {
+    const element = marker.getElement();
+    element.disabled = mapStatic;
+    element.tabIndex = mapStatic ? -1 : 0;
+    element.toggleAttribute("aria-hidden",mapStatic);
+  });
+
+  if (!map) return;
+  const interactive = !mapStatic;
+  setMapHandlerState(map.boxZoom,interactive);
+  setMapHandlerState(map.scrollZoom,interactive);
+  setMapHandlerState(map.dragPan,interactive);
+  setMapHandlerState(map.doubleClickZoom,interactive);
+  setMapHandlerState(map.touchZoomRotate,interactive);
+  setMapHandlerState(map.touchPitch,interactive);
+  setMapHandlerState(map.keyboard,interactive && drawer.hidden);
+}
+
+function setMapStatic(nextStatic,{force=false}={}) {
+  if (!force && mapStatic === nextStatic) return;
+  mapStatic = nextStatic;
+  if (mapStatic) {
+    journeySequence += 1;
+    window.clearTimeout(journeyTimer);
+    map?.stop();
+    setRouteVisible(false);
+    site.classList.remove("journey-active","traveling","returning");
+    travelStatus.hidden = true;
+    returnOrigin.hidden = true;
+  } else {
+    returnOrigin.hidden = currentDestination === "overview" || currentDestination === "omaha";
+  }
+  applyMapInteractionMode();
+  if (!mapStatic && resetOverviewOnResume && mapReady) {
+    resetOverviewOnResume = false;
+    showProjectOverview({animate:true});
+  }
+}
+
+function syncMapModeToScroll() {
+  window.cancelAnimationFrame(mapModeFrame);
+  mapModeFrame = window.requestAnimationFrame(() => {
+    const boundary = dataPracticeSection.offsetTop;
+    const currentScrollPosition = document.body.classList.contains("drawer-open") ? scrollPosition : window.scrollY;
+    setMapStatic(currentScrollPosition >= boundary - 1);
+  });
 }
 
 function addMapMarkers() {
@@ -714,13 +793,17 @@ function initializeMap() {
       mapReady = true;
       addRouteLayers();
       addMapMarkers();
-      showProjectOverview();
+      if (!mapStatic) {
+        showProjectOverview();
+        resetOverviewOnResume = false;
+      }
+      applyMapInteractionMode();
       mapState.classList.add("map-loaded");
       mapStateText.textContent = "Geographic atlas ready";
       window.setTimeout(() => { mapState.hidden = true; }, 700);
     });
     map.on("move", () => {
-      if (!mapReady || site.classList.contains("journey-active")) return;
+      if (!mapReady || mapStatic || site.classList.contains("journey-active")) return;
       const center = map.getCenter();
       setCoordinates([center.lng,center.lat]);
     });
@@ -748,7 +831,7 @@ function closeProject({restoreFocus=true}={}) {
   document.documentElement.style.scrollBehavior = previousScrollBehavior;
   if (restoreFocus && projectTrigger instanceof HTMLElement && projectTrigger.isConnected) projectTrigger.focus();
   projectTrigger = null;
-  if (map) map.keyboard.enable();
+  if (map) setMapHandlerState(map.keyboard,!mapStatic);
 }
 
 function renderDrawerNavigation(project, locationKey) {
@@ -841,6 +924,14 @@ function getLocationLabel(locationKey) {
 }
 
 function navigateToProject(project, trigger, locationKey) {
+  if (mapStatic) {
+    window.clearTimeout(journeyTimer);
+    closeProject({restoreFocus:false});
+    travelStatus.hidden = true;
+    returnOrigin.hidden = true;
+    openDrawer(project,trigger || getProjectListButton(project.id),locationKey);
+    return;
+  }
   const trip = ++journeySequence;
   const previousLocationKey = currentDestination;
   const locationChanged = previousLocationKey !== locationKey;
@@ -879,6 +970,12 @@ function navigateToProject(project, trigger, locationKey) {
 }
 
 function returnToOmaha() {
+  if (mapStatic) {
+    closeProject({restoreFocus:false});
+    travelStatus.hidden = true;
+    returnOrigin.hidden = true;
+    return;
+  }
   const trip = ++journeySequence;
   const previousLocationKey = currentDestination;
   window.clearTimeout(journeyTimer);
@@ -917,7 +1014,10 @@ function getDrawerControls() {
 
 function goTo(id) {
   document.getElementById(id)?.scrollIntoView({behavior:reduceMotion.matches ? "auto" : "smooth",block:"start"});
-  if (id === "home") showProjectOverview({animate:true});
+  if (id === "home") {
+    if (mapStatic) resetOverviewOnResume = true;
+    else showProjectOverview({animate:true});
+  }
 }
 
 function backToProjectList() {
@@ -931,6 +1031,7 @@ renderAtlasLegend();
 renderDataPractice();
 renderBeyondTheMap();
 initializeBeyondMapReveal();
+syncMapModeToScroll();
 initializeMap();
 returnOrigin.addEventListener("click",returnToOmaha);
 document.querySelector("#previous-project").addEventListener("click",event => {
@@ -952,8 +1053,12 @@ document.querySelector("#drawer-location-choices").addEventListener("click",even
 document.querySelectorAll("[data-go]").forEach(button => button.addEventListener("click",() => goTo(button.dataset.go)));
 window.addEventListener("resize",() => {
   window.clearTimeout(overviewResizeTimer);
-  overviewResizeTimer = window.setTimeout(refreshMarkerLayout,150);
+  overviewResizeTimer = window.setTimeout(() => {
+    syncMapModeToScroll();
+    refreshMarkerLayout();
+  },150);
 });
+window.addEventListener("scroll",syncMapModeToScroll,{passive:true});
 document.addEventListener("click",event => {
   const projectButton = event.target.closest("[data-project]");
   if (projectButton) openProject(projectButton.dataset.project,projectButton);
