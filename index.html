@@ -8,9 +8,9 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 rx=%226%22 fill=%22%23071a26%22/><text x=%225%22 y=%2222%22 fill=%22%2323c1c6%22 font-size=%2215%22 font-family=%22Arial%22 font-weight=%22700%22>MA</text></svg>">
   <link rel="preconnect" href="https://tiles.openfreemap.org" crossorigin>
   <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.12.0/dist/maplibre-gl.css">
-  <link rel="stylesheet" href="./styles.css?v=24">
+  <link rel="stylesheet" href="./styles.css?v=25">
   <script src="https://unpkg.com/maplibre-gl@5.12.0/dist/maplibre-gl.js" defer></script>
-  <script src="./app.js?v=16" defer></script>
+  <script src="./app.js?v=17" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -71,7 +71,7 @@
         <p>Across projects, I move between community knowledge, spatial patterns, analytical choices, and the systems needed to keep results visible.</p>
       </div>
       <div class="analytical-workflow" id="analytical-workflow" aria-label="Selected analytical workflow"></div>
-      <div class="data-practice-list" id="data-practice-list"></div>
+      <div class="featured-tools" id="featured-tools" aria-label="Featured planning tools"></div>
       <div class="interactive-example">
         <div class="interactive-example-copy">
           <p class="kicker"><span></span> Secondary interactive example</p>
@@ -137,7 +137,7 @@
             <span>Résumé</span><strong>View résumé</strong><i aria-hidden="true">↗</i>
           </a>
           </div>
-          <div class="contact-line"><span>Open to research and civic innovation conversations.</span><button type="button" data-go="home">Return to origin ↑</button></div>
+          <div class="contact-line"><button type="button" data-go="home">Return to origin ↑</button></div>
         </section>
       </div>
     </section>
@@ -155,7 +155,6 @@
       <article class="project-drawer" tabindex="-1">
         <button class="drawer-close" type="button" data-close aria-label="Close project details">×</button>
         <p class="kicker"><span></span> <b id="drawer-number"></b></p>
-        <small class="drawer-location" id="drawer-location"></small>
         <nav class="drawer-navigation" aria-label="Project navigation">
           <button type="button" id="previous-project">← Previous project</button>
           <button type="button" id="back-to-project-list">Back to project list</button>

@@ -42,7 +42,7 @@ const projects = [
     summary:"Work involving community engagement analysis, scenario planning, spatial research, and implementation-focused reporting.",
     role:"Planning practice", methods:["Qualitative coding","Survey analysis","Spatial synthesis"],
     findings:[], deliverables:[], skills:[], images:[], stat:"50K+", statLabel:"resident comments analyzed",
-    location:"Omaha · approximate city-center location", destination:"omaha"
+    destination:"omaha"
   },
   {
     id:"future-lab", number:"02", title:"Future Lab — Scenario Choosing Workshop", city:"Omaha", state:"Nebraska",
@@ -58,7 +58,7 @@ const projects = [
     deliverables:["Translation of public input into planning findings","TODO: Morenike to provide images, charts, maps, workshop materials, and reports"],
     skills:["Survey-response analysis","Scenario comparison","Spatial analysis and mapping","Data visualization","Community-engagement reporting"],
     images:["TODO: Morenike to provide"],
-    stat:"700", statLabel:"total responses", location:"Omaha · approximate city-center location",
+    stat:"700", statLabel:"total responses",
     destination:"omaha", markerSymbol:"⌁",
     details:[
       ["Project overview","A 2026 scenario-choosing workshop within the We Make Omaha comprehensive planning process."],
@@ -84,7 +84,7 @@ const projects = [
     summary:"A public-facing framework connecting plan commitments to actions, indicators, annual reporting, and place-based projects.",
     role:"Public accountability", methods:["Information design","Data governance","Public accountability"],
     findings:[], deliverables:[], skills:[], images:[], stat:"32", statLabel:"implementation indicators",
-    location:"Omaha · approximate city-center location", destination:"omaha"
+    destination:"omaha"
   },
   {
     id:"plans", number:"04", title:"Plan Quality and Implementation Research", city:"Marshalltown", state:"Iowa",
@@ -99,7 +99,7 @@ const projects = [
     summary:"A comparative evaluation of comprehensive plans in Marshalltown, Iowa; Walla Walla, Washington; and Ottumwa, Iowa, including equity, implementation responsibility, and monitoring.",
     role:"Applied research", methods:["Comparative research","Content analysis","Plan evaluation"],
     findings:[], deliverables:[], skills:[], images:[], stat:"10", statLabel:"plan-quality criteria",
-    location:"Regional research · Marshalltown, Ottumwa, and Walla Walla", destination:"plan-research",
+    destination:"plan-research",
     locationKeys:["marshalltown","ottumwa","wallaWalla"]
   },
   {
@@ -111,7 +111,7 @@ const projects = [
     summary:"Research examining how affordable housing locations connect residents with employment opportunities. Spatial mismatch is one explanation being tested, not a predetermined conclusion.",
     role:"Current research", methods:["GIS","Accessibility analysis","Equity research"],
     findings:[], deliverables:[], skills:[], images:[], stat:"1", statLabel:"explanation among several",
-    location:"Omaha · approximate city-center location", destination:"omaha"
+    destination:"omaha"
   },
   {
     id:"wdsm", number:"06", title:"Inclusivity WDSM Project", city:"West Des Moines", state:"Iowa",
@@ -123,7 +123,7 @@ const projects = [
     summary:"TODO: Morenike to provide project summary.", role:"TODO: Morenike to provide",
     methods:["TODO: Morenike to provide methods"], findings:["TODO: Morenike to provide"],
     deliverables:["TODO: Morenike to provide"], skills:["TODO: Morenike to provide"], images:["TODO: Morenike to provide"],
-    stat:"ISU", statLabel:"Iowa State University", location:"West Des Moines Project Site · approximate city-level location",
+    stat:"ISU", statLabel:"Iowa State University",
     destination:"west-des-moines",
     details:[
       ["Full meaning of WDSM","TODO: Morenike to provide"],
@@ -235,14 +235,9 @@ const ANALYTICAL_WORKFLOW = [
   ["Implementation","Useful measures connect findings to responsibility and action."]
 ];
 
-const DATA_PRACTICE = [
-  {title:"Qualitative analysis",projectId:"omaha",question:"Which priorities recur—and where do experiences differ?",data:"Resident comments, focus groups, interviews, and open-ended survey responses.",method:"Coding frameworks, synthesis, and comparison across engagement methods.",example:"More than 50,000 qualitative responses across the broader We Make Omaha process.",why:"Recurring and place-specific concerns could be translated into planning priorities."},
-  {title:"Survey analysis",projectId:"future-lab",question:"How do priorities vary across participants and places?",data:"Scenario choices, age, income, ZIP code, values, geography, and preferred actions.",method:"Cross-tabulation, subgroup comparison, and careful interpretation.",example:"700 Future Lab responses analyzed across scenarios and participant characteristics.",why:"Differences remained visible instead of being collapsed into one headline result."},
-  {title:"Spatial analysis",projectId:"access",question:"How do housing, jobs, transportation, and opportunity relate across space?",data:"Geographic, housing, employment, transportation, and demographic records.",method:"GIS, accessibility measures, and equity-oriented spatial comparison.",example:"Ongoing Employment Access and Housing research in Omaha.",why:"Geography helps test—not assume—possible barriers to opportunity."},
-  {title:"Scenario analysis",projectId:"future-lab",question:"What do preferences across alternative growth futures reveal?",data:"Four scenario choices and related priorities, values, and actions.",method:"Scenario comparison with demographic and geographic cross-tabs.",example:"Neighborhood Hubs received 328 reported selections, approximately 47%.",why:"Scenario preferences could inform planning direction without erasing subgroup patterns."},
-  {title:"Data visualization",projectId:"future-lab",question:"How can complex findings become legible without losing context?",data:"Survey results, categories, locations, and comparison groups.",method:"Accessible charts, maps, tables, dashboards, and explanatory captions.",example:"A labeled scenario-results chart with an accessible data table.",why:"Decision-makers and residents can see both the pattern and the evidence behind it."},
-  {title:"Performance measurement",projectId:"tracker",question:"How can residents see whether adopted commitments are advancing?",data:"Indicators, status, trends, mapped projects, policies, and annual updates.",method:"Indicator design, reporting structure, and public information design.",example:"32 implementation indicators connected to public-facing progress communication.",why:"Accountability becomes observable rather than buried in internal systems."},
-  {title:"Data governance",projectId:"tracker",question:"Who maintains public data, and how does it remain reliable over time?",data:"Indicator definitions, documentation, update responsibilities, and reporting cycles.",method:"Standards, ownership, continuity, access, and institutional coordination.",example:"An annual reporting framework linking indicators, policies, and projects.",why:"A useful tracker depends on maintainable data—not only a polished interface."}
+const FEATURED_TOOLS = [
+  {projectId:"tracker", title:"Implementation Tracker", action:"Explore the tracker"},
+  {projectId:"omaha", title:"Community Input Toolkit", action:"View project"}
 ];
 
 /*
@@ -380,14 +375,27 @@ function renderDataPractice() {
   const workflow = document.querySelector("#analytical-workflow");
   workflow.innerHTML = `<ol>${ANALYTICAL_WORKFLOW.map(([stage,note],index) => `<li><span>${String(index+1).padStart(2,"0")}</span><strong>${escapeHTML(stage)}</strong><small>${escapeHTML(note)}</small></li>`).join("")}</ol>
     <p>Not always linear: community knowledge can reshape the question, while implementation needs determine which measures are useful.</p>`;
-  document.querySelector("#data-practice-list").innerHTML = DATA_PRACTICE.map((area,index) => `
-    <details class="practice-detail"${index === 0 ? " open" : ""}>
-      <summary><span>${String(index+1).padStart(2,"0")}</span><strong>${escapeHTML(area.title)}</strong><em>Explore method</em></summary>
-      <div class="practice-detail-body">
-        <dl><div><dt>Question</dt><dd>${escapeHTML(area.question)}</dd></div><div><dt>Data</dt><dd>${escapeHTML(area.data)}</dd></div><div><dt>Method</dt><dd>${escapeHTML(area.method)}</dd></div><div><dt>Real example</dt><dd>${escapeHTML(area.example)}</dd></div><div><dt>Why it mattered</dt><dd>${escapeHTML(area.why)}</dd></div></dl>
-        <button type="button" data-method-project="${escapeHTML(area.projectId)}">Open related case study ↗</button>
+  document.querySelector("#featured-tools").innerHTML = FEATURED_TOOLS.map((tool,index) => {
+    const project = projects.find(item => item.id === tool.projectId);
+    const questions = project.caseStudy.find(section => section.title === (tool.projectId === "tracker" ? "Governance questions" : "The analytical questions"));
+    const contribution = project.caseStudy.find(section => section.title === (tool.projectId === "tracker" ? "Contribution and structure" : "My contribution"));
+    return `<article class="featured-tool">
+      <span class="featured-tool-number">${String(index+1).padStart(2,"0")}</span>
+      <div class="featured-tool-copy">
+        <h3>${escapeHTML(tool.title)}</h3>
+        <p class="featured-tool-summary">${escapeHTML(project.short)}</p>
+        <dl>
+          <div><dt>Planning question</dt><dd>${escapeHTML(questions.items[0])}</dd></div>
+          <div><dt>My contribution</dt><dd>${escapeHTML(contribution.body)}</dd></div>
+        </dl>
+        <div class="featured-tool-methods" aria-label="Key methods and capabilities">${project.methods.map(method => `<span>${escapeHTML(method)}</span>`).join("")}</div>
       </div>
-    </details>`).join("");
+      <div class="featured-tool-footer">
+        <p><strong>${escapeHTML(project.evidence)}</strong><span>Verified project evidence</span></p>
+        <button type="button" data-project="${escapeHTML(project.id)}" aria-label="${escapeHTML(tool.action)}: ${escapeHTML(project.title)}">${escapeHTML(tool.action)} <span aria-hidden="true">↗</span></button>
+      </div>
+    </article>`;
+  }).join("");
 }
 
 function renderBeyondTheMap() {
@@ -792,11 +800,7 @@ function renderCaseStudySection(section, index) {
 function openDrawer(project, trigger, locationKey=getProjectLocationKeys(project)[0]) {
   setSelectedProject(project.id,locationKey);
   projectTrigger = trigger || document.activeElement;
-  const location = ATLAS_LOCATIONS[locationKey];
   document.querySelector("#drawer-number").textContent = `Field note ${project.number}`;
-  document.querySelector("#drawer-location").textContent = project.locationKeys
-    ? `${location.city}, ${location.state} · approximate city-level location / ${project.category}`
-    : `${project.location} / ${project.category}`;
   document.querySelector("#project-title").textContent = project.title;
   document.querySelector("#drawer-description").textContent = project.summary;
   document.querySelector("#drawer-stat").textContent = project.stat;
@@ -951,11 +955,6 @@ window.addEventListener("resize",() => {
   overviewResizeTimer = window.setTimeout(refreshMarkerLayout,150);
 });
 document.addEventListener("click",event => {
-  const methodProject = event.target.closest("[data-method-project]");
-  if (methodProject) {
-    openProject(methodProject.dataset.methodProject,methodProject);
-    return;
-  }
   const projectButton = event.target.closest("[data-project]");
   if (projectButton) openProject(projectButton.dataset.project,projectButton);
 });
