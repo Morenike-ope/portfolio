@@ -256,6 +256,7 @@ const FEATURED_TOOLS = [
  *   replace `reading.current` with the new current book.
  * - Add another book: add another reading record and render it using the same
  *   accessible book-card pattern in `renderBeyondTheMap`.
+ * - Update Cubicle Botanicals: edit the fields inside `tending`.
  * - Replace covers or Apple Books links: update that book's `cover`, `coverAlt`,
  *   and `url` together after verifying the title and author on Apple Books.
  */
@@ -289,6 +290,12 @@ const BEYOND_THE_MAP = {
       cover:"https://is1-ssl.mzstatic.com/image/thumb/Publication114/v4/ab/02/5d/ab025d4d-2cac-95f3-75af-aecf393f074b/MatMH_ebook_Final.jpg/536x0w.webp",
       coverAlt:"Book cover of Murder at the Mayfair Hotel by C.J. Archer"
     }
+  },
+  tending: {
+    status:"Currently tending",
+    title:"Cubicle Botanicals",
+    description:"Office plants have lives. Some are thriving. Some need repotting. Others may require a report to Plant Protective Services.",
+    url:"https://www.instagram.com/cubicle_botanicals/"
   }
 };
 
@@ -409,6 +416,7 @@ function renderBeyondTheMap() {
   const listening = BEYOND_THE_MAP.listening;
   const currentBook = BEYOND_THE_MAP.reading.current;
   const recentBook = BEYOND_THE_MAP.reading.recent;
+  const tending = BEYOND_THE_MAP.tending;
   const listeningDetails = [listening.song, listening.album]
     .filter(Boolean)
     .map(detail => `<span>${escapeHTML(detail)}</span>`)
@@ -462,6 +470,17 @@ function renderBeyondTheMap() {
           <p>${escapeHTML(recentBook.author)} · ${escapeHTML(recentBook.service)}</p>
         </div>
         <a class="recent-link" href="${escapeHTML(recentBook.url)}" target="_blank" rel="noopener noreferrer" aria-label="View ${escapeHTML(recentBook.title)} by ${escapeHTML(recentBook.author)} in Apple Books in a new tab">View in Apple Books <span aria-hidden="true">↗</span></a>
+      </div>
+    </article>
+    <article class="personal-panel botanical-panel">
+      <div class="personal-panel-heading">
+        <span class="personal-icon" aria-hidden="true">&#10087;</span>
+        <div><small>${escapeHTML(tending.status)}</small><h4>${escapeHTML(tending.title)}</h4></div>
+      </div>
+      <div class="botanical-artwork media-frame" aria-hidden="true"><span></span></div>
+      <div class="botanical-copy">
+        <p>${escapeHTML(tending.description)}</p>
+        <a class="personal-link" href="${escapeHTML(tending.url)}" target="_blank" rel="noopener noreferrer" aria-label="See the office drama from Cubicle Botanicals on Instagram in a new tab">See the office drama <span aria-hidden="true">&rarr;</span></a>
       </div>
     </article>`;
 
