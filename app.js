@@ -477,7 +477,10 @@ function renderBeyondTheMap() {
         <span class="personal-icon" aria-hidden="true">&#10087;</span>
         <div><small>${escapeHTML(tending.status)}</small><h4>${escapeHTML(tending.title)}</h4></div>
       </div>
-      <div class="botanical-artwork media-frame" aria-hidden="true"><span></span></div>
+      <div class="botanical-artwork media-frame">
+        <div class="media-fallback" aria-hidden="true"><span>&#10087;</span></div>
+        <img src="./assets/cubicle-botanicals.jpg" alt="Zebra plant by an office window" width="1200" height="2133" loading="lazy" decoding="async">
+      </div>
       <div class="botanical-copy">
         <p>${escapeHTML(tending.description)}</p>
         <a class="personal-link" href="${escapeHTML(tending.url)}" target="_blank" rel="noopener noreferrer" aria-label="See the office drama from Cubicle Botanicals on Instagram in a new tab">See the office drama <span aria-hidden="true">&rarr;</span></a>
